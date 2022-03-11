@@ -6,3 +6,4 @@ discord.py==1.7.3
 nest_asyncio==1.5.4
 pytz==2019.3
 requests==2.22.0
+importlib==1.0.4

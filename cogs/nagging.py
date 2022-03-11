@@ -6,7 +6,7 @@ import pickle
 import typing
 import nest_asyncio
 nest_asyncio.apply()
-from OversightData import merge_memberdata, data_retrieval, data_storage
+import OversightData
 
 class colors:
     default = 0
@@ -91,7 +91,7 @@ class nagging(commands.Cog):
         ctx.channel.name == 'disciplinarians' and ctx.channel.category.name \
                 != '[The Harbour]':
                     oldmemberdata = []
-                    oldmemberdata = data_retrieval(oldmemberdata)
+                    oldmemberdata = OversightData.data_retrieval(oldmemberdata)
                     fetcheddata = requests.get(
                             'https://politicsandwar.com/api/alliance-members/' +
                             '?allianceid=5049&key=' + apikey)
@@ -101,12 +101,12 @@ class nagging(commands.Cog):
                         'http://24.117.204.187:8080/discord/?alliance=5049' +
                         '&key=davethsmellskrampuswhales')
                     list_of_dics = list_of_dics.json()
-                    memberdata = merge_memberdata(memberdata, oldmemberdata, list_of_dics)
+                    memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)
                     for dic in memberdata:
                         ping_dic = dic.get('ping')
                         for k in ping_dic:
                             ping_dic.update({k: 0})
-                    data_storage(memberdata)
+                    OversightData.data_storage(memberdata)
                     reset_message = 'Reset ping counter for everyone'
                     await ctx.send(reset_message)
     
@@ -120,14 +120,14 @@ class nagging(commands.Cog):
                  await ctx.send('Invalid input, must be True or False.')
              else:
                  oldmemberdata = []
-                 oldmemberdata = data_retrieval(oldmemberdata)
+                 oldmemberdata = OversightData.data_retrieval(oldmemberdata)
                  if status == 'True' or status == 'true' or status == '1':
                      status = '1'
                  else:
                      status = '0'
                  for nation in oldmemberdata:
                      nation.update({'war_status':status})
-                 data_storage(oldmemberdata)
+                 OversightData.data_storage(oldmemberdata)
                  if status == '1':
                      await ctx.send('War status set to true')
                  if status == '0':

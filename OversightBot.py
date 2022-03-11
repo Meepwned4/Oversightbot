@@ -1,9 +1,9 @@
 import discord
-import logging
 import requests
 import traceback
 import sys
 import os
+import importlib
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
 from discord.ext.commands import MissingAnyRole, CommandOnCooldown
@@ -13,30 +13,30 @@ from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
 import nest_asyncio
 nest_asyncio.apply()
-from OversightData import merge_memberdata, data_retrieval, data_storage
-import logging.config
+import OversightData
+#import logging
 
-'''
-Options for logging:
-logging.NOTSET - No logging
-logging.DEBUG - All info
-logging.INFO - Slightly less
-logging.WARN - Only warnings and worse
-logging.ERROR - Only errors and worse
-'''
-
-logger = logging.getLogger(__name__)
-c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.INFO)
-c_format = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%b-%d-%y %H:%M:%S')
-c_handler.setFormatter(c_format)
-logger.addHandler(c_handler)
-
-logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    datefmt='%b-%d-%y %H:%M:%S')
+#'''
+#Options for logging:
+#logging.NOTSET - No logging
+#logging.DEBUG - All info
+#logging.INFO - Slightly less
+#logging.WARN - Only warnings and worse
+#logging.ERROR - Only errors and worse
+#'''
+#
+#logger = logging.getLogger(__name__)
+#c_handler = logging.StreamHandler()
+#c_handler.setLevel(logging.INFO)
+#c_format = logging.Formatter(
+#        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#        datefmt='%b-%d-%y %H:%M:%S')
+#c_handler.setFormatter(c_format)
+#logger.addHandler(c_handler)
+#
+#logging.basicConfig(filename='app.log', filemode='w', level=logging.WARN,
+#                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#                    datefmt='%b-%d-%y %H:%M:%S')
 
 pickle_off = open('./data/api_key.pickle', 'rb')
 apikey = pickle.load(pickle_off)
@@ -90,12 +90,15 @@ async def unload(ctx, extension):
 @client.command()
 @commands.is_owner()
 async def reload(ctx, extension):
-    try:
-        client.unload_extension(f'cogs.{extension}')
-        client.load_extension(f'cogs.{extension}')
-        await ctx.send(f'{extension} reloaded')
-    except:
-        await ctx.send(f'{extension} not recognized')
+    if extension == 'oversightdata' or extension == 'OversightData':
+        importlib.reload(OversightData)
+    else:
+        try:
+            client.unload_extension(f'cogs.{extension}')
+            client.load_extension(f'cogs.{extension}')
+            await ctx.send(f'{extension} reloaded')
+        except:
+            await ctx.send(f'{extension} not recognized')
 
 class colors:
     default = 0
@@ -134,7 +137,7 @@ async def daily():
     mmr_list = mmr.split()
     mmr = mmr_list[0]
     oldmemberdata = []
-    oldmemberdata = data_retrieval(oldmemberdata)
+    oldmemberdata = OversightData.data_retrieval(oldmemberdata)
     nerds_list = []
     raider_list = []
     piggy_id = 236978935538122754
@@ -150,7 +153,7 @@ async def daily():
         '&key=davethsmellskrampuswhales')
     list_of_dics = list_of_dics.json()
     print('Pulled info from Shama\'s api!')
-    memberdata = merge_memberdata(memberdata, oldmemberdata, list_of_dics)
+    memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)
     print('Data download complete')               
 
     for chan in server.text_channels:
@@ -199,7 +202,7 @@ async def daily():
             nation.update({'Trainee':1})
         else:
             nation.update({'Trainee':0})
-    data_storage(memberdata)
+    OversightData.data_storage(memberdata)
     print('Trainees and raiders logged')
     
     pinglist = []

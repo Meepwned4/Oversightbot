@@ -4,7 +4,7 @@ from discord.ext import commands
 import json
 import nest_asyncio
 nest_asyncio.apply()
-from OversightData import interview_message
+import OversightData
 
 class colors:
     default = 0
@@ -160,7 +160,7 @@ class interview(commands.Cog):
                             dic.update({'num':num})
                         with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
-                        message = interview_message(num, member)
+                        message = OversightData.interview_message(num, member)
                         embed = discord.Embed(title = f'Interview information',
                                         description = f'{message}', color=colors.dark_gold)
                         msg = await chan.send(embed=embed)
@@ -183,7 +183,7 @@ class interview(commands.Cog):
                         with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
                         if num == 9:
-                            message_list = interview_message(num, member)
+                            message_list = OversightData.interview_message(num, member)
                             l = 0
                             for item in message_list:
                                 l += 1
@@ -199,7 +199,7 @@ class interview(commands.Cog):
                                     await msg.add_reaction(person)
                             await user_message.reactions[0].remove(member)
                         elif num == 11:
-                            message = interview_message(num, member)
+                            message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'',
                                                 description = f'{message}', color=colors.dark_gold)
                             msg = await chan.send(embed=embed)
@@ -207,7 +207,7 @@ class interview(commands.Cog):
                             os.remove(f'./data/tickets/{chan_name}-{chan_id}.json')
                             await user_message.reactions[0].remove(member)
                         else:
-                            message = interview_message(num, member)
+                            message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'Question number {num}',
                                             description = f'{message}', color=colors.dark_gold)
                             msg = await chan.send(embed=embed)
@@ -247,7 +247,7 @@ class interview(commands.Cog):
                 with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
                     json.dump(dic, outfile)
             user = None
-            message = interview_message(num, user)
+            message = OversightData.interview_message(num, user)
             embed = discord.Embed(title = f'Interview information',
                             description = f'{message}', color=colors.dark_gold)
             msg = await ctx.send(embed=embed)
@@ -289,7 +289,7 @@ class interview(commands.Cog):
             user = None
             if num != 11:
                 if num == 9:
-                    message_list = interview_message(num, user)
+                    message_list = OversightData.interview_message(num, user)
                     l = 0
                     for item in message_list:
                         l += 1
@@ -304,7 +304,7 @@ class interview(commands.Cog):
                             await msg.add_reaction(right_arrow)
                             await msg.add_reaction(person)
                 else:
-                    message = interview_message(num, user)
+                    message = OversightData.interview_message(num, user)
                     embed = discord.Embed(title = f'Question number {num}',
                                     description = f'{message}', color=colors.dark_gold)
                     msg = await ctx.send(embed=embed)

@@ -200,7 +200,7 @@ class ticket(commands.Cog):
         user_name = user.get('leader')
         channel_name = user.get('leader').replace(' ', '-') + '-' + str(user.get('NationID'))
         nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
-        login_data = {'email': email, 'password': password, 'loginform': 'Login'}
+        login_data = {'email': 'bswindellnwt08@gmail.com', 'password': 'woodcutmaster4', 'loginform': 'Login'}
         async with aiohttp.ClientSession() as session:
             login_url = 'https://politicsandwar.com/login/'
             res1 = await session.post(login_url, data=login_data)
