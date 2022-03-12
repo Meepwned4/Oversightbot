@@ -189,10 +189,6 @@ If you have any questions, comments, or concerns, please let us know. Otherwise,
         
     return message
 
-def test(x):
-    x = 1
-	OversightData.test(x)
-
 # async def test():
 #     query = '''query {alliances(id: [5049], first: 1) {
 #     data {
