@@ -274,7 +274,6 @@ class interview(commands.Cog):
                 with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
                     dic = json.load(data)
                 num = int(dic.get('num'))
-                print(num)
             except:
                 for member in ctx.channel.members:
                     if suffet_role not in member.roles and elder_role not in member.roles \
@@ -290,9 +289,7 @@ class interview(commands.Cog):
                     dic = json.load(data)
                     num = int(dic.get('num'))
             num = int(num)
-            print(f'num:{num}')
             num += 1
-            print(f'num:{num}')
             num = str(num)
             dic.update({'num':num})
             with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:

@@ -173,7 +173,6 @@ class ticket(commands.Cog):
                 and pentarch_role not in member.roles and interviewer_role not in member.roles \
                 and adirim_role not in member.roles and bot_role not in member.roles:
                     discord_id = member.id
-                    print(discord_id)
                     break
 #            discord_id = 502150110940233730
             user = requests.get(
