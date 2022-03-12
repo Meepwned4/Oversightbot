@@ -64,6 +64,7 @@ def lesson_message(lesson):
 
 
 def interview_message(num, user):
+    message = ''
     reminder = f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \
     + f'**After** you\'ve answered, react with {right_arrow} to continue'
     if num == '0':
@@ -71,7 +72,7 @@ def interview_message(num, user):
                         + 'so far in the game and to give you a sense of our alliance policies and format.\n\n' \
                         + f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \
                         + f'React with {right_arrow} to begin the automated interview')
-    if num == 1:
+    if num == '1':
         try:
             discord_id = user.id
 #            discord_id = 175719252995604480
@@ -92,23 +93,23 @@ def interview_message(num, user):
                        + 'If you can\'t find it, go to your nation page' \
                        + ' and copy/paste your nation ID.\n\n' \
                        + reminder)
-    if num == 2:
+    if num == '2':
         message = ('How did you find out about Carthago? What led you to apply?\n\n' \
                        + reminder)
-    if num == 3:
+    if num == '3':
         message = ('Have you ever been involved in another alliance ' \
                        + 'on Politics and War, either under this account or' \
                        + ' another account?\n\n' + reminder)
-    if num == 4:
+    if num == '4':
         message = ('Do you have any standing debts to anyone in the game?\n\n' \
                        + reminder)
-    if num == 5:
+    if num == '5':
         message = ('What would you consider your greatest skills? These can be ' \
                        + 'in games or IRL which translate into the game, such as GFX ' \
                        + '(Photoshop, GIMP, etc), Video editing, Diplomacy, Spreadsheet ' \
                        + 'or Coding.\n What would you consider your worst weaknesses?\n\n' \
                        + reminder)
-    if num == 6:
+    if num == '6':
         message = ('''Now, please select one of the following, or use your own words to best describe what your activity would look like: 
  
 - I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
@@ -119,7 +120,7 @@ def interview_message(num, user):
 
 - I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
 + reminder)
-    if num == 7:
+    if num == '7':
         message = ('''If you were given the opportunity to choose a government department to work in, considering the descriptions provided, which would you choose?
  
 - **War Department**: Defense during peacetime and wartime, making sure members meet minimum military requirements, monitoring conflicts across Orbis and assisting with Foreign Affairs when necessary; ensuring warchests are kept stocked.
@@ -136,7 +137,7 @@ def interview_message(num, user):
  
 If you aren't interested in any of these, that’s okay, just say so. If you have ideas for other government positions we should be offering, feel free to bring this up after this interview.\n\n''' \
 + reminder)
-    if num == 8:
+    if num == '8':
         message = ('''
 With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game? Which would you consider the least interesting? 
 
@@ -151,7 +152,7 @@ With your answer in mind, which among the following or using your own words, wou
 - Raiding inactive nations for money and resources. Arrgh!
 
 - Becoming a politically influential, well-known player.\n\n''' + reminder)
-    if num == 9:
+    if num == '9':
         message = [('''
 ```--- TERMS AND CONDITIONS of Carthago ---
 ```
@@ -182,9 +183,9 @@ We hope to see you on Discord as much as your time commitments allow, but you mu
 ---
 If you have any questions, comments, or concerns, please let us know. Otherwise, state you agree to these terms.\n\n'''
 + reminder)]
-    if num == 10:
+    if num == '10':
         message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
-    if num == 11:
+    if num == '11':
         message = ('That was the last question, a human should be along soon to review your interview.')
         
     return message
