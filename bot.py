@@ -76,7 +76,7 @@ async def load(ctx, extension):
         print('check')
         try:
             importlib.load(OversightData)
-            await ctx.send(f'{extension} reloaded')
+            await ctx.send(f'{extension} loaded')
         except:
             await ctx.send(f'{extension} not recognized')
     else:
@@ -92,7 +92,7 @@ async def unload(ctx, extension):
     if extension == 'oversightdata' or extension == 'OversightData':
         try:
             importlib.unload(OversightData)
-            await ctx.send(f'{extension} reloaded')
+            await ctx.send(f'{extension} unloaded')
         except:
             await ctx.send(f'{extension} not recognized')
     else:
