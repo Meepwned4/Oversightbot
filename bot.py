@@ -90,8 +90,11 @@ async def unload(ctx, extension):
 @client.command()
 @commands.is_owner()
 async def reload(ctx, extension):
+	print('check')
     if extension == 'oversightdata' or extension == 'OversightData':
+	print('point')
         importlib.reload(OversightData)
+	print('!!')
     else:
         try:
             client.unload_extension(f'cogs.{extension}')
