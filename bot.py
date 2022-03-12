@@ -90,11 +90,15 @@ async def unload(ctx, extension):
 @client.command()
 @commands.is_owner()
 async def reload(ctx, extension):
-    print('check')
     if extension == 'oversightdata' or extension == 'OversightData':
-	print('point')
-        importlib.reload(OversightData)
-	print('!!')
+        print('check')
+        try:
+            print('point')
+            importlib.reload(OversightData)
+            print('1')
+            await ctx.send(f'{extension} reloaded')
+        except:
+            await ctx.send(f'{extension} not recognized')
     else:
         try:
             client.unload_extension(f'cogs.{extension}')
@@ -102,7 +106,7 @@ async def reload(ctx, extension):
             await ctx.send(f'{extension} reloaded')
         except:
             await ctx.send(f'{extension} not recognized')
-	
+
 class colors:
     default = 0
     teal = 0x1abc9c
