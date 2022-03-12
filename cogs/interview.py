@@ -180,10 +180,10 @@ class interview(commands.Cog):
                             dic.update({'num':num})
                         num = int(dic.get('num'))
                         num += 1
-                        dic.update({'num':num})
+                        dic.update({'num':str(num)})
                         with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
-                        if num == 9:
+                        if num == '9':
                             message_list = OversightData.interview_message(num, member)
                             l = 0
                             for item in message_list:
@@ -282,13 +282,14 @@ class interview(commands.Cog):
                     json.dump(dic, outfile)
                 with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
                     dic = json.load(data)
-                num = int(data.get('num'))
+                    num = int(data.get('num'))
             num += 1
+            num = str(num)
             with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
                 json.dump(dic, outfile)
             user = None
-            if num != 11:
-                if num == 9:
+            if num != '11':
+                if num == '9':
                     message_list = OversightData.interview_message(num, user)
                     l = 0
                     for item in message_list:
@@ -317,7 +318,7 @@ class interview(commands.Cog):
                     if 'foreigner' in user.roles:
                         user_id = user.id
                         dic.update({'user_id':user_id})
-            elif num == 11:
+            elif num == '11':
                 embed = discord.Embed(title = f'',
                                     description = f'{item}', color=colors.dark_gold)
                 msg = await ctx.send(embed=embed)
