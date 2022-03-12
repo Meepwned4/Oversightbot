@@ -282,7 +282,7 @@ class interview(commands.Cog):
                     json.dump(dic, outfile)
                 with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
                     dic = json.load(data)
-                    num = int(data.get('num'))
+                    num = int(dic.get('num'))
             num += 1
             num = str(num)
             with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
