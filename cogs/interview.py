@@ -180,7 +180,8 @@ class interview(commands.Cog):
                             dic.update({'num':num})
                         num = int(dic.get('num'))
                         num += 1
-                        dic.update({'num':str(num)})
+                        num = str(num)
+                        dic.update({'num':num})
                         with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
                         if num == '9':
@@ -199,7 +200,7 @@ class interview(commands.Cog):
                                     await msg.add_reaction(right_arrow)
                                     await msg.add_reaction(person)
                             await user_message.reactions[0].remove(member)
-                        elif num == 11:
+                        elif num == '11':
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'',
                                                 description = f'{message}', color=colors.dark_gold)
