@@ -2,6 +2,7 @@ import discord
 import os
 from discord.ext import commands
 import json
+import typing
 import nest_asyncio
 nest_asyncio.apply()
 import OversightData
@@ -219,7 +220,7 @@ class interview(commands.Cog):
     
     @commands.command(name='start', help='+start')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim')
-    async def start(self, ctx):
+    async def start(self, ctx, num: typing.Optional[str] = '0' ):
         if ctx.channel.category.id == 567390184774303745 or ctx.channel.category.id == 876639217042751578 or ctx.channel.id == 736099358344478764:
             chan_name = ctx.channel.name
             chan_id = ctx.channel.id
@@ -228,7 +229,6 @@ class interview(commands.Cog):
             pentarch_role = ctx.guild.get_role(pentarch_role_id)
             interviewer_role = ctx.guild.get_role(management_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
-            num = '0'
             try:
                 with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
                     dic = json.load(data)
