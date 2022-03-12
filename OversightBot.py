@@ -91,7 +91,11 @@ async def unload(ctx, extension):
 @commands.is_owner()
 async def reload(ctx, extension):
     if extension == 'oversightdata' or extension == 'OversightData':
-        importlib.reload(OversightData)
+        try:
+            importlib.reload(OversightData)
+            await ctx.send(f'{extension} reloaded')
+        except:
+            await ctx.send(f'{extension} not recognized')
     else:
         try:
             client.unload_extension(f'cogs.{extension}')
