@@ -219,7 +219,7 @@ class interview(commands.Cog):
                             await user_message.reactions[0].remove(member)
     
     @commands.command(name='start', help='+start')
-    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'interviewer')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer')
     async def start(self, ctx, num: typing.Optional[str] = '0' ):
         if ctx.channel.category.id == 567390184774303745 or ctx.channel.category.id == 876639217042751578 or ctx.channel.id == 736099358344478764:
             chan_name = ctx.channel.name
@@ -255,7 +255,7 @@ class interview(commands.Cog):
             await msg.add_reaction(person)
 
     @commands.command(name='next', help='+next')
-    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'interviewer')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer')
     async def next(self, ctx):
         if ctx.channel.category.id == 567390184774303745 or ctx.channel.category.id == 876639217042751578 or ctx.channel.id == 736099358344478764:
             chan_name = ctx.channel.name
