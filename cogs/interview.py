@@ -230,6 +230,7 @@ class interview(commands.Cog):
             pentarch_role = ctx.guild.get_role(pentarch_role_id)
             interviewer_role = ctx.guild.get_role(management_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
+            num = str(num)
             try:
                 with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
                     dic = json.load(data)
