@@ -103,12 +103,6 @@ async def reload(ctx, extension):
             await ctx.send(f'{extension} reloaded')
         except:
             await ctx.send(f'{extension} not recognized')
-
-@client.command()
-@commands.is_owner()
-async def test(ctx):
-	x = 1
-	OversightData.test(x)
 	
 class colors:
     default = 0
