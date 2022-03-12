@@ -72,20 +72,35 @@ for filename in os.listdir('./cogs'):
 @client.command()
 @commands.is_owner()
 async def load(ctx, extension):
-    try:
-        client.load_extension(f'cogs.{extension}')
-        await ctx.send(f'{extension} loaded')
-    except:
-        await ctx.send(f'{extension} not recognized')
+    if extension == 'oversightdata' or extension == 'OversightData':
+        print('check')
+        try:
+            importlib.load(OversightData)
+            await ctx.send(f'{extension} reloaded')
+        except:
+            await ctx.send(f'{extension} not recognized')
+    else:
+        try:
+            client.load_extension(f'cogs.{extension}')
+            await ctx.send(f'{extension} loaded')
+        except:
+            await ctx.send(f'{extension} not recognized')
 
 @client.command()
 @commands.is_owner()
 async def unload(ctx, extension):
-    try:
-        client.unload_extension(f'cogs.{extension}')
-        await ctx.send(f'{extension} unloaded')
-    except:
-        await ctx.send(f'{extension} not recognized')
+    if extension == 'oversightdata' or extension == 'OversightData':
+        try:
+            importlib.unload(OversightData)
+            await ctx.send(f'{extension} reloaded')
+        except:
+            await ctx.send(f'{extension} not recognized')
+    else:
+        try:
+            client.unload_extension(f'cogs.{extension}')
+            await ctx.send(f'{extension} unloaded')
+        except:
+            await ctx.send(f'{extension} not recognized')
 
 @client.command()
 @commands.is_owner()
