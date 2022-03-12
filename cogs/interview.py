@@ -230,7 +230,6 @@ class interview(commands.Cog):
             pentarch_role = ctx.guild.get_role(pentarch_role_id)
             interviewer_role = ctx.guild.get_role(management_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
-            num = str(num)
             try:
                 with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
                     dic = json.load(data)
@@ -250,7 +249,11 @@ class interview(commands.Cog):
                     json.dump(dic, outfile)
             user = None
             message = OversightData.interview_message(num, user)
-            embed = discord.Embed(title = f'Interview information',
+            if num != '0':
+                embed = discord.Embed(title = f'Question number {num}',
+                            description = f'{message}', color=colors.dark_gold)
+            else:
+                embed = discord.Embed(title = f'Interview information',
                             description = f'{message}', color=colors.dark_gold)
             msg = await ctx.send(embed=embed)
             await msg.add_reaction(right_arrow)
