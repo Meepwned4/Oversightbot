@@ -7,6 +7,8 @@ import importlib
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
 from discord.ext.commands import MissingAnyRole, CommandOnCooldown
+from discord import DMChannel
+import time
 import pickle
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -150,15 +152,12 @@ async def daily():
             'https://politicsandwar.com/api/alliance-members/' +
             f'?allianceid=5049&key={apikey}')
     fetcheddata = fetcheddata.json()
-    print('Pulled info from PnW api!')
     memberdata = fetcheddata.get(['nations'][0])
     list_of_dics = requests.get(
         'http://24.117.204.187:8080/discord/?alliance=5049' +
         '&key=davethsmellskrampuswhales')
     list_of_dics = list_of_dics.json()
-    print('Pulled info from Shama\'s api!')
-    memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)
-    print('Data download complete')               
+    memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)              
 
     for chan in server.text_channels:
         if chan.category_id == 567390184774303745:
@@ -199,15 +198,13 @@ async def daily():
             if i.get('nationid') == dic.get(
                     '_id'):
                 i.update({'DiscordID':dic.get('DiscordID')})
-                            
-    print('Trainees and raiders found')                
+                                          
     for nation in memberdata:
         if nation.get('DiscordID') in nerds_list:
             nation.update({'Trainee':1})
         else:
             nation.update({'Trainee':0})
     OversightData.data_storage(memberdata)
-    print('Trainees and raiders logged')
     
     pinglist = []
     login_nationids = []
@@ -267,7 +264,6 @@ async def daily():
             login_ping = 'Everyone has logged in within 3 days.'
     if nerds_login_ping == nerds_login_temp:
         nerds_login_ping = 'Everyone has logged in within 3 days.'
-    print('Inactive done')
 
     nmp_temp = '\n__People who don\'t have max planes__\n'
     nmp_ping = [nmp_temp]
@@ -319,7 +315,6 @@ async def daily():
         nmp_ping = 'Everyone has max planes.'
     if not nerds_nmp_ping:
         nerds_nmp_ping = 'Everyone has max planes.'
-    print('nmp done')
 
     nsp_nationids = []
     nsp_temp = '\n\n__People who don\'t have max spies:__\n'
@@ -378,7 +373,6 @@ async def daily():
         nsp_ping = 'Everyone has max spies.'
     if nerds_nsp_ping == nerds_nsp_temp:
         nerds_nsp_ping = 'Everyone has max spies.'
-    print('nsp done')
 
 
     nmt_nationids = []
@@ -437,7 +431,6 @@ async def daily():
         nmt_ping = 'Everyone has max tanks.'
     if not nerds_nmt_ping:
         nerds_nmt_ping = 'Nobody has tanks.'
-    print('nmt done')
     
     
     nms_nationids = []
@@ -491,7 +484,6 @@ async def daily():
         nms_ping = 'Everyone has max soldiers.'
     if not nerds_nms_ping:
         nerds_nms_ping = 'Everyone has max soldiers.'
-    print('nms done')
 
 
     nmsh_nationids = []
@@ -545,7 +537,6 @@ async def daily():
         nmsh_ping = 'Everyone has max ships.'
     if not nerds_nmsh_ping:
         nerds_nmsh_ping = 'Everyone doesn\'t have ships.'
-    print('nmsh done')
 
 
     color_nationids = []
@@ -568,7 +559,6 @@ async def daily():
                     dic.get('vacmode') == '0':
                     b = dic.get('nationid')
                     if int(b) == 210815:
-                        print(dic.get('DiscordID'))
                         continue
                     color_nationids.append(b)
                     if b not in pinglist:
@@ -604,7 +594,6 @@ async def daily():
         color_ping = 'Everyone is on the correct color.'
     if not nerds_color_ping:
         nerds_color_ping = 'Everyone is on the correct color.'
-    print('color done')
     
     color_message_temp = f'\nChange to {AA_color}' + \
     ' <https://politicsandwar.com/nation/edit/> ' + \
@@ -665,35 +654,34 @@ async def daily():
     if len(no_message) < 1800:
         if no_message != no_temp:
             await disc_channel.send(no_message)
-    print('messages sent, maybe')
     
     
-#    for ping in no_message_list:
-#        if ping == login_temp or ping == nms_temp or ping == nmt_temp \
-#        or ping == nmp_temp or ping == nmsh_temp or ping == nsp_temp \
-#        or ping == color_temp or ping == None:
-#            continue
-#        else:
-#            if ping == login_temp:
-#                number /= 1440
-#                number *= 2
-#                
-#                msg = f'''
-#                My data sources have shown that you haven't logged in for at least {str(number)} days.
-#                failure to login before 7 days inactive, will result in being set as an applicant
-#                and possible complete removal from the alliance.
-#                '''
-#            for user_id in ping:
-#                user = await client.fetch_user(user_id)
-#                msg = f''
-#                channel = client.get_channel(946196124614664212)
-#                try:
-#                    await DMChannel.send(user, msg)
-#                    await channel.send(f':white_check_mark: Your Message has been sent')
-#                    time.sleep(4)
-#                except:
-#                    await channel.send(':x: Message failed to send, I might be blocked by <@{user_id}>')
-#                    time.sleep(1)
+    for ping in no_message_list:
+        if ping == login_temp or ping == nms_temp or ping == nmt_temp \
+        or ping == nmp_temp or ping == nmsh_temp or ping == nsp_temp \
+        or ping == color_temp or ping == None:
+            continue
+        else:
+            if ping == login_temp:
+                number /= 1440
+                number *= 2
+                
+                msg = f'''
+                My data sources have shown that you haven't logged in for at least {str(number)} days.
+                failure to login before 7 days inactive, will result in being set as an applicant
+                and eventually, removal from the alliance.
+                '''
+            for user_id in ping:
+                user = await client.fetch_user(user_id)
+                msg = f''
+                channel = client.get_channel(946196124614664212)
+                try:
+                    await DMChannel.send(user, msg)
+                    await channel.send(f':white_check_mark: {user.mention} has been DMed')
+                    time.sleep(4)
+                except:
+                    await channel.send(':x: Message failed to send, I might be blocked by <@{user_id}>')
+                    time.sleep(1)
 
 #        embed = discord.Embed(title = 'Trainee units and inactivity status.',
 #                          description = '', color=colors.dark_gold)
@@ -762,9 +750,8 @@ async def daily():
 #        if a == 1:
 #            await disc_channel.send(embed=embed)
 
-#    print('Daily end!')
-#    data_storage(memberdata)
-#    print('Data stored')
+    OversightData.data_storage(memberdata)
+    print('Daily end!')
 
 # initializing scheduler
 scheduler = AsyncIOScheduler(
