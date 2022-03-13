@@ -22,7 +22,7 @@ ticket_category_name = '[Admission & Training]'
 management_role_id = 568141320011382825
 suffet_role_id = 567338425443942420
 elder_role_id = 567338487380967430
-pentarch_role_id = 568141320011382825
+pentarch_role_id = 567389583289876490
 adirim_role_id = 752227315832062063
 bot_role_id = 567722813335535622
 trainee_role_id = 712071416505172090
@@ -104,6 +104,7 @@ class ticket(commands.Cog):
                     await ticket_category.create_text_channel(
                             f'ticket-{num}', overwrites=overwrites)
                     chan = discord.utils.get(guild.text_channels, name=f'ticket-{num}')
+                    await chan.edit(sync_permissions=True)
                     dic = {'channel':chan.name, 'user_id':member.id}
                     with open(f'./data/tickets/{chan.name}-{chan.id}.json', 'w') as outfile:
                         json.dump(dic, outfile)
@@ -251,6 +252,7 @@ class ticket(commands.Cog):
         channel = client.get_channel(archive_channel)
         await channel.send(embed=embed)
         await channel.send(file=discord.File(transcript_file))
+        os.remove(f'./data/transcripts/{channel_name}-{ctx.channel.id}.html')
     
     @commands.command(help='+close (reason)')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
@@ -313,6 +315,7 @@ class ticket(commands.Cog):
             except:
                 await ctx.send('❌ This does not seem like a ticket channel.')
             os.remove(f'./data/tickets/{channel_name}-{ctx.channel.id}.json')
+            os.remove(f'./data/transcripts/{channel_name}-{ctx.channel.id}.html')
 
 def setup(client):
-    client.add_cog(ticket(client))
+	client.add_cog(ticket(client))
