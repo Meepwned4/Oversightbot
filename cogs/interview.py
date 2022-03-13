@@ -86,7 +86,26 @@ class interview(commands.Cog):
     async def on_guild_channel_create(self, channel):
         if channel.category.id == 567390184774303745 or channel.category.id == 876639217042751578:
             chan_name = channel.name.split('-')
+            chan_id = channel.id
+            suffet_role = channel.guild.get_role(suffet_role_id)
+            elder_role = channel.guild.get_role(elder_role_id)
+            pentarch_role = channel.guild.get_role(pentarch_role_id)
+            interviewer_role = channel.guild.get_role(management_role_id)
+            adirim_role = channel.guild.get_role(adirim_role_id)
             if chan_name[0] == 'ticket':
+                try:
+                    with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
+                        dic = json.load(data)
+                except:
+                    for member in channel.members:
+                        if suffet_role not in member.roles and elder_role not in member.roles \
+                        and pentarch_role not in member.roles and interviewer_role not in member.roles \
+                        and adirim_role not in member.roles:
+                            member_id = member.id
+                            break
+                    dic = {'channel':chan_name, 'user_id':member_id}
+                with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
+                    json.dump(dic, outfile)
                 message = f'''
                 Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
 

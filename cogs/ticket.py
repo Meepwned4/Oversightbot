@@ -252,7 +252,7 @@ class ticket(commands.Cog):
         channel = client.get_channel(archive_channel)
         await channel.send(embed=embed)
         await channel.send(file=discord.File(transcript_file))
-        os.remove(f'./data/transcripts/{channel_name}-{ctx.channel.id}.html')
+        os.remove(f'./data/transcripts/{ctx.channel.name}-{ctx.channel.id}.html')
     
     @commands.command(help='+close (reason)')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
