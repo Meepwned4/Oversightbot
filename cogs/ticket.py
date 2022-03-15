@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import DMChannel
 import chat_exporter
 import pickle
 import json
@@ -157,7 +158,7 @@ class ticket(commands.Cog):
         chan = ctx.channel
         try:
             
-            with open(f'./data/tickets/{chan.name}-{chan.id}.json') as data:
+            with open(f'./data/tickets/{chan.id}.json') as data:
                 data = json.load(data)
             discord_id = data.get('user_id')
 #            discord_id = 605929396724826135
@@ -245,14 +246,21 @@ class ticket(commands.Cog):
         if transcript is None:
             return
     
-        file = open(f'./data/transcripts/transcript-{ctx.channel.name}.html', 'w')
-        file.write(transcript)
-        file.close()
-        transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.name}.html', 'r')
-        channel = client.get_channel(archive_channel)
-        await channel.send(embed=embed)
-        await channel.send(file=discord.File(transcript_file))
-        os.remove(f'./data/transcripts/{ctx.channel.name}-{ctx.channel.id}.html')
+        try:
+            file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+            file.write(transcript)
+            file.close()
+            transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+            channel = client.get_channel(archive_channel)
+            await channel.send(embed=embed)
+            await channel.send(file=discord.File(transcript_file))
+            os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
+        except:
+            msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+            user = await client.fetch_user(175719252995604480)
+            await DMChannel.send(ctx.author, msg)
+            msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
+            await DMChannel.send(user, msg)
     
     @commands.command(help='+close (reason)')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
@@ -270,7 +278,7 @@ class ticket(commands.Cog):
         if ctx.message.channel.category == ticket_category and channel_name == 'ticket':
             await ctx.message.delete()
             try:
-                with open(f'./data/tickets/{ctx.channel.name}-{ctx.channel.id}.json') as data:
+                with open(f'./data/tickets/{ctx.channel.id}.json') as data:
                     data = json.load(data)
                     user_id = data.get('user_id')
                     channel_name = data.get('channel')
@@ -299,23 +307,29 @@ class ticket(commands.Cog):
         
             if transcript is None:
                 return
-        
-            file = open(f'./data/transcripts/transcript-{ctx.channel.name}.html', 'w')
-            file.write(transcript)
-            file.close()
-            transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.name}.html', 'r')
-            channel = client.get_channel(archive_channel)
-            await channel.send(embed=embed)
-            await channel.send(file=discord.File(transcript_file))
-            try:    
-                if 'ticket' in ctx.channel.name:
-                    await ctx.channel.delete()
-                else:
+            try:
+                file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+                file.write(transcript)
+                file.close()
+                transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+                channel = client.get_channel(archive_channel)
+                await channel.send(embed=embed)
+                await channel.send(file=discord.File(transcript_file))
+                try:    
+                    for filename in os.listdir('./transcripts'):
+                        if str(ctx.channel.id) in filename:
+                            await ctx.channel.delete()
+                            os.remove(f'./data/tickets/{ctx.channel.id}.json')
+                            os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
+                        else:
+                            await ctx.send('❌ This does not seem like a ticket channel.')
+                except:
                     await ctx.send('❌ This does not seem like a ticket channel.')
             except:
-                await ctx.send('❌ This does not seem like a ticket channel.')
-            os.remove(f'./data/tickets/{channel_name}-{ctx.channel.id}.json')
-            os.remove(f'./data/transcripts/{channel_name}-{ctx.channel.id}.html')
-
+                msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+                user = await client.fetch_user(175719252995604480)
+                await DMChannel.send(ctx.author, msg)
+                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+close\" ran by <@{ctx.author.id}>'
+                await DMChannel.send(user, msg)
 def setup(client):
 	client.add_cog(ticket(client))

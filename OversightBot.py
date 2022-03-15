@@ -160,26 +160,23 @@ async def daily():
     memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)              
 
     for chan in server.text_channels:
-        if chan.category_id == 567390184774303745:
-            if chan.id == 845685557367144448 or chan.id == disc_channel or \
-            chan.id == 568822425253576739:
-                continue
-            else:
-                chan_id = chan.id
-                for member in chan.members:
-                    if member.id == piggy_id:
-                        continue
-                    else:
-                        member_id = str(member.id)
-                        for dic in memberdata:
-                            if dic.get('DiscordID') == member_id:
-                                for role in member.roles:
-                                    role_id = role.id
-                                    if role_id == nerds_id:
-                                        nerds_list.append(str(member_id))
-                                        dic.update({'ChannelID': chan_id})
-                                    elif role_id == raider_id:
-                                        raider_list.append(str(member_id))
+        if chan.id == 812131124489879552:
+            chan_id = chan.id
+            for member in chan.members:
+                if member.id == piggy_id:
+                    continue
+                else:
+                    member_id = str(member.id)
+                    for dic in memberdata:
+                        if dic.get('DiscordID') == member_id:
+                            for role in member.roles:
+                                role_id = role.id
+                                if role_id == nerds_id:
+                                    nerds_list.append(str(member_id))
+                                    dic.update({'ChannelID': chan_id})
+                                elif role_id == raider_id:
+                                    raider_list.append(str(member_id))
+            break
     if memberdata[0].get('war_status'):
         for i in memberdata:
             i.update({'war_status':memberdata[0].get('war_status')})

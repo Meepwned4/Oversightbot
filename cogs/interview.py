@@ -94,7 +94,7 @@ class interview(commands.Cog):
             adirim_role = channel.guild.get_role(adirim_role_id)
             if chan_name[0] == 'ticket':
                 try:
-                    with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
+                    with open(f'./data/tickets/{chan_id}.json') as data:
                         dic = json.load(data)
                 except:
                     for member in channel.members:
@@ -104,7 +104,7 @@ class interview(commands.Cog):
                             member_id = member.id
                             break
                     dic = {'channel':chan_name, 'user_id':member_id}
-                with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
+                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                     json.dump(dic, outfile)
                 message = f'''
                 Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
@@ -172,13 +172,13 @@ class interview(commands.Cog):
                     if emoji.name == interview_emoji:
                         num = '0'
                         try:
-                            with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
+                            with open(f'./data/tickets/{chan_id}.json') as data:
                                 dic = json.load(data)
                             dic.update({'num':num})
                         except:
                             dic = {'channel':chan.name, 'user_id':member.id}
                             dic.update({'num':num})
-                        with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
+                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
                         message = OversightData.interview_message(num, member)
                         embed = discord.Embed(title = f'Interview information',
@@ -191,7 +191,7 @@ class interview(commands.Cog):
                     if emoji.name == right_arrow:
                         disc_channel = client.get_channel(disc_channel_id)
                         try:
-                            with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
+                            with open(f'./data/tickets/{chan_id}.json') as data:
                                 dic = json.load(data)
                         except:
                             num = '0'
@@ -201,7 +201,7 @@ class interview(commands.Cog):
                         num += 1
                         num = str(num)
                         dic.update({'num':num})
-                        with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
+                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
                         if num == '9':
                             message_list = OversightData.interview_message(num, member)
@@ -234,7 +234,7 @@ class interview(commands.Cog):
                             msg = await chan.send(embed=embed)
                             await msg.add_reaction(right_arrow)
                             await msg.add_reaction(person)
-                            with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
+                            with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                 json.dump(dic, outfile)
                             await user_message.reactions[0].remove(member)
     
@@ -242,7 +242,6 @@ class interview(commands.Cog):
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer')
     async def start(self, ctx, num: typing.Optional[str] = '0' ):
         if ctx.channel.category.id == 567390184774303745 or ctx.channel.category.id == 876639217042751578 or ctx.channel.id == 736099358344478764:
-            chan_name = ctx.channel.name
             chan_id = ctx.channel.id
             suffet_role = ctx.guild.get_role(suffet_role_id)
             elder_role = ctx.guild.get_role(elder_role_id)
@@ -250,10 +249,10 @@ class interview(commands.Cog):
             interviewer_role = ctx.guild.get_role(management_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
             try:
-                with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
+                with open(f'./data/tickets/{chan_id}.json') as data:
                     dic = json.load(data)
                 dic.update({'num':num})
-                with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
+                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                     json.dump(dic, outfile)
             except:
                 for member in ctx.channel.members:
@@ -264,7 +263,7 @@ class interview(commands.Cog):
                         break
                 dic = {'channel':ctx.channel.name, 'user_id':member_id}
                 dic.update({'num':num})
-                with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
+                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                     json.dump(dic, outfile)
             user = None
             message = OversightData.interview_message(num, user)
@@ -290,7 +289,7 @@ class interview(commands.Cog):
             interviewer_role = ctx.guild.get_role(management_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
             try:
-                with open(f'./data/tickets/{chan_name}-{chan_id}.json') as data:
+                with open(f'./data/tickets/{chan_id}.json') as data:
                     dic = json.load(data)
                 num = int(dic.get('num'))
             except:
@@ -311,7 +310,7 @@ class interview(commands.Cog):
             num += 1
             num = str(num)
             dic.update({'num':num})
-            with open(f'./data/tickets/{chan_name}-{chan_id}.json', 'w') as outfile:
+            with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                 json.dump(dic, outfile)
             user = None
             if num != '11':
@@ -337,7 +336,7 @@ class interview(commands.Cog):
                     msg = await ctx.send(embed=embed)
                     await msg.add_reaction(right_arrow)
                     await msg.add_reaction(person)
-                data = open(f'./data/tickets/{chan_name}-{chan_id}.json')
+                data = open(f'./data/tickets/{chan_id}.json')
                 dic = json.load(data)
                 dic.update({'num':num})
                 for user in ctx.channel.members:
@@ -350,7 +349,7 @@ class interview(commands.Cog):
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction(right_arrow)
                 await msg.add_reaction(person)
-                os.remove(f'./data/tickets/{chan_name}-{chan_id}.json') 
+                os.remove(f'./data/tickets/{chan_id}.json') 
             await ctx.message.delete()
 
 
