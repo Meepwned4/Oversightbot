@@ -653,32 +653,32 @@ async def daily():
             await disc_channel.send(no_message)
     
     
-    for ping in no_message_list:
-        if ping == login_temp or ping == nms_temp or ping == nmt_temp \
-        or ping == nmp_temp or ping == nmsh_temp or ping == nsp_temp \
-        or ping == color_temp or ping == None:
-            continue
-        else:
-            if ping == login_temp:
-                number /= 1440
-                number *= 2
-                
-                msg = f'''
-                My data sources have shown that you haven't logged in for at least {str(number)} days.
-                failure to login before 7 days inactive, will result in being set as an applicant
-                and eventually, removal from the alliance.
-                '''
-            for user_id in ping:
-                user = await client.fetch_user(user_id)
-                msg = f''
-                channel = client.get_channel(946196124614664212)
-                try:
-                    await DMChannel.send(user, msg)
-                    await channel.send(f':white_check_mark: {user.mention} has been DMed')
-                    time.sleep(4)
-                except:
-                    await channel.send(':x: Message failed to send, I might be blocked by <@{user_id}>')
-                    time.sleep(1)
+#    for ping in no_message_list:
+#        if ping == login_temp or ping == nms_temp or ping == nmt_temp \
+#        or ping == nmp_temp or ping == nmsh_temp or ping == nsp_temp \
+#        or ping == color_temp or ping == None:
+#            continue
+#        else:
+#            if ping == login_temp:
+#                number /= 1440
+#                number *= 2
+#                
+#                msg = f'''
+#                My data sources have shown that you haven't logged in for at least {str(number)} days.
+#                failure to login before 7 days inactive, will result in being set as an applicant
+#                and eventually, removal from the alliance.
+#                '''
+#            for user_id in ping:
+#                user = await client.fetch_user(user_id)
+#                msg = f''
+#                channel = client.get_channel(946196124614664212)
+#                try:
+#                    await DMChannel.send(user, msg)
+#                    await channel.send(f':white_check_mark: {user.mention} has been DMed')
+#                    time.sleep(4)
+#                except:
+#                    await channel.send(':x: Message failed to send, I might be blocked by <@{user_id}>')
+#                    time.sleep(1)
 
 #        embed = discord.Embed(title = 'Trainee units and inactivity status.',
 #                          description = '', color=colors.dark_gold)
