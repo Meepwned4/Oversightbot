@@ -77,6 +77,7 @@ class ticket(commands.Cog):
         try:
             guild = client.get_guild(guild_id)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
+            print(ticket_category.id)
             management_role = guild.get_role(management_role_id)  # management role
             channel = guild.get_channel(channel_id)
         except:
@@ -144,169 +145,110 @@ class ticket(commands.Cog):
     @commands.command(help='+approve')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def approve(self, ctx):
-        trainee_role = ctx.guild.get_role(trainee_role_id)
-        foreigner_role = ctx.guild.get_role(foreigner_role_id)
-        citizen_role = ctx.guild.get_role(citizen_role_id)
-        suffet_role = ctx.guild.get_role(suffet_role_id)
-        pentarch_role = ctx.guild.get_role(pentarch_role_id)
-        elder_role = ctx.guild.get_role(elder_role_id)
-        interviewer_role = ctx.guild.get_role(management_role_id)
-        adirim_role = ctx.guild.get_role(adirim_role_id)
-        bot_role = ctx.guild.get_role(bot_role_id)
-        pickle_off = open('./data/api_key.pickle', 'rb')
-        apikey = pickle.load(pickle_off)
-        chan = ctx.channel
-        try:
-            with open(f'./data/tickets/{chan.id}.json') as data:
-                data = json.load(data)
-            discord_id = data.get('user_id')
-            user = requests.get(
-                f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
-            user = user.json()
-            user = user[0]
-            for member in ctx.channel.members:
-                if member.id == discord_id:
-                    break
-        except:
-            for member in ctx.channel.members:
-               if suffet_role not in member.roles and elder_role not in member.roles \
-                and pentarch_role not in member.roles and interviewer_role not in member.roles \
-                and adirim_role not in member.roles and bot_role not in member.roles:
-                    discord_id = member.id
-                    break
-            user = requests.get(
-                f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
-            user = user.json()
-            user = user[0]
-        
-        nation_id = user.get('_id')
-        try:
-            nation = requests.get(
-                f'http://24.117.204.187:8080/nations/?_id={nation_id}&key=davethsmellskrampuswhales')
-            nation = nation.json()
-            nation = nation[0]
-        except:
-            fetcheddata = requests.get(
-                    'https://politicsandwar.com/api/nation/' +
-                    f'?id={nation_id}&key={apikey}')
-            fetcheddata = fetcheddata.json()
-            memberdata = fetcheddata.get(['nations'][0])
-            for dic in memberdata:
-                if dic.get('nationid') == nation_id:
-                    nation = dic
-                    break
-        user_name = user.get('leader')
-        channel_name = user.get('leader').replace(' ', '-') + '-' + str(user.get('NationID'))
-        nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
-        login_data = {'email': 'jacksonayres11@gmail.com', 'password': 'Dungeons&Dragons', 'loginform': 'Login'}
-        async with aiohttp.ClientSession() as session:
-            login_url = 'https://politicsandwar.com/login/'
-            res1 = await session.post(login_url, data=login_data)
-            if(len((BeautifulSoup(await res1.text(), 'html.parser')).body.findAll(text='Login Failure')) > 0):
-                print('Login failed')
-                raise   Exception('Login failed')
-            url = 'https://politicsandwar.com/alliance/id=5049#permissions'
-            perms_data = {'nationperm':f'{user_name}', 'level':'2', 'permsubmit':'Go'}
-#            res2 = await session.get(url);
-#            text = await res2.text()
-#            auth_token = (BeautifulSoup(text, 'html.parser')).find('input', {'name':'token'})['value']
-#            perms_data.update({'token': auth_token})
-            await session.post(url, data=perms_data)
-            await session.close()
-        await ctx.channel.edit(name=channel_name, topic=nation_link)
-        if nation.get('cities') >= 10:
-            if nation.get('cenciveng') == True and nation.get('intagncy') == True \
-            and nation.get('propbureau') == True:
-                await member.add_roles(citizen_role)
-                await member.remove_roles(foreigner_role)
+        if ctx.channel.category.name == ticket_category_name and 'ticket' in ctx.channel.name:
+            trainee_role = ctx.guild.get_role(trainee_role_id)
+            foreigner_role = ctx.guild.get_role(foreigner_role_id)
+            citizen_role = ctx.guild.get_role(citizen_role_id)
+            suffet_role = ctx.guild.get_role(suffet_role_id)
+            pentarch_role = ctx.guild.get_role(pentarch_role_id)
+            elder_role = ctx.guild.get_role(elder_role_id)
+            interviewer_role = ctx.guild.get_role(management_role_id)
+            adirim_role = ctx.guild.get_role(adirim_role_id)
+            bot_role = ctx.guild.get_role(bot_role_id)
+            pickle_off = open('./data/api_key.pickle', 'rb')
+            apikey = pickle.load(pickle_off)
+            chan = ctx.channel
+            try:
+                with open(f'./data/tickets/{chan.id}.json') as data:
+                    data = json.load(data)
+                discord_id = data.get('user_id')
+                user = requests.get(
+                    f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                user = user.json()
+                user = user[0]
+                for member in ctx.channel.members:
+                    if member.id == discord_id:
+                        break
+            except:
+                for member in ctx.channel.members:
+                   if suffet_role not in member.roles and elder_role not in member.roles \
+                    and pentarch_role not in member.roles and interviewer_role not in member.roles \
+                    and adirim_role not in member.roles and bot_role not in member.roles:
+                        discord_id = member.id
+                        user = requests.get(
+                            f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                        user = user.json()
+                        user = user[0]
+                        break
+            
+            nation_id = user.get('_id')
+            try:
+                nation = requests.get(
+                    f'http://24.117.204.187:8080/nations/?_id={nation_id}&key=davethsmellskrampuswhales')
+                nation = nation.json()
+                nation = nation[0]
+            except:
+                fetcheddata = requests.get(
+                        'https://politicsandwar.com/api/nation/' +
+                        f'?id={nation_id}&key={apikey}')
+                fetcheddata = fetcheddata.json()
+                memberdata = fetcheddata.get(['nations'][0])
+                for dic in memberdata:
+                    if dic.get('nationid') == nation_id:
+                        nation = dic
+                        break
+            user_name = user.get('leader')
+            channel_name = user.get('leader').replace(' ', '-') + '-' + str(user.get('NationID'))
+            nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
+            login_data = {'email': 'jacksonayres11@gmail.com', 'password': 'Dungeons&Dragons', 'loginform': 'Login'}
+            async with aiohttp.ClientSession() as session:
+                login_url = 'https://politicsandwar.com/login/'
+                res1 = await session.post(login_url, data=login_data)
+                if(len((BeautifulSoup(await res1.text(), 'html.parser')).body.findAll(text='Login Failure')) > 0):
+                    print('Login failed')
+                    raise   Exception('Login failed')
+                url = 'https://politicsandwar.com/alliance/id=5049#permissions'
+                perms_data = {'nationperm':f'{user_name}', 'level':'2', 'permsubmit':'Go'}
+    #            res2 = await session.get(url);
+    #            text = await res2.text()
+    #            auth_token = (BeautifulSoup(text, 'html.parser')).find('input', {'name':'token'})['value']
+    #            perms_data.update({'token': auth_token})
+                await session.post(url, data=perms_data)
+                await session.close()
+            await ctx.channel.edit(name=channel_name, topic=nation_link)
+            if nation.get('cities') >= 10:
+                if nation.get('cenciveng') == True and nation.get('intagncy') == True \
+                and nation.get('propbureau') == True:
+                    await member.add_roles(citizen_role)
+                    await member.remove_roles(foreigner_role)
+                else:
+                    await member.add_roles(trainee_role)
+                    await member.remove_roles(foreigner_role)
             else:
                 await member.add_roles(trainee_role)
                 await member.remove_roles(foreigner_role)
-        else:
-            await member.add_roles(trainee_role)
-            await member.remove_roles(foreigner_role)
     
     @commands.command(help='+save')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def save(self, ctx: commands.Context):
-        client = self.client
-        await ctx.message.delete()
-        embed = discord.Embed(title='Ticket manually saved',color=colors.dark_gold)
-        embed.add_field(name = 'Saved by',
-                    value = f'<@{ctx.author.id}>',
-                    inline = True)
-        embed.add_field(name = 'Ticket name',
-                    value = f'{ctx.channel.name}',
-                    inline = True)
-        embed.add_field(name = 'Reason',
-                    value = 'Manually saved',
-                    inline = False)
-        transcript = await chat_exporter.export(ctx.channel)
-    
-        if transcript is None:
-            return
-    
-        try:
-#            file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
-#            file.write(transcript)
-#            file.close()
-#            transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
-            channel = client.get_channel(archive_channel)
-            await channel.send(embed=embed)
-            await channel.send(file=discord.File(transcript))
-            os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
-        except:
-            msg = f'❌ Failed to archive <#{ctx.channel.id}> \n Billy has been notified'
-            user = await client.fetch_user(175719252995604480)
-            await DMChannel.send(ctx.author, msg)
-            msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
-            await DMChannel.send(user, msg)
-    
-    @commands.command(help='+close (reason)')
-    @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
-    async def close(self, ctx, *, reason: typing.Optional[str] = 'Not specified'):
-        client = self.client
-        guild = client.get_guild(guild_id)
-        ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
-        channel_name = ctx.channel.name.split('-')
-        channel_name = channel_name[0]
-        suffet_role = ctx.guild.get_role(suffet_role_id)
-        elder_role = ctx.guild.get_role(elder_role_id)
-        pentarch_role = ctx.guild.get_role(pentarch_role_id)
-        interviewer_role = ctx.guild.get_role(management_role_id)
-        adirim_role = ctx.guild.get_role(adirim_role_id)
-        if ctx.message.channel.category == ticket_category and channel_name == 'ticket':
+        if ctx.channel.category.name == ticket_category_name and 'ticket' in ctx.channel.name:
+            client = self.client
             await ctx.message.delete()
-            try:
-                with open(f'./data/tickets/{ctx.channel.id}.json') as data:
-                    data = json.load(data)
-                    user_id = data.get('user_id')
-                    channel_name = data.get('channel')
-            except:
-                for member in ctx.channel.members:
-                    if suffet_role not in member.roles and elder_role not in member.roles \
-                    and pentarch_role not in member.roles and interviewer_role not in member.roles \
-                    and adirim_role not in member.roles:
-                        user_id = member.id
-                        channel_name = data.get('channel')
-                        break
-            embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
-            embed.add_field(name = 'Opened by',
-                        value = f'<@{user_id}>',
-                        inline = True)
-            embed.add_field(name = 'Closed by',
+            embed = discord.Embed(title='Ticket manually saved',color=colors.dark_gold)
+            embed.add_field(name = 'Saved by',
                         value = f'<@{ctx.author.id}>',
                         inline = True)
             embed.add_field(name = 'Ticket name',
-                        value = f'{channel_name}',
+                        value = f'{ctx.channel.name}',
                         inline = True)
             embed.add_field(name = 'Reason',
-                        value = f'{reason}',
+                        value = 'Manually saved',
                         inline = False)
             transcript = await chat_exporter.export(ctx.channel)
         
             if transcript is None:
                 return
+        
             try:
                 file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
                 file.write(transcript)
@@ -315,21 +257,88 @@ class ticket(commands.Cog):
                 channel = client.get_channel(archive_channel)
                 await channel.send(embed=embed)
                 await channel.send(file=discord.File(transcript_file))
-                try:    
-                    for filename in os.listdir('./transcripts'):
-                        if str(ctx.channel.id) in filename:
-                            await ctx.channel.delete()
-                            os.remove(f'./data/tickets/{ctx.channel.id}.json')
-                            os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
-                        else:
-                            await ctx.send('❌ This does not seem like a ticket channel.')
-                except:
-                    await ctx.send('❌ This does not seem like a ticket channel.')
+                os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
             except:
-                msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n Billy has been notified'
                 user = await client.fetch_user(175719252995604480)
                 await DMChannel.send(ctx.author, msg)
-                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+close\" ran by <@{ctx.author.id}>'
+                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
                 await DMChannel.send(user, msg)
+    
+    @commands.command(help='+close (reason)')
+    @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
+    async def close(self, ctx, *, reason: typing.Optional[str] = 'Not specified'):
+        if ctx.channel.category.name == ticket_category_name and 'ticket' in ctx.channel.name:
+            client = self.client
+            guild = client.get_guild(guild_id)
+            ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
+            channel_name = ctx.channel.name.split('-')
+            channel_name = channel_name[0]
+            suffet_role = ctx.guild.get_role(suffet_role_id)
+            elder_role = ctx.guild.get_role(elder_role_id)
+            pentarch_role = ctx.guild.get_role(pentarch_role_id)
+            interviewer_role = ctx.guild.get_role(management_role_id)
+            adirim_role = ctx.guild.get_role(adirim_role_id)
+            if ctx.message.channel.category == ticket_category and channel_name == 'ticket':
+                await ctx.message.delete()
+                try:
+                    with open(f'./data/tickets/{ctx.channel.id}.json') as data:
+                        data = json.load(data)
+                        user_id = data.get('user_id')
+                        channel_name = data.get('channel')
+                except:
+                    for member in ctx.channel.members:
+                        if suffet_role not in member.roles and elder_role not in member.roles \
+                        and pentarch_role not in member.roles and interviewer_role not in member.roles \
+                        and adirim_role not in member.roles:
+                            user_id = member.id
+                            channel_name = ctx.channel.name
+                            break
+                embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
+                embed.add_field(name = 'Opened by',
+                            value = f'<@{user_id}>',
+                            inline = True)
+                embed.add_field(name = 'Closed by',
+                            value = f'<@{ctx.author.id}>',
+                            inline = True)
+                embed.add_field(name = 'Ticket name',
+                            value = f'{channel_name}',
+                            inline = True)
+                embed.add_field(name = 'Reason',
+                            value = f'{reason}',
+                            inline = False)
+                transcript = await chat_exporter.export(ctx.channel)
+            
+                if transcript is None:
+                    return
+                try:
+                    file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+                    file.write(transcript)
+                    file.close()
+                    transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+                    channel = client.get_channel(archive_channel)
+                    await channel.send(embed=embed)
+                    await channel.send(file=discord.File(transcript_file))
+                    try:
+                        for filename in os.listdir('./data/transcripts'):
+                            if str(ctx.channel.id) in filename:
+                                os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
+                    except:
+                        pass
+                    for filename in os.listdir('./data/tickets'):
+                        if str(ctx.channel.id) in filename:
+                            os.remove(f'./data/tickets/{ctx.channel.id}.json')
+                    await ctx.channel.delete()
+                except:
+                    if ctx.author == client.is_owner:
+                        user = await client.fetch_user(175719252995604480)
+                        msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+close\" ran by <@{ctx.author.id}>'
+                        await DMChannel.send(user, msg)
+                    else:
+                        msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+                        user = await client.fetch_user(175719252995604480)
+                        await DMChannel.send(ctx.author, msg)
+                        msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+close\" ran by <@{ctx.author.id}>'
+                        await DMChannel.send(user, msg)
 def setup(client):
 	client.add_cog(ticket(client))
