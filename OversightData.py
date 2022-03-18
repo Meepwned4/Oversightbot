@@ -154,9 +154,6 @@ With your answer in mind, which among the following or using your own words, wou
 - Becoming a politically influential, well-known player.\n\n''' + reminder)
     if num == '9':
         message = [('''
-```--- TERMS AND CONDITIONS of Carthago ---
-```
-
  These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated. 
 
 **- Economics -**

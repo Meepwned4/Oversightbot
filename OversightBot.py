@@ -16,29 +16,29 @@ from pytz import utc
 import nest_asyncio
 nest_asyncio.apply()
 import OversightData
-#import logging
+import logging
 
-#'''
-#Options for logging:
-#logging.NOTSET - No logging
-#logging.DEBUG - All info
-#logging.INFO - Slightly less
-#logging.WARN - Only warnings and worse
-#logging.ERROR - Only errors and worse
-#'''
-#
-#logger = logging.getLogger(__name__)
-#c_handler = logging.StreamHandler()
-#c_handler.setLevel(logging.INFO)
-#c_format = logging.Formatter(
-#        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-#        datefmt='%b-%d-%y %H:%M:%S')
-#c_handler.setFormatter(c_format)
-#logger.addHandler(c_handler)
-#
-#logging.basicConfig(filename='app.log', filemode='w', level=logging.WARN,
-#                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-#                    datefmt='%b-%d-%y %H:%M:%S')
+'''
+Options for logging:
+logging.NOTSET - No logging
+logging.DEBUG - All info
+logging.INFO - Slightly less
+logging.WARN - Only warnings and worse
+logging.ERROR - Only errors and worse
+'''
+
+logger = logging.getLogger(__name__)
+c_handler = logging.StreamHandler()
+c_handler.setLevel(logging.INFO)
+c_format = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%b-%d-%y %H:%M:%S')
+c_handler.setFormatter(c_format)
+logger.addHandler(c_handler)
+
+logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%b-%d-%y %H:%M:%S')
 
 pickle_off = open('./data/api_key.pickle', 'rb')
 apikey = pickle.load(pickle_off)
@@ -105,6 +105,16 @@ async def reload(ctx, extension):
             await ctx.send(f'{extension} reloaded')
         except:
             await ctx.send(f'{extension} not recognized')
+
+@client.command()
+@commands.is_owner()
+async def logs(ctx):
+    user = ctx.author
+    try:
+        await DMChannel.send(user, file=discord.File('app.log'))
+    except:
+        msg = 'Failed to send logs'
+        await DMChannel.send(user, msg)
 
 class colors:
     default = 0

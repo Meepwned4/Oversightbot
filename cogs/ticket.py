@@ -160,7 +160,6 @@ class ticket(commands.Cog):
             with open(f'./data/tickets/{chan.id}.json') as data:
                 data = json.load(data)
             discord_id = data.get('user_id')
-            discord_id = 605929396724826135
             user = requests.get(
                 f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
