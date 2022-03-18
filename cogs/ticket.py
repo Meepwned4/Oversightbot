@@ -157,11 +157,10 @@ class ticket(commands.Cog):
         apikey = pickle.load(pickle_off)
         chan = ctx.channel
         try:
-            
             with open(f'./data/tickets/{chan.id}.json') as data:
                 data = json.load(data)
             discord_id = data.get('user_id')
-#            discord_id = 605929396724826135
+            discord_id = 605929396724826135
             user = requests.get(
                 f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
@@ -176,7 +175,6 @@ class ticket(commands.Cog):
                 and adirim_role not in member.roles and bot_role not in member.roles:
                     discord_id = member.id
                     break
-#            discord_id = 502150110940233730
             user = requests.get(
                 f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
@@ -217,14 +215,17 @@ class ticket(commands.Cog):
             await session.post(url, data=perms_data)
             await session.close()
         await ctx.channel.edit(name=channel_name, topic=nation_link)
-        if nation.get('cities') <= 10:
+        if nation.get('cities') >= 10:
             if nation.get('cenciveng') == True and nation.get('intagncy') == True \
             and nation.get('propbureau') == True:
-                await member.remove_roles(citizen_role)
+                await member.add_roles(citizen_role)
                 await member.remove_roles(foreigner_role)
             else:
                 await member.add_roles(trainee_role)
                 await member.remove_roles(foreigner_role)
+        else:
+            await member.add_roles(trainee_role)
+            await member.remove_roles(foreigner_role)
     
     @commands.command(help='+save')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
@@ -256,7 +257,7 @@ class ticket(commands.Cog):
             await channel.send(file=discord.File(transcript_file))
             os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
         except:
-            msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+            msg = f'❌ Failed to archive <#{ctx.channel.id}> \n Billy has been notified'
             user = await client.fetch_user(175719252995604480)
             await DMChannel.send(ctx.author, msg)
             msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'

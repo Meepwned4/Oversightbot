@@ -209,7 +209,7 @@ class interview(commands.Cog):
                             for item in message_list:
                                 l += 1
                                 if l == 1:
-                                    embed = discord.Embed(title = f'Question number {num}',
+                                    embed = discord.Embed(title = f'```--- TERMS AND CONDITIONS of Carthago ---\n```',
                                                 description = f'{item}', color=colors.dark_gold)
                                     await chan.send(embed=embed)
                                 else:
