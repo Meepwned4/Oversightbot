@@ -247,13 +247,13 @@ class ticket(commands.Cog):
             return
     
         try:
-            file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
-            file.write(transcript)
-            file.close()
-            transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+#            file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+#            file.write(transcript)
+#            file.close()
+#            transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
             channel = client.get_channel(archive_channel)
             await channel.send(embed=embed)
-            await channel.send(file=discord.File(transcript_file))
+            await channel.send(file=discord.File(transcript))
             os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
         except:
             msg = f'❌ Failed to archive <#{ctx.channel.id}> \n Billy has been notified'
