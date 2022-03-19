@@ -250,22 +250,22 @@ class ticket(commands.Cog):
             if transcript is None:
                 return
         
-#            try:
-#            file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
-#            file.write(transcript)
-#            file.close()
-#            transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
-            transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
-            channel = client.get_channel(archive_channel)
-            await channel.send(embed=embed)
-            await channel.send(file=discord.File(transcript_file))
-            os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
-#            except:
-#                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n Billy has been notified'
-#                user = await client.fetch_user(175719252995604480)
-#                await DMChannel.send(ctx.author, msg)
-#                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
-#                await DMChannel.send(user, msg)
+            try:
+    #            file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+    #            file.write(transcript)
+    #            file.close()
+    #            transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+                transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
+                channel = client.get_channel(archive_channel)
+                await channel.send(embed=embed)
+                await channel.send(file=transcript_file)
+    #            os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
+            except:
+                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n Billy has been notified'
+                user = await client.fetch_user(175719252995604480)
+                await DMChannel.send(ctx.author, msg)
+                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
+                await DMChannel.send(user, msg)
     
     @commands.command(help='+close (reason)')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
