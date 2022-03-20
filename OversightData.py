@@ -62,7 +62,73 @@ def lesson_message(lesson):
 
     return message
 
-
+def build(build):
+    if build == 'coal':
+        message = '''{
+    "infra_needed": 1000,
+    "imp_total": 20,
+    "imp_coalpower": 2,
+    "imp_oilpower": 0,
+    "imp_windpower": 0,
+    "imp_nuclearpower": 0,
+    "imp_coalmine": 5,
+    "imp_oilwell": 0,
+    "imp_uramine": 0,
+    "imp_leadmine": 0,
+    "imp_ironmine": 0,
+    "imp_bauxitemine": 0,
+    "imp_farm": 0,
+    "imp_gasrefinery": 0,
+    "imp_aluminumrefinery": 0,
+    "imp_munitionsfactory": 0,
+    "imp_steelmill": 0,
+    "imp_policestation": 1,
+    "imp_hospital": 0,
+    "imp_recyclingcenter": 1,
+    "imp_subway": 0,
+    "imp_supermarket": 0,
+    "imp_bank": 0,
+    "imp_mall": 0,
+    "imp_stadium": 0,
+    "imp_barracks": 5,
+    "imp_factory": 0,
+    "imp_hangars": 5,
+    "imp_drydock": 1
+}'''
+        return message
+    elif build == 'oil':
+        message = '''{
+    "infra_needed": 1000,
+    "imp_total": 20,
+    "imp_coalpower": 0,
+    "imp_oilpower": 2,
+    "imp_windpower": 0,
+    "imp_nuclearpower": 0,
+    "imp_coalmine": 0,
+    "imp_oilwell": 5,
+    "imp_uramine": 0,
+    "imp_leadmine": 0,
+    "imp_ironmine": 0,
+    "imp_bauxitemine": 0,
+    "imp_farm": 0,
+    "imp_gasrefinery": 0,
+    "imp_aluminumrefinery": 0,
+    "imp_munitionsfactory": 0,
+    "imp_steelmill": 0,
+    "imp_policestation": 1,
+    "imp_hospital": 0,
+    "imp_recyclingcenter": 1,
+    "imp_subway": 0,
+    "imp_supermarket": 0,
+    "imp_bank": 0,
+    "imp_mall": 0,
+    "imp_stadium": 0,
+    "imp_barracks": 5,
+    "imp_factory": 0,
+    "imp_hangars": 5,
+    "imp_drydock": 1
+}'''
+        return message
 def interview_message(num, user):
     message = ''
     reminder = f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \

@@ -106,6 +106,10 @@ class interview(commands.Cog):
                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                     json.dump(dic, outfile)
                 await channel.send(f'<@{member_id}>')
+                for message in channel.messages:
+                    if message == f'<@{member_id}>':
+                        await message.delete()
+                        break
                 message = f'''
                 Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
 

@@ -3,7 +3,7 @@ from discord.ext import commands
 import typing
 import nest_asyncio
 nest_asyncio.apply()
-from OversightData import lesson_message
+from OversightData import lesson_message, build
 
 class colors:
     default = 0
@@ -98,6 +98,8 @@ class rookie_program(commands.Cog):
          if ctx.channel.category.name != '[The Harbour]':
              message = 'https://politicsandwar.com/cities/mass-land-purchase/'
              message += '\nhttps://politicsandwar.com/cities/mass-infra-purchase/'
+             message += '\nUse these tools to calculate the cost for 1k infrastructure/land.'
+             message += '\nThen screenshot those and send them here.'
              await ctx.send(message)
     
     @commands.command(name='beige_cycle', help='+beige_cycle')
@@ -133,6 +135,22 @@ class rookie_program(commands.Cog):
                 await ctx.send('https://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif')
             else:
                 await ctx.send('https://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif')
+
+    @commands.command(name='build_oil', help='+build_oil')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer', 'Trainee')
+    async def build_oil(self, ctx):
+         if ctx.channel.category.name == '[Admission & Training]':
+             rss = 'oil'
+             import_build = build(rss)
+             await ctx.send(import_build)
+    
+    @commands.command(name='build_coal', help='+build_coal')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer', 'Trainee')
+    async def build_coal(self, ctx):
+         if ctx.channel.category.name == '[Admission & Training]':
+             rss = 'coal'
+             import_build = build(rss)
+             await ctx.send(import_build)
 #    '''
 #    What is beige?
 #    A nation defeated gets 2 more days of being on the beige color. Beige protects from new war declarations. We want to have active enemies always in war, so they don't have the opportunity to build back up.
