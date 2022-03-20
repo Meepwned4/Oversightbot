@@ -21,11 +21,13 @@ guild_id = 567336454632636416
 information_board = 714233548332204084
 archive_channel = 754640623276916756
 ticket_category_name = '[Admission & Training]'
-management_role_id = 568141320011382825
+interviewer_role_id = 568141320011382825
 suffet_role_id = 567338425443942420
 elder_role_id = 567338487380967430
 pentarch_role_id = 567389583289876490
 adirim_role_id = 752227315832062063
+senator_role_id = 567389586586599486
+disc_role_id = 605910328613535784
 bot_role_id = 567722813335535622
 trainee_role_id = 712071416505172090
 foreigner_role_id = 569519945847930911
@@ -63,7 +65,7 @@ class ticket(commands.Cog):
     
     # Ignore these
     ticket_category = None
-    management_role = None
+    interviewer_role = None
     guild = None
 
     
@@ -78,13 +80,20 @@ class ticket(commands.Cog):
         try:
             guild = client.get_guild(guild_id)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
-            print(ticket_category.id)
-            management_role = guild.get_role(management_role_id)  # management role
+            interviewer_role = guild.get_role(interviewer_role_id)  # management role
+            senator_role = guild.get_role(senator_role_id)
+            pentarch_role = guild.get_role(pentarch_role_id)
+            disc_role = guild.get_role(disc_role_id)
+            adirim_role = guild.get(adirim_role_id)
             channel = guild.get_channel(channel_id)
         except:
             guild = client.get_guild(645391966598594561)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
-            management_role = guild.get_role(management_role_id)  # management role
+            interviewer_role = guild.get_role(interviewer_role_id)  # management role
+            senator_role = guild.get_role(senator_role_id)
+            pentarch_role = guild.get_role(pentarch_role_id)
+            disc_role = guild.get_role(disc_role_id)
+            adirim_role = guild.get(adirim_role_id)
             channel = guild.get_channel(channel_id)
         
         if not member.bot:
@@ -98,7 +107,11 @@ class ticket(commands.Cog):
                         guild.default_role: discord.PermissionOverwrite(view_channel=False),
                         member: discord.PermissionOverwrite(view_channel=True),
                         guild.me: discord.PermissionOverwrite(view_channel=True),
-                        management_role: discord.PermissionOverwrite(view_channel=True),
+                        interviewer_role: discord.PermissionOverwrite(view_channel=True, read_messages=True, send_messages=True, add_reactions=True, attach_files=True, read_message_history),
+                        pentarch_role: discord.PermissionOverwrite(view_channel=True),
+                        senator_role: discord.PermissionOverwrite(view_channel=True, read_messages=True, send_messages=True, add_reactions=True, attach_files=True, read_message_history),
+                        adirim_role: discord.PermissionOverwrite(view_channel=True, read_messages=True, send_messages=True, add_reactions=True, attach_files=True, read_message_history),
+                        disc_role: discord.PermissionOverwrite(view_channel=True, read_messages=True, send_messages=True, add_reactions=True, attach_files=True, read_message_history),
                     }
                     
                     pickle_off = open('./data/num.pickle', 'rb')
@@ -153,7 +166,7 @@ class ticket(commands.Cog):
             suffet_role = ctx.guild.get_role(suffet_role_id)
             pentarch_role = ctx.guild.get_role(pentarch_role_id)
             elder_role = ctx.guild.get_role(elder_role_id)
-            interviewer_role = ctx.guild.get_role(management_role_id)
+            interviewer_role = ctx.guild.get_role(interviewer_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
             bot_role = ctx.guild.get_role(bot_role_id)
             pickle_off = open('./data/api_key.pickle', 'rb')
@@ -259,13 +272,18 @@ class ticket(commands.Cog):
                 channel = client.get_channel(archive_channel)
                 await channel.send(embed=embed)
                 await channel.send(file=transcript_file)
-    #            os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
+                os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
             except:
-                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n Billy has been notified'
-                user = await client.fetch_user(175719252995604480)
-                await DMChannel.send(ctx.author, msg)
-                msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
-                await DMChannel.send(user, msg)
+                if ctx.author == client.is_owner:
+                    user = await client.fetch_user(175719252995604480)
+                    msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
+                    await DMChannel.send(user, msg)
+                else:
+                    msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+                    user = await client.fetch_user(175719252995604480)
+                    await DMChannel.send(ctx.author, msg)
+                    msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
+                    await DMChannel.send(user, msg)
     
     @commands.command(help='+close (reason)')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
@@ -279,7 +297,7 @@ class ticket(commands.Cog):
             suffet_role = ctx.guild.get_role(suffet_role_id)
             elder_role = ctx.guild.get_role(elder_role_id)
             pentarch_role = ctx.guild.get_role(pentarch_role_id)
-            interviewer_role = ctx.guild.get_role(management_role_id)
+            interviewer_role = ctx.guild.get_role(interviewer_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
             if ctx.message.channel.category == ticket_category and channel_name == 'ticket':
                 await ctx.message.delete()
@@ -314,22 +332,27 @@ class ticket(commands.Cog):
                 if transcript is None:
                     return
                 try:
-                    file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
-                    file.write(transcript)
-                    file.close()
-                    transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+#                    file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+#                    file.write(transcript)
+#                    file.close()
+#                    transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+                    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
                     channel = client.get_channel(archive_channel)
                     await channel.send(embed=embed)
-                    await channel.send(file=discord.File(transcript_file))
+#                    await channel.send(file=discord.File(transcript_file))
+                    await channel.send(file=transcript_file)
                     try:
                         for filename in os.listdir('./data/transcripts'):
                             if str(ctx.channel.id) in filename:
                                 os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
                     except:
                         pass
-                    for filename in os.listdir('./data/tickets'):
-                        if str(ctx.channel.id) in filename:
-                            os.remove(f'./data/tickets/{ctx.channel.id}.json')
+                    try:
+                        for filename in os.listdir('./data/tickets'):
+                            if str(ctx.channel.id) in filename:
+                                os.remove(f'./data/tickets/{ctx.channel.id}.json')
+                    except:
+                        pass
                     await ctx.channel.delete()
                 except:
                     if ctx.author == client.is_owner:

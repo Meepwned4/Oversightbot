@@ -116,6 +116,16 @@ async def logs(ctx):
         msg = 'Failed to send logs'
         await DMChannel.send(user, msg)
 
+@client.command()
+@commands.is_owner()
+async def get_memberdata(ctx):
+    user = ctx.author
+    try:
+        await DMChannel.send(user, file=discord.File('./data/memberdata.json'))
+    except:
+        msg = 'Failed to send memberdata'
+        await DMChannel.send(user, msg)
+
 class colors:
     default = 0
     teal = 0x1abc9c
@@ -170,23 +180,34 @@ async def daily():
     memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)              
 
     for chan in server.text_channels:
+        if chan.category.id == 605910228692893726:
+            if chan.id != 605910228692893726 and chan.id != 845685557367144448 and \
+            chan.id != 568822425253576739:
+                chan_id = chan.id
+                for member in chan.members:
+                    if member.id == piggy_id:
+                        continue
+                    else:
+                        member_id = str(member.id)
+                        for dic in memberdata:
+                            if dic.get('DiscordID') == member_id:
+                                for role in member.roles:
+                                    role_id = role.id
+                                    if role_id == nerds_id:
+                                        nerds_list.append(str(member_id))
+                                        dic.update({'ChannelID': chan_id})
         if chan.id == 812131124489879552:
-            chan_id = chan.id
             for member in chan.members:
                 if member.id == piggy_id:
                     continue
                 else:
                     member_id = str(member.id)
-                    for dic in memberdata:
-                        if dic.get('DiscordID') == member_id:
-                            for role in member.roles:
-                                role_id = role.id
-                                if role_id == nerds_id:
-                                    nerds_list.append(str(member_id))
-                                    dic.update({'ChannelID': chan_id})
-                                elif role_id == raider_id:
-                                    raider_list.append(str(member_id))
-            break
+                        for dic in memberdata:
+                            if dic.get('DiscordID') == member_id:
+                                for role in member.roles:
+                                    role_id = role.id
+                                    if role_id == raider_id:
+                                        raider_list.append(str(member_id))
     if memberdata[0].get('war_status'):
         for i in memberdata:
             i.update({'war_status':memberdata[0].get('war_status')})
