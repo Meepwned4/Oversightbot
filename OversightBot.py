@@ -293,7 +293,7 @@ async def daily():
     if nerds_login_ping == nerds_login_temp:
         nerds_login_ping = 'Everyone has logged in within 3 days.'
 
-    nmp_temp = '\n__People who don\'t have max planes__\n'
+    nmp_temp = '\n\n__People who don\'t have max planes__\n'
     nmp_ping = [nmp_temp]
     nmp_no_ping = [nmp_temp]
     nmp_nationids = []

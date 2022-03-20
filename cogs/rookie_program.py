@@ -47,7 +47,7 @@ class rookie_program(commands.Cog):
 
     @commands.command(name='lesson', help='+lesson (number 1-6)')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
-    async def lesson(self, ctx, lesson: typing.Optional[str] = 'default' ):
+    async def lesson(self, ctx, lesson: typing.Optional[str] = 'default'):
          if ctx.channel.category.name != '[The Harbour]':
              message = lesson_message(lesson)
              await ctx.send(message)
@@ -91,6 +91,14 @@ class rookie_program(commands.Cog):
          if ctx.channel.category.name != '[The Harbour]':
              message = 'https://politicsandwar.com/cities/mass-land-purchase/'
              await ctx.send(message)
+             
+    @commands.command(name='bulk', help='+bulk')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
+    async def bulk(self, ctx):
+         if ctx.channel.category.name != '[The Harbour]':
+             message = 'https://politicsandwar.com/cities/mass-land-purchase/'
+             message += '\nhttps://politicsandwar.com/cities/mass-infra-purchase/'
+             await ctx.send(message)
     
     @commands.command(name='beige_cycle', help='+beige_cycle')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
@@ -119,10 +127,12 @@ class rookie_program(commands.Cog):
     
     @commands.command(name='import_file', help='+import', aliases=['import'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
-    async def import_file(self, ctx):
+    async def import_file(self, ctx, gif: typing.Optional[str] = 'default'):
          if ctx.channel.category.name != '[The Harbour]':
-            await ctx.send('https://media.discordapp.net/attachments/605910228692893726/885588943947583488/ImportTemplate.gif')
-    
+            if gif == 'default':
+                await ctx.send('https://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif')
+            else:
+                await ctx.send('https://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif')
 #    '''
 #    What is beige?
 #    A nation defeated gets 2 more days of being on the beige color. Beige protects from new war declarations. We want to have active enemies always in war, so they don't have the opportunity to build back up.
