@@ -202,12 +202,12 @@ async def daily():
                     continue
                 else:
                     member_id = str(member.id)
-                        for dic in memberdata:
-                            if dic.get('DiscordID') == member_id:
-                                for role in member.roles:
-                                    role_id = role.id
-                                    if role_id == raider_id:
-                                        raider_list.append(str(member_id))
+                    for dic in memberdata:
+                        if dic.get('DiscordID') == member_id:
+                            for role in member.roles:
+                                role_id = role.id
+                                if role_id == raider_id:
+                                    raider_list.append(str(member_id))
     if memberdata[0].get('war_status'):
         for i in memberdata:
             i.update({'war_status':memberdata[0].get('war_status')})
