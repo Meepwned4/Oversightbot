@@ -107,11 +107,11 @@ class ticket(commands.Cog):
                         guild.default_role: discord.PermissionOverwrite(view_channel=False),
                         member: discord.PermissionOverwrite(view_channel=True),
                         guild.me: discord.PermissionOverwrite(view_channel=True),
-                        interviewer_role: discord.PermissionOverwrite(view_channel=True, read_messages=True, send_messages=True, add_reactions=True, attach_files=True, read_message_history),
+                        interviewer_role: discord.PermissionOverwrite(view_channel=True),
                         pentarch_role: discord.PermissionOverwrite(view_channel=True),
-                        senator_role: discord.PermissionOverwrite(view_channel=True, read_messages=True, send_messages=True, add_reactions=True, attach_files=True, read_message_history),
-                        adirim_role: discord.PermissionOverwrite(view_channel=True, read_messages=True, send_messages=True, add_reactions=True, attach_files=True, read_message_history),
-                        disc_role: discord.PermissionOverwrite(view_channel=True, read_messages=True, send_messages=True, add_reactions=True, attach_files=True, read_message_history),
+                        senator_role: discord.PermissionOverwrite(view_channel=True),
+                        adirim_role: discord.PermissionOverwrite(view_channel=True),
+                        disc_role: discord.PermissionOverwrite(view_channel=True),
                     }
                     
                     pickle_off = open('./data/num.pickle', 'rb')
