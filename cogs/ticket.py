@@ -84,7 +84,7 @@ class ticket(commands.Cog):
             senator_role = guild.get_role(senator_role_id)
             pentarch_role = guild.get_role(pentarch_role_id)
             disc_role = guild.get_role(disc_role_id)
-            adirim_role = guild.get(adirim_role_id)
+            adirim_role = guild.get_role(adirim_role_id)
             channel = guild.get_channel(channel_id)
         except:
             guild = client.get_guild(645391966598594561)

@@ -98,8 +98,10 @@ class rookie_program(commands.Cog):
          if ctx.channel.category.name != '[The Harbour]':
              message = 'https://politicsandwar.com/cities/mass-land-purchase/'
              message += '\nhttps://politicsandwar.com/cities/mass-infra-purchase/'
-             message += '\nUse these tools to calculate the cost for 1k infrastructure/land.'
+             await ctx.send(message)
+             message = 'Use these tools to calculate the cost for 1k infrastructure/land.'
              message += '\nThen screenshot those and send them here.'
+             message += '\nhttps://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif'
              await ctx.send(message)
     
     @commands.command(name='beige_cycle', help='+beige_cycle')
@@ -131,9 +133,6 @@ class rookie_program(commands.Cog):
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def import_file(self, ctx, gif: typing.Optional[str] = 'default'):
          if ctx.channel.category.name != '[The Harbour]':
-            if gif == 'default':
-                await ctx.send('https://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif')
-            else:
                 await ctx.send('https://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif')
 
     @commands.command(name='build_oil', help='+build_oil')
