@@ -183,14 +183,12 @@ async def daily():
         if chan.category_id == 567390184774303745:
             if chan.id != 605910228692893726 and chan.id != 845685557367144448 and \
             chan.id != 568822425253576739:
-                print(chan.name)
                 chan_id = chan.id
                 for member in chan.members:
                     if member.id == piggy_id:
                         continue
                     else:
                         member_id = str(member.id)
-                        print(member.id)
                         for dic in memberdata:
                             if dic.get('DiscordID') == member_id:
                                 for role in member.roles:
@@ -386,7 +384,6 @@ async def daily():
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
                             c = dic.get('ChannelID')
-                            print(c)
                             nerds_nsp_ping.append(f'<#{c}> {spies}\n')
                             ping_dic.update({'spies':num})
                             continue
