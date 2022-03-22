@@ -96,8 +96,8 @@ class rookie_program(commands.Cog):
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def bulk(self, ctx):
          if ctx.channel.category.name != '[The Harbour]':
-             message = 'https://politicsandwar.com/cities/mass-land-purchase/'
-             message += '\nhttps://politicsandwar.com/cities/mass-infra-purchase/'
+             message = '<https://politicsandwar.com/cities/mass-land-purchase/>'
+             message += '\n<https://politicsandwar.com/cities/mass-infra-purchase/>'
              await ctx.send(message)
              message = 'Use these tools to calculate the cost for 1k infrastructure/land.'
              message += '\nThen screenshot those and send them here.'

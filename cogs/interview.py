@@ -107,11 +107,11 @@ class interview(commands.Cog):
                     dic = {'channel':chan_name, 'user_id':member_id}
                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                     json.dump(dic, outfile)
-#                await channel.send(f'<@{member_id}>')
-#                async for message in channel.history(limit=5):
-#                    if message == f'<@{member_id}>' and message.author == client.user:
-#                        await message.delete()
-#                        break
+                await channel.send(f'<@{member_id}>')
+                async for message in channel.history(limit=5):
+                    if message == f'<@{member_id}>' and message.author == client.user:
+                        await message.delete()
+                        break
                 message = f'''
                 Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
 
