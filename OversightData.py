@@ -167,15 +167,17 @@ def interview_message(num, user):
                        + 'on Politics and War, either under this account or' \
                        + ' another account?\n\n' + reminder)
     if num == '4':
+        message = ('How long have you been playing Politics and War? Have you had any gaming experience in similar games?')
+    if num == '5':
         message = ('Do you have any standing debts to anyone in the game?\n\n' \
                        + reminder)
-    if num == '5':
+    if num == '6':
         message = ('What would you consider your greatest skills? These can be ' \
                        + 'in games or IRL which translate into the game, such as GFX ' \
                        + '(Photoshop, GIMP, etc), Video editing, Diplomacy, Spreadsheet ' \
                        + 'or Coding.\n What would you consider your worst weaknesses?\n\n' \
                        + reminder)
-    if num == '6':
+    if num == '7':
         message = ('''Now, please select one of the following, or use your own words to best describe what your activity would look like: 
  
 - I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
@@ -186,7 +188,7 @@ def interview_message(num, user):
 
 - I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
 + reminder)
-    if num == '7':
+    if num == '8':
         message = ('''If you were given the opportunity to choose a government department to work in, considering the descriptions provided, which would you choose?
  
 - **War Department**: Defense during peacetime and wartime, making sure members meet minimum military requirements, monitoring conflicts across Orbis and assisting with Foreign Affairs when necessary; ensuring warchests are kept stocked.
@@ -203,7 +205,7 @@ def interview_message(num, user):
  
 If you aren't interested in any of these, that’s okay, just say so. If you have ideas for other government positions we should be offering, feel free to bring this up after this interview.\n\n''' \
 + reminder)
-    if num == '8':
+    if num == '9':
         message = ('''
 With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game? Which would you consider the least interesting? 
 
@@ -218,7 +220,7 @@ With your answer in mind, which among the following or using your own words, wou
 - Raiding inactive nations for money and resources. Arrgh!
 
 - Becoming a politically influential, well-known player.\n\n''' + reminder)
-    if num == '9':
+    if num == '10':
         message = [('''
  These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated. 
 
@@ -246,55 +248,82 @@ We hope to see you on Discord as much as your time commitments allow, but you mu
 ---
 If you have any questions, comments, or concerns, please let us know. Otherwise, state you agree to these terms.\n\n'''
 + reminder)]
-    if num == '10':
-        message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
     if num == '11':
+        message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
+    if num == '12':
         message = ('That was the last question, a human should be along soon to review your interview.')
         
     return message
 
-# async def test():
-#     query = '''query {alliances(id: [5049], first: 1) {
-#     data {
-#       id
-#       name
-#       score
-#       nations {
-#         id
-#         vmode
-#         score
-#         nation_name
-#         alliance_position
-#         alliance {
-#           id
-#           name
-#         }
-#         color
-#         continent
-#         leader_name
-#         num_cities
-#         cities {
-#           id
-#           infrastructure
-#           land
-#           barracks
-#           factory
-#           airforcebase
-#           drydock
-#         }
+def nagging_message():
+     query = '''{
+	alliances(id: [5049], first: 1) {
+    data {
+      id
+      name
+      nations {
+        id
+        vmode
+        score
+        last_active
+        nation_name
+        alliance_position
+        color
+        continent
+        leader_name
+        dompolicy
+        warpolicy
+        wars {
+          date
+          id
+          war_type
+          attacks {
+            date
+            warid
+            id
+            attid
+            attcas1
+            attcas2
+            att_mun_used
+            att_gas_used
+            aircraft_killed_by_tanks
+            moneystolen
+            loot_info
+            resistance_eliminated
+            defid
+            defcas1
+            defcas2
+            cityid
+            city_infra_before
+            infradestroyed
+            infra_destroyed_value
+            improvementslost
+            def_mun_used
+            def_gas_used
+            victor
+          }
+          attid
+          att_gas_used
+          att_mun_used
+          att_alum_used
+          att_steel_used
+          att_resistance
+          att_money_looted
+          att_missiles_used
+          attpoints
+          att_resistance
+          att_money_looted
+          att_infra_destroyed_value
+          att_soldiers_killed
+          att_aircraft_killed
+          defid
+          airsuperiority
+          groundcontrol
+          navalblockade
+        }
+      }
+    }
+  }
+}'''
 
-#         soldiers
-#         tanks
-#         aircraft
-#         ships
-#         nukes
-#         missiles
-#         spies
-#       }
-#     }
-#   }
-# }'''
-#     fetcheddata = requests.post(
-#             f'https://api.politicsandwar.com/graphql?api_key={apikey}',
-#             json={'query': query})
-#     fetcheddata = fetcheddata.json()
+     return query

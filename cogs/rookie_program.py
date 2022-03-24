@@ -82,14 +82,14 @@ class rookie_program(commands.Cog):
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def mass_infra(self, ctx):
          if ctx.channel.category.name != '[The Harbour]':
-             message = 'https://politicsandwar.com/cities/mass-infra-purchase/'
+             message = '<https://politicsandwar.com/cities/mass-infra-purchase/>'
              await ctx.send(message)
     
     @commands.command(name='mass_land', help='+mass_land')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def mass_land(self, ctx):
          if ctx.channel.category.name != '[The Harbour]':
-             message = 'https://politicsandwar.com/cities/mass-land-purchase/'
+             message = '<https://politicsandwar.com/cities/mass-land-purchase/>'
              await ctx.send(message)
              
     @commands.command(name='bulk', help='+bulk')
@@ -101,7 +101,7 @@ class rookie_program(commands.Cog):
              await ctx.send(message)
              message = 'Use these tools to calculate the cost for 1k infrastructure/land.'
              message += '\nThen screenshot those and send them here.'
-             message += '\nhttps://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif'
+#             message += '\nhttps://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif'
              await ctx.send(message)
     
     @commands.command(name='beige_cycle', help='+beige_cycle')
