@@ -48,17 +48,17 @@ def merge_memberdata(memberdata, oldmemberdata, list_of_dics):
 
 def lesson_message(lesson):
     if lesson == '1' or lesson == 'one':
-        message = 'https://docs.google.com/document/d/1hcJXZ0GgWfvFy4zdhki30Nh_Q9p4N2UdboDznoQ7e0A/edit?usp=drivesdk'
+        message = 'https://docs.google.com/document/d/1XICmeGQ9zLiGjZ9oKAGeOKtgcpBEn6lz-kgCFFaNoN4/edit'
     elif lesson == '2' or lesson == 'two':
-        message = 'https://docs.google.com/document/d/1sfipFRpZ4Q9djbjJQ8g3pOOHpvN27Iq7N6Dt-Ksw_vQ/edit?usp=sharing'
+        message = 'https://docs.google.com/document/d/1VipevfZ1R590BJWQeFgUKy-q50_dnU-tx_QobbsKRf0/edit'
     elif lesson == '3' or lesson == 'three':
-        message = 'https://docs.google.com/document/d/1eoHB392F0mbYT7LDyfPAwSLOeK6jn8EcuEjHwJ8rNtY/edit?usp=sharing'
+        message = 'https://docs.google.com/document/d/1i8XUd93uQtygUW_3rD7wZCnr5cbgdhUgRWy6UUs5qV0/edit'
     elif lesson == '4' or lesson == 'four':
-        message = 'https://docs.google.com/document/d/1LlUXghUGyHJ5ubim0vxNx1Ke4LTnsYPxoTHOGt9YOgs/edit'
+        message = 'https://docs.google.com/document/d/1IJ7ioQqHGGncMeyckgq_yoxmjhuluzZMnLRp8j1pAaI/edit'
     elif lesson == '5' or lesson == 'five':
-        message = 'https://docs.google.com/document/d/1YwHi_3t6HyaHnnKkcm7CLodgIqgPE3u89rE0X3LbTtY/edit'
+        message = 'https://docs.google.com/document/d/1RZZV6SlX6eWRD7TLS8y3HZKunrgHbsnoV6-t67s7qa8/edit'
     elif lesson == '6' or lesson == 'six':
-        message = 'https://docs.google.com/document/d/1dd6hJLeiKtkdvP8yHCrKfx5wNXwgspsM77kavhthMGY/edit?usp=sharing'
+        message = 'https://docs.google.com/document/d/1R9DCHjdyjtLZOCpVjUbWx3C4AbBf2NE0GfHRGEYuXxw/edit'
 
     return message
 
