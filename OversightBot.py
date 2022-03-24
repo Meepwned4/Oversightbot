@@ -196,6 +196,9 @@ async def daily():
                                     if role_id == nerds_id:
                                         nerds_list.append(str(member_id))
                                         dic.update({'ChannelID': chan_id})
+                                    if chan_id == 954201909114339369 and member_id == 908876110220120124:
+                                        nerds_list.append(str(member_id))
+                                        dic.update({'ChannelID': chan_id})
         if chan.id == 812131124489879552:
             for member in chan.members:
                 if member.id == piggy_id:
