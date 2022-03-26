@@ -78,7 +78,7 @@ class rookie_program(commands.Cog):
                               description = f'{message}', color=colors.dark_gold)
              await ctx.send(embed=embed)
     
-    @commands.command(name='mass_infra', help='+mass_infra', aliases=['bulk_land'])
+    @commands.command(name='mass_infra', help='+mass_infra', aliases=['bulk_infra'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def mass_infra(self, ctx):
          if ctx.channel.category.name != '[The Harbour]':
