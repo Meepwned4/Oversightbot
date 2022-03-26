@@ -78,14 +78,14 @@ class rookie_program(commands.Cog):
                               description = f'{message}', color=colors.dark_gold)
              await ctx.send(embed=embed)
     
-    @commands.command(name='mass_infra', help='+mass_infra')
+    @commands.command(name='mass_infra', help='+mass_infra', aliases=['bulk_land'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def mass_infra(self, ctx):
          if ctx.channel.category.name != '[The Harbour]':
              message = '<https://politicsandwar.com/cities/mass-infra-purchase/>'
              await ctx.send(message)
     
-    @commands.command(name='mass_land', help='+mass_land')
+    @commands.command(name='mass_land', help='+mass_land', aliases=['bulk_land'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def mass_land(self, ctx):
          if ctx.channel.category.name != '[The Harbour]':
@@ -129,7 +129,7 @@ class rookie_program(commands.Cog):
                               description = f'{message}', color=colors.dark_gold)
              await ctx.send(embed=embed)
     
-    @commands.command(name='import_file', help='+import', aliases=['import'])
+    @commands.command(name='import_file', help='+import', aliases=['import', 'bulk_import'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def import_file(self, ctx, gif: typing.Optional[str] = 'default'):
          if ctx.channel.category.name != '[The Harbour]':

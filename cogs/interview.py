@@ -209,13 +209,13 @@ class interview(commands.Cog):
                         dic.update({'num':num})
                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
-                        if num == '9':
+                        if num == '10':
                             message_list = OversightData.interview_message(num, member)
                             l = 0
                             for item in message_list:
                                 l += 1
                                 if l == 1:
-                                    embed = discord.Embed(title = f'```--- TERMS AND CONDITIONS of Carthago ---\n```',
+                                    embed = discord.Embed(title = f'--- TERMS AND CONDITIONS of Carthago ---',
                                                 description = f'{item}', color=colors.dark_gold)
                                     await chan.send(embed=embed)
                                 else:

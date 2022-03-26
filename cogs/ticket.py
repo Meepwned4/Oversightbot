@@ -264,14 +264,15 @@ class ticket(commands.Cog):
                 return
         
             try:
-    #            file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
-    #            file.write(transcript)
-    #            file.close()
-    #            transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
-                transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
+                file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+                file.write(transcript)
+                file.close()
+                transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+#                transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
                 channel = client.get_channel(archive_channel)
                 await channel.send(embed=embed)
-                await channel.send(file=transcript_file)
+#                await channel.send(file=transcript_file)
+                await channel.send(file=discord.File(transcript_file))
                 os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
             except:
                 if ctx.author == client.is_owner:
@@ -332,15 +333,15 @@ class ticket(commands.Cog):
                 if transcript is None:
                     return
                 try:
-#                    file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
-#                    file.write(transcript)
-#                    file.close()
-#                    transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
-                    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
+                    file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+                    file.write(transcript)
+                    file.close()
+                    transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+#                    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
                     channel = client.get_channel(archive_channel)
                     await channel.send(embed=embed)
-#                    await channel.send(file=discord.File(transcript_file))
-                    await channel.send(file=transcript_file)
+                    await channel.send(file=discord.File(transcript_file))
+#                    await channel.send(file=transcript_file)
                     try:
                         for filename in os.listdir('./data/transcripts'):
                             if str(ctx.channel.id) in filename:
