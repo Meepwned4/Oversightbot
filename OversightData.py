@@ -167,7 +167,8 @@ def interview_message(num, user):
                        + 'on Politics and War, either under this account or' \
                        + ' another account?\n\n' + reminder)
     if num == '4':
-        message = ('How long have you been playing Politics and War? Have you had any gaming experience in similar games?')
+        message = ('How long have you been playing Politics and War? Have you had' + \
+                   ' any gaming experience in similar games?\n\n' + reminder)
     if num == '5':
         message = ('Do you have any standing debts to anyone in the game?\n\n' \
                        + reminder)
