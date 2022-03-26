@@ -225,7 +225,7 @@ class interview(commands.Cog):
                                     await msg.add_reaction(right_arrow)
                                     await msg.add_reaction(person)
                             await user_message.reactions[0].remove(member)
-                        elif num == '11':
+                        elif num == '12':
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'',
                                                 description = f'{message}', color=colors.dark_gold)
