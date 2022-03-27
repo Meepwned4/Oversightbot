@@ -245,9 +245,10 @@ class ticket(commands.Cog):
     @commands.command(help='+save')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def save(self, ctx: commands.Context):
-        if ctx.channel.category.name == ticket_category_name and 'ticket' in ctx.channel.name:
+        ignore_channels = [605910228692893726, 845685557367144448, 568822425253576739]
+        if ctx.channel.category.name == ticket_category_name and ctx.channel.id not in ignore_channels:
             client = self.client
-            await ctx.message.delete()
+#            await ctx.message.delete()
             embed = discord.Embed(title='Ticket manually saved',color=colors.dark_gold)
             embed.add_field(name = 'Saved by',
                         value = f'<@{ctx.author.id}>',
@@ -264,16 +265,15 @@ class ticket(commands.Cog):
                 return
         
             try:
-                file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
-                file.write(transcript)
-                file.close()
-                transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
-#                transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
+#                file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+#                file.write(transcript)
+#                file.close()
+#                transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+                transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
                 channel = client.get_channel(archive_channel)
-                await channel.send(embed=embed)
-#                await channel.send(file=transcript_file)
-                await channel.send(file=discord.File(transcript_file))
-                os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
+                await channel.send(embed=embed, file=transcript_file)
+#                await channel.send(embed=embed, file=discord.File(transcript_file))
+#                os.remove(f'./data/transcripts/transcript-{ctx.channel.id}.html')
             except:
                 if ctx.author == client.is_owner:
                     user = await client.fetch_user(175719252995604480)
@@ -289,7 +289,8 @@ class ticket(commands.Cog):
     @commands.command(help='+close (reason)')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def close(self, ctx, *, reason: typing.Optional[str] = 'Not specified'):
-        if ctx.channel.category.name == ticket_category_name and 'ticket' in ctx.channel.name:
+        ignore_channels = [605910228692893726, 845685557367144448, 568822425253576739]
+        if ctx.channel.category.name == ticket_category_name and ctx.channel.id not in ignore_channels:
             client = self.client
             guild = client.get_guild(guild_id)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
@@ -300,7 +301,7 @@ class ticket(commands.Cog):
             pentarch_role = ctx.guild.get_role(pentarch_role_id)
             interviewer_role = ctx.guild.get_role(interviewer_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
-            if ctx.message.channel.category == ticket_category and channel_name == 'ticket':
+            if ctx.message.channel.category == ticket_category:
                 await ctx.message.delete()
                 try:
                     with open(f'./data/tickets/{ctx.channel.id}.json') as data:
@@ -333,15 +334,14 @@ class ticket(commands.Cog):
                 if transcript is None:
                     return
                 try:
-                    file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
-                    file.write(transcript)
-                    file.close()
-                    transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
-#                    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
+#                    file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
+#                    file.write(transcript)
+#                    file.close()
+#                    transcript_file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'r')
+                    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{ctx.channel.id}.html')
                     channel = client.get_channel(archive_channel)
-                    await channel.send(embed=embed)
-                    await channel.send(file=discord.File(transcript_file))
-#                    await channel.send(file=transcript_file)
+#                    await channel.send(embed=embed, file=discord.File(transcript_file))
+                    await channel.send(embed=embed, file=transcript_file)
                     try:
                         for filename in os.listdir('./data/transcripts'):
                             if str(ctx.channel.id) in filename:
