@@ -248,7 +248,7 @@ class ticket(commands.Cog):
         ignore_channels = [605910228692893726, 845685557367144448, 568822425253576739]
         if ctx.channel.category.name == ticket_category_name and ctx.channel.id not in ignore_channels:
             client = self.client
-#            await ctx.message.delete()
+            await ctx.message.delete()
             embed = discord.Embed(title='Ticket manually saved',color=colors.dark_gold)
             embed.add_field(name = 'Saved by',
                         value = f'<@{ctx.author.id}>',
@@ -296,30 +296,10 @@ class ticket(commands.Cog):
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
             channel_name = ctx.channel.name.split('-')
             channel_name = channel_name[0]
-            suffet_role = ctx.guild.get_role(suffet_role_id)
-            elder_role = ctx.guild.get_role(elder_role_id)
-            pentarch_role = ctx.guild.get_role(pentarch_role_id)
-            interviewer_role = ctx.guild.get_role(interviewer_role_id)
-            adirim_role = ctx.guild.get_role(adirim_role_id)
             if ctx.message.channel.category == ticket_category:
                 await ctx.message.delete()
-                try:
-                    with open(f'./data/tickets/{ctx.channel.id}.json') as data:
-                        data = json.load(data)
-                        user_id = data.get('user_id')
-                        channel_name = data.get('channel')
-                except:
-                    for member in ctx.channel.members:
-                        if suffet_role not in member.roles and elder_role not in member.roles \
-                        and pentarch_role not in member.roles and interviewer_role not in member.roles \
-                        and adirim_role not in member.roles:
-                            user_id = member.id
-                            channel_name = ctx.channel.name
-                            break
+                channel_name = ctx.channel.name
                 embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
-                embed.add_field(name = 'Opened by',
-                            value = f'<@{user_id}>',
-                            inline = True)
                 embed.add_field(name = 'Closed by',
                             value = f'<@{ctx.author.id}>',
                             inline = True)
