@@ -196,7 +196,8 @@ async def daily():
                                     if role_id == nerds_id:
                                         nerds_list.append(str(member_id))
                                         dic.update({'ChannelID': chan_id})
-                                    if chan_id == 954201909114339369 and member_id == 908876110220120124:
+                                    if member_id == 908876110220120124:
+                                        chan_id == 954201909114339369
                                         nerds_list.append(str(member_id))
                                         dic.update({'ChannelID': chan_id})
         if chan.id == 812131124489879552:
@@ -686,24 +687,45 @@ async def daily():
         if no_message != no_temp:
             await disc_channel.send(no_message)
     
-    
     for ping in no_message_list:
-        if ping == login_temp or ping == nms_temp or ping == nmt_temp \
-        or ping == nmp_temp or ping == nmsh_temp or ping == nsp_temp \
-        or ping == color_temp or ping == None:
-            continue
-        else:
-            if ping == login_temp:
-                number /= 1440
-                number *= 2
-                
-                msg = f'''
-                My data sources have shown that you haven't logged in for at least {str(number)} days.
-                failure to login before 7 days inactive, will result in being set as an applicant
-                and eventually, removal from the alliance.
-                '''
-            for user_id in ping:
-                user = await client.fetch_user(user_id)
+        for member in ping:
+            msg_list = []
+            msg_str = ''
+            if login_temp == ping[0]:
+                if member != ping[0]:
+                    msg_list.append('logged in')
+            if nms_temp ==  ping[0]:
+                if member != ping[0]:
+                    msg_list.append('bought soldiers')
+            if nmt_temp == ping[0]:
+                if member != ping[0]:
+                    msg_list.append('bought tanks')
+            if nmsh_temp == ping[0]:
+                if member != ping[0]:
+                    msg_list.append('bought ships')
+            if nmp_temp == ping[0]:
+                if member != ping[0]:
+                    msg_list.append('bought planes')
+            if nsp_temp == ping[0]:
+                if member != ping[0]:
+                    msg_list.append('bought spies')
+            if color_temp == ping[0]:
+                if member != ping[0]:
+                    msg_list.append('changed color')
+            
+            msg_num = len(msg_list)
+            for item in msg_list:
+                if msg_num != 1:
+                    msg_str += f'{item}, '
+                    msg_num -= 1
+                else:
+                    msg_str += f'or {item}'
+            msg = f'''My data sources have shown that you haven't {msg_str} for at least 3 days.
+Failure to do so will result in eventual removal from the alliance.'''
+            if member != login_temp or member != nms_temp or member != nmt_temp \
+            or member != nmp_temp or member != nmsh_temp or member != nsp_temp \
+            or member != color_temp or member != None:
+                user = await client.fetch_user(member)
                 msg = f''
                 channel = client.get_channel(946196124614664212)
                 try:

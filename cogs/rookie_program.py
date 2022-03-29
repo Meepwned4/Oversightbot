@@ -118,6 +118,13 @@ class rookie_program(commands.Cog):
                               description = f'{message}', color=colors.dark_gold)
              await ctx.send(embed=embed)
     
+    @commands.command(name='build_plan', help='+build_plan')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
+    async def build_plan(self, ctx):
+         if ctx.channel.category.name != '[The Harbour]':
+             message = 'https://cdn.discordapp.com/attachments/837098970827194399/958021082412113990/unknown-4.png'
+             await ctx.send(message)
+
     @commands.command(name='overextension', help='+overextension')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def overextension(self, ctx):
