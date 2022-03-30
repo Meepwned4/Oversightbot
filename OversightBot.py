@@ -122,6 +122,7 @@ async def get_memberdata(ctx):
     user = ctx.author
     try:
         await DMChannel.send(user, file=discord.File('./data/memberdata.json'))
+        await DMChannel.send(user, file=discord.File('./data/num.pickle'))
     except:
         msg = 'Failed to send memberdata'
         await DMChannel.send(user, msg)
@@ -178,7 +179,17 @@ async def daily():
         '&key=davethsmellskrampuswhales')
     list_of_dics = list_of_dics.json()
     memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)              
-
+    
+#    for nation in memberdata:
+#        ping = nation.get('ping')
+#        for key in ping:
+#            if ping.get(key) >= 3:
+#                value = ping.get(key)
+#                DiscordID = nation.get('DiscordID')
+#                nation_name = nation.get('nation')
+#                nationid = nation.get('nationid')
+#                print(f'{nation_name} - {nationid} - {DiscordID} - {key} - {value}\n')
+    
     for chan in server.text_channels:
         if chan.category_id == 567390184774303745:
             if chan.id != 605910228692893726 and chan.id != 845685557367144448 and \
@@ -226,6 +237,7 @@ async def daily():
         if not i.get('ping'):
             i.update({'ping':{'color':0, 'soldiers':0, 'ships':0,
                             'login':0, 'tanks':0, 'spies':0}})
+    
         for dic in list_of_dics:
             if i.get('nationid') == dic.get(
                     '_id'):
@@ -282,11 +294,10 @@ async def daily():
                     num += 1
                     ping_dic.update({'login':num})
                     continue
-                if ping_dic.get('login'):
-                    if ping_dic.get('login') >= 3:
-                        duplicate_ping_check.append(c)
-                        login_no_ping.append(f'<@{c}> ')
-                        ping_dic.update({'login':num})
+                if ping_dic.get('login') >= 3:
+                    duplicate_ping_check.append(c)
+                    login_no_ping.append(f'<@{c}> ')
+                    ping_dic.update({'login':num})
                 if c not in nerds_list:
                     duplicate_ping_check.append(c)
                     login_ping.append(f'<@{c}> ')
@@ -332,12 +343,11 @@ async def daily():
                             nerds_nmp_ping.append(f'<#{c}> {planes}\n')
                             ping_dic.update({'aircraft':num})
                             continue
-                        if ping_dic.get('ping'):
-                            if ping_dic.get('ping') >= 3:
-                                duplicate_ping_check.append(c)
-                                nmp_no_ping.append(f'<@{c}> ')
-                                num += 1
-                                ping_dic.update({'aircraft':num})
+                        if ping_dic.get('aircraft') >= 3:
+                            duplicate_ping_check.append(c)
+                            nmp_no_ping.append(f'<@{c}> ')
+                            num += 1
+                            ping_dic.update({'aircraft':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
                             nmp_ping.append(f'<@{c}> ')
@@ -391,11 +401,10 @@ async def daily():
                             nerds_nsp_ping.append(f'<#{c}> {spies}\n')
                             ping_dic.update({'spies':num})
                             continue
-                        if ping_dic.get('ping'):
-                            if ping_dic.get('ping') >= 3:
-                                duplicate_ping_check.append(c)
-                                nsp_no_ping.append(f'<@{c}> ')
-                                ping_dic.update({'spies':num})
+                        if ping_dic.get('spies') >= 3:
+                            duplicate_ping_check.append(c)
+                            nsp_no_ping.append(f'<@{c}> ')
+                            ping_dic.update({'spies':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
                             nsp_ping.append(f'<@{c}> ')
@@ -447,11 +456,10 @@ async def daily():
                                 nerds_nmt_ping.append(f'<#{c}> {tanks}\n')
                                 ping_dic.update({'tanks':num})
                             continue
-                        if ping_dic.get('tanks'):
-                            if ping_dic.get('tanks') >= 3:
-                                duplicate_ping_check.append(c)
-                                nmt_no_ping.append(f'<@{c}> ')
-                                ping_dic.update({'tanks':num})
+                        if ping_dic.get('tanks') >= 3:
+                            duplicate_ping_check.append(c)
+                            nmt_no_ping.append(f'<@{c}> ')
+                            ping_dic.update({'tanks':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
                             nmt_ping.append(f'<@{c}> ')
@@ -502,11 +510,10 @@ async def daily():
                             nerds_nms_ping.append(f'<#{c}> {soldiers}\n')
                             ping_dic.update({'soldiers':num})
                             continue
-                        if ping_dic.get('soldiers'):
-                            if ping_dic.get('soldiers') >= 3:
-                                duplicate_ping_check.append(c)
-                                nms_no_ping.append(f'<@{c}> ')
-                                ping_dic.update({'soldiers':num})
+                        if ping_dic.get('soldiers') >= 3:
+                            duplicate_ping_check.append(c)
+                            nms_no_ping.append(f'<@{c}> ')
+                            ping_dic.update({'soldiers':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
                             nms_ping.append(f'<@{c}> ')
@@ -554,12 +561,11 @@ async def daily():
                                 c = dic.get('ChannelID')
                                 nerds_nmsh_ping.append(f'<#{c}> {ships}\n')
                                 ping_dic.update({'ships':num})
-                                continue
-                        if ping_dic.get('ships'):
-                            if ping_dic.get('ships') >= 3:
-                                duplicate_ping_check.append(c)
-                                nmsh_no_ping.append(f'<@{c}> ')
-                                ping_dic.update({'ships':num})
+                            continue
+                        if ping_dic.get('ships') >= 3:
+                            duplicate_ping_check.append(c)
+                            nmsh_no_ping.append(f'<@{c}> ')
+                            ping_dic.update({'ships':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
                             nmsh_ping.append(f'<@{c}> ')
@@ -611,11 +617,10 @@ async def daily():
                 nerds_color_ping.append(f'<#{c}> {nation_color}\n')
                 ping_dic.update({'color':num})
                 continue
-            if ping_dic.get('color'):
-                if ping_dic.get('color') >= 3:
-                    duplicate_ping_check.append(c)
-                    color_no_ping.append(f'<@{c}> ')
-                    ping_dic.update({'color':num})
+            if ping_dic.get('color') >= 3:
+                duplicate_ping_check.append(c)
+                color_no_ping.append(f'<@{c}> ')
+                ping_dic.update({'color':num})
             if c not in nerds_list:
                 duplicate_ping_check.append(c)
                 color_ping.append(f'<@{c}> ')
@@ -676,7 +681,7 @@ async def daily():
         await disc_channel.send(nerds_message)
 
     for ping in no_message_list:
-        if len(ping) != 1:
+        if len(ping) > 1:
             for ids in ping:
                 no_message += f'{ids}\n'
                 if len(no_message) > 1800:
@@ -689,6 +694,8 @@ async def daily():
     
     for ping in no_message_list:
         for member in ping:
+            if member in temp_no_message:
+                continue
             msg_list = []
             msg_str = ''
             if login_temp == ping[0]:
@@ -722,6 +729,8 @@ async def daily():
                     msg_str += f'or {item}'
             msg = f'''My data sources have shown that you haven't {msg_str} for at least 3 days.
 Failure to do so will result in eventual removal from the alliance.'''
+            print(msg)
+            
             if member != login_temp or member != nms_temp or member != nmt_temp \
             or member != nmp_temp or member != nmsh_temp or member != nsp_temp \
             or member != color_temp or member != None:
