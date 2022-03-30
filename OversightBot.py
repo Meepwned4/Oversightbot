@@ -691,6 +691,7 @@ async def daily():
     if len(no_message) < 1800:
         if no_message != no_temp:
             await disc_channel.send(no_message)
+            await disc_channel.send('Commencement of automatic DMing.')
     
     for ping in no_message_list:
         for member in ping:
