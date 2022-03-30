@@ -179,6 +179,9 @@ def interview_message(num, user):
                        + 'or Coding.\n What would you consider your worst weaknesses?\n\n' \
                        + reminder)
     if num == '7':
+        message = ('What would you consider your worst weaknesses?\n\n' \
+                   + reminder)
+    if num == '8':
         message = ('''Now, please select one of the following, or use your own words to best describe what your activity would look like: 
  
 - I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
@@ -189,7 +192,7 @@ def interview_message(num, user):
 
 - I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
 + reminder)
-    if num == '8':
+    if num == '9':
         message = ('''If you were given the opportunity to choose a government department to work in, considering the descriptions provided, which would you choose?
  
 - **War Department**: Defense during peacetime and wartime, making sure members meet minimum military requirements, monitoring conflicts across Orbis and assisting with Foreign Affairs when necessary; ensuring warchests are kept stocked.
@@ -206,7 +209,7 @@ def interview_message(num, user):
  
 If you aren't interested in any of these, that’s okay, just say so. If you have ideas for other government positions we should be offering, feel free to bring this up after this interview.\n\n''' \
 + reminder)
-    if num == '9':
+    if num == '10':
         message = ('''
 With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game? Which would you consider the least interesting? 
 
@@ -221,7 +224,7 @@ With your answer in mind, which among the following or using your own words, wou
 - Raiding inactive nations for money and resources. Arrgh!
 
 - Becoming a politically influential, well-known player.\n\n''' + reminder)
-    if num == '10':
+    if num == '11':
         message = [('''
  These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated. 
 
@@ -249,9 +252,9 @@ We hope to see you on Discord as much as your time commitments allow, but you mu
 ---
 If you have any questions, comments, or concerns, please let us know. Otherwise, state you agree to these terms.\n\n'''
 + reminder)]
-    if num == '11':
-        message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
     if num == '12':
+        message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
+    if num == '13':
         message = ('That was the last question, a human should be along soon to review your interview.')
         
     return message

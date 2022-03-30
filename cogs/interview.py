@@ -209,8 +209,9 @@ class interview(commands.Cog):
                         dic.update({'num':num})
                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
-                        if num == '10':
-                            message_list = OversightData.interview_message(num, member)
+            
+                        message_list = OversightData.interview_message(num, member)
+                        if isinstance(message_list, list) == True:
                             l = 0
                             for item in message_list:
                                 l += 1
@@ -225,7 +226,7 @@ class interview(commands.Cog):
                                     await msg.add_reaction(right_arrow)
                                     await msg.add_reaction(person)
                             await user_message.reactions[0].remove(member)
-                        elif num == '12':
+                        elif num == '13':
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'',
                                                 description = f'{message}', color=colors.dark_gold)
@@ -319,14 +320,14 @@ class interview(commands.Cog):
             with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                 json.dump(dic, outfile)
             user = None
-            if num != '11':
-                if num == '9':
-                    message_list = OversightData.interview_message(num, user)
+            message_list = OversightData.interview_message(num, user)
+            if num != '13':
+                if isinstance(message_list, list) == True:
                     l = 0
                     for item in message_list:
                         l += 1
                         if l == 1:
-                            embed = discord.Embed(title = f'Question number {num}',
+                            embed = discord.Embed(title = f'--- TERMS AND CONDITIONS of Carthago ---',
                                         description = f'{item}', color=colors.dark_gold)
                             await ctx.send(embed=embed)
                         else:
@@ -349,7 +350,7 @@ class interview(commands.Cog):
                     if 'foreigner' in user.roles:
                         user_id = user.id
                         dic.update({'user_id':user_id})
-            elif num == '11':
+            elif num == '13':
                 embed = discord.Embed(title = f'',
                                     description = f'{item}', color=colors.dark_gold)
                 msg = await ctx.send(embed=embed)
