@@ -176,7 +176,7 @@ def interview_message(num, user):
         message = ('What would you consider your greatest skills? These can be ' \
                        + 'in games or IRL which translate into the game, such as GFX ' \
                        + '(Photoshop, GIMP, etc), Video editing, Diplomacy, Spreadsheet ' \
-                       + 'or Coding.\n What would you consider your worst weaknesses?\n\n' \
+                       + 'or Coding.\n\n' \
                        + reminder)
     if num == '7':
         message = ('What would you consider your worst weaknesses?\n\n' \
