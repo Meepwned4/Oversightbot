@@ -170,7 +170,11 @@ class ticket(commands.Cog):
             adirim_role = ctx.guild.get_role(adirim_role_id)
             bot_role = ctx.guild.get_role(bot_role_id)
             pickle_off = open('./data/api_key.pickle', 'rb')
-            apikey = pickle.load(pickle_off)
+            apikeys = pickle.load(pickle_off)
+            apikeys = apikeys.split(',')
+            api_num = apikeys[0]
+            apikeys.remove(api_num)
+            apikey = apikeys[int(api_num)]
             chan = ctx.channel
             try:
                 with open(f'./data/tickets/{chan.id}.json') as data:
@@ -346,5 +350,17 @@ class ticket(commands.Cog):
                         await DMChannel.send(ctx.author, msg)
                         msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+close\" ran by <@{ctx.author.id}>'
                         await DMChannel.send(user, msg)
+    
+    @commands.command(name='ticket_counter', help='+ticket_counter')
+    @commands.is_owner()
+    async def ticket_counter(self, ctx, num):
+#        pickle_off = open('./data/num.pickle', 'rb')
+#        num = pickle.load(pickle_off)
+        num = str(num)
+        pickling_on = open('./data/num.pickle', 'wb')
+        pickle.dump(num, pickling_on)
+        pickling_on.close()
+
+
 def setup(client):
 	client.add_cog(ticket(client))

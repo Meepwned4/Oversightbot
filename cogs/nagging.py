@@ -50,8 +50,8 @@ class nagging(commands.Cog):
 
 
     @commands.command(name='DM', help='+DM test', aliases=['dm'])
-    @commands.is_owner()
-    async def DM(self, ctx, user_id, msg):
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim')
+    async def DM(self, ctx, user_id, *, msg):
         client = self.client
         user = await client.fetch_user(user_id)
         try:

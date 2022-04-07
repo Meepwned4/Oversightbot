@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import typing
+import pickle
 import nest_asyncio
 nest_asyncio.apply()
 from OversightData import lesson_message, build
@@ -30,7 +31,9 @@ class colors:
     blurple = 0x7289da
     greyple = 0x99aab5
 
-apikey = 'a00d3f1cd6f1ad'
+pickle_off = open('./data/api_key.pickle', 'rb')
+apikeys = pickle.load(pickle_off)
+apikeys = apikeys.split(',')
 token = 'NzM1MjU3Mzc3NjA3MjU0MTE3.Xxdnyw.yCKnVzcCHxY_vS5GMelz2ElqSXs'
 oversight_channel_id = 812131124489879552
 disc_channel_id = 605910228692893726
