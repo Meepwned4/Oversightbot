@@ -7,7 +7,9 @@ right_arrow = '➡' # right arrow emoji
 robot = '🤖' # robot emoji
 person = '🧑' # person emoji
 
-apikey = 'a00d3f1cd6f1ad'
+pickle_off = open('./data/api_key.pickle', 'rb')
+apikeys = pickle.load(pickle_off)
+apikeys = apikeys.split(',')
 token = 'NzM1MjU3Mzc3NjA3MjU0MTE3.Xxdnyw.yCKnVzcCHxY_vS5GMelz2ElqSXs'
 oversight_channel_id = 812131124489879552
 disc_channel_id = 605910228692893726

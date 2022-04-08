@@ -29,19 +29,26 @@ logging.ERROR - Only errors and worse
 
 logger = logging.getLogger(__name__)
 c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.INFO)
+c_handler.setLevel(logging.WARN)
 c_format = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%b-%d-%y %H:%M:%S')
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
-logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
+logging.basicConfig(filename='app.log', filemode='w', level=logging.WARN,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%b-%d-%y %H:%M:%S')
 
 pickle_off = open('./data/api_key.pickle', 'rb')
-apikey = pickle.load(pickle_off)
+apikeys = pickle.load(pickle_off)
+apikeys = apikeys.split(',')
+api_num = apikeys[0]
+apikeys.remove(api_num)
+apikey = apikeys[0]
+#pickling_on = open('./data/api_key.pickle', 'wb')
+#pickle.dump(apikey, pickling_on)
+#pickling_on.close()
 pickle_off = open('./data/token.pickle', 'rb')
 token = pickle.load(pickle_off)
 oversight_channel_id = 812131124489879552
@@ -181,6 +188,9 @@ async def daily():
     memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)              
     
 #    for nation in memberdata:
+#        if not nation.get('ping'):
+#            nation.update({'ping':{'color':0, 'soldiers':0, 'ships':0,
+#                            'login':0, 'tanks':0, 'spies':0}})
 #        ping = nation.get('ping')
 #        for key in ping:
 #            if ping.get(key) >= 3:
@@ -189,7 +199,7 @@ async def daily():
 #                nation_name = nation.get('nation')
 #                nationid = nation.get('nationid')
 #                print(f'{nation_name} - {nationid} - {DiscordID} - {key} - {value}\n')
-    
+#    
     for chan in server.text_channels:
         if chan.category_id == 567390184774303745:
             if chan.id != 605910228692893726 and chan.id != 845685557367144448 and \
@@ -236,7 +246,8 @@ async def daily():
             i.update({'ChannelID':0})
         if not i.get('ping'):
             i.update({'ping':{'color':0, 'soldiers':0, 'ships':0,
-                            'login':0, 'tanks':0, 'spies':0}})
+                            'login':0, 'tanks':0, 'spies':0,
+                            'missiles':0, 'nukes':0}})
     
         for dic in list_of_dics:
             if i.get('nationid') == dic.get(
@@ -253,13 +264,9 @@ async def daily():
     pinglist = []
     login_nationids = []
     number = 3
-    reminder = '**Reminder**, if you buy a new city, you won\'t ' + \
-        'meet MMR until you buy the units for that city.' + \
-        '\n\nLet us know if you\'ve read this, confirm by reacting or ' +\
-        'responding to this message.'
     login_temp = f'__People who have been inactive for more than {number} days:__\n'
     nerds_login_temp = f'__Trainees who have been inactive for more than {number} days:__\n'
-    no_temp = f'**__Members that need to be DMed for failure to comply within {number} days.__**\n\n'
+    no_temp = f'**__Members that need to be DMed for failure to comply within {number} days.__**\n'
     number *= 1440
     login_ping = [login_temp]
     login_no_ping = [login_temp]
@@ -579,7 +586,7 @@ async def daily():
 
     color_nationids = []
     fetcheddata = requests.get(
-            'https://politicsandwar.com/api/alliance/id=5049&key=id=5049&key='
+            'https://politicsandwar.com/api/alliance/id=5049&key='
             + apikey)
     fetcheddata = fetcheddata.json()
     AA_color = fetcheddata.get('color')
@@ -632,6 +639,56 @@ async def daily():
     if not nerds_color_ping:
         nerds_color_ping = 'Everyone is on the correct color.'
     
+    nmm_temp = '\n\n__People who have missiles__\n'
+    nmm_ping = [nmm_temp]
+    nmm_no_ping = [nmm_temp]
+    nmm_nationids = []
+    nerds_nmm_temp = '\n__Trainees who has missiles:__\n'
+    nerds_nmm_ping = [nerds_nmm_temp]
+    duplicate_ping_check = []
+
+    for dic in memberdata:
+        if int(dic.get('missiles')) > 0 and \
+            dic.get('vacmode') == '0':
+            missiles = int(dic.get('missiles'))
+            b = dic.get('nationid')
+            nmm_nationids.append(b)
+            if b not in pinglist:
+                pinglist.append(b)
+        for dic2 in oldmemberdata:
+            if dic.get('nationid') in duplicate_ping_check:
+                continue
+            if dic.get('nationid') == dic2.get('nationid'):
+                if dic.get('nationid') in nmp_nationids:
+                    if dic2.get('missiles') <= dic.get('missiles'):
+                        ping_dic = dic.get('ping')
+                        if not ping_dic.get('missiles'):
+                            ping_dic.update({'missiles':0})
+                        num = ping_dic.get('missiles')
+                        c = dic2.get('DiscordID')
+                        c = str(c)
+                        if c in nerds_list:
+                            duplicate_ping_check.append(c)
+                            c = dic.get('ChannelID')
+                            nerds_nmm_ping.append(f'<#{c}> {missiles}\n')
+                            ping_dic.update({'missiles':num})
+                            continue
+                        if ping_dic.get('missiles') >= 3:
+                            duplicate_ping_check.append(c)
+                            nmm_no_ping.append(f'<@{c}> ')
+                            num += 1
+                            ping_dic.update({'missiles':num})
+                        if c not in nerds_list:
+                            duplicate_ping_check.append(c)
+                            nmm_ping.append(f'<@{c}> ')
+                            num += 1
+                            ping_dic.update({'missiles':num})
+    if not nmp_ping:
+        nmp_ping = 'Nobody has missiles.'
+    if not nerds_nmp_ping:
+        nerds_nmp_ping = 'Nobody has missiles.'
+    
+    
     color_message_temp = f'\nChange to {AA_color}' + \
     ' <https://politicsandwar.com/nation/edit/> ' + \
     'and vote <https://politicsandwar.com/world/color/voting/> ' + \
@@ -644,9 +701,21 @@ async def daily():
     nerds_message = ''
     war_status = dic.get('war_status')
     if war_status == '1':
+        reminder = '**Reminder**, if you buy a new city, you won\'t ' + \
+        'meet MMR until you buy the units for that city.' + \
+        '\n\nLet us know if you\'ve read this, confirm by reacting or ' + \
+        'responding to this message.'
         message_list = [login_ping, color_ping]
         no_message_list = [login_no_ping, color_no_ping]
+        nerds_message_list = [nerds_login_ping, nerds_nmt_ping, nerds_nmsh_ping,
+                          nerds_nsp_ping, nerds_color_ping]
     elif war_status == '0':
+        reminder = '**Reminder**, if you buy a new city, you won\'t ' + \
+        'meet MMR until you buy the units for that city.' + \
+        '\nAdditionally, if you have missiles or nukes, please ' + \
+        'decommission them as they aren\'t useful during peace.' + \
+        '\n\nLet us know if you\'ve read this, confirm by reacting or ' + \
+        'responding to this message.'
         message_list = [login_ping, nms_ping, nmt_ping, nmp_ping, nmsh_ping,
                     nsp_ping, color_ping]
         no_message_list = [login_no_ping, nms_no_ping, nmt_no_ping,
@@ -691,52 +760,51 @@ async def daily():
     if len(no_message) < 1800:
         if no_message != no_temp:
             await disc_channel.send(no_message)
-            await disc_channel.send('Commencement of automatic DMing.')
+#            await disc_channel.send('Commencement of automatic DMing.')
     
     for ping in no_message_list:
         for member in ping:
-            if member in temp_no_message:
-                continue
-            msg_list = []
-            msg_str = ''
-            if login_temp == ping[0]:
-                if member != ping[0]:
-                    msg_list.append('logged in')
-            if nms_temp ==  ping[0]:
-                if member != ping[0]:
-                    msg_list.append('bought soldiers')
-            if nmt_temp == ping[0]:
-                if member != ping[0]:
-                    msg_list.append('bought tanks')
-            if nmsh_temp == ping[0]:
-                if member != ping[0]:
-                    msg_list.append('bought ships')
-            if nmp_temp == ping[0]:
-                if member != ping[0]:
-                    msg_list.append('bought planes')
-            if nsp_temp == ping[0]:
-                if member != ping[0]:
-                    msg_list.append('bought spies')
-            if color_temp == ping[0]:
-                if member != ping[0]:
-                    msg_list.append('changed color')
-            
-            msg_num = len(msg_list)
-            for item in msg_list:
-                if msg_num != 1:
-                    msg_str += f'{item}, '
-                    msg_num -= 1
-                else:
-                    msg_str += f'or {item}'
-            msg = f'''My data sources have shown that you haven't {msg_str} for at least 3 days.
-Failure to do so will result in eventual removal from the alliance.'''
-            print(msg)
-            
-            if member != login_temp or member != nms_temp or member != nmt_temp \
-            or member != nmp_temp or member != nmsh_temp or member != nsp_temp \
-            or member != color_temp or member != None:
+            if member not in temp_no_message:
+                msg_list = []
+                msg_str = ''
+                if login_temp == ping[0]:
+                    if member != ping[0]:
+                        msg_list.append('logged in')
+                if nms_temp ==  ping[0]:
+                    if member != ping[0]:
+                        msg_list.append('bought soldiers')
+                if nmt_temp == ping[0]:
+                    if member != ping[0]:
+                        msg_list.append('bought tanks')
+                if nmsh_temp == ping[0]:
+                    if member != ping[0]:
+                        msg_list.append('bought ships')
+                if nmp_temp == ping[0]:
+                    if member != ping[0]:
+                        msg_list.append('bought planes')
+                if nsp_temp == ping[0]:
+                    if member != ping[0]:
+                        msg_list.append('bought spies')
+                if color_temp == ping[0]:
+                    if member != ping[0]:
+                        msg_list.append('changed color')
+                
+                msg_num = len(msg_list)
+                for item in msg_list:
+                    if msg_num == 1:
+                        msg_str += f'{item}'
+                    else:
+                        if msg_num > 1:
+                            msg_str += f'{item}, '
+                            msg_num -= 1
+                        else:
+                            msg_str += f'or {item}'
+                msg = f'''My data sources have shown that you haven't {msg_str} for at least 3 days.
+    Failure to do so will result in eventual removal from the alliance.
+    If you believe this has been sent in error, reply to this message or contact <@175719252995604480>'''
+                member = member.replace('<@', '')
+                member = int(member.replace('>', ''))
                 user = await client.fetch_user(member)
-                msg = f''
                 channel = client.get_channel(946196124614664212)
                 try:
                     await DMChannel.send(user, msg)
@@ -867,5 +935,8 @@ async def on_error(ctx, error):
         # All other Errors not returned come here. And we can just print the default TraceBack.
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+        channel = client.get_channel(959657551627161650)
+        await channel.send('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+        await channel.send(traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr))
 
 client.run(token)
