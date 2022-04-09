@@ -41,11 +41,11 @@ logging.basicConfig(filename='app.log', filemode='w', level=logging.WARN,
                     datefmt='%b-%d-%y %H:%M:%S')
 
 pickle_off = open('./data/api_key.pickle', 'rb')
-apikeys = pickle.load(pickle_off)
-apikeys = apikeys.split(',')
-api_num = apikeys[0]
-apikeys.remove(api_num)
-apikey = apikeys[0]
+apikey = pickle.load(pickle_off)
+#apikeys = apikeys.split(',')
+#api_num = apikeys[0]
+#apikeys.remove(api_num)
+#apikey = apikeys[0]
 #pickling_on = open('./data/api_key.pickle', 'wb')
 #pickle.dump(apikey, pickling_on)
 #pickling_on.close()
