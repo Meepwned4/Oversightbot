@@ -261,54 +261,68 @@ If you have any questions, comments, or concerns, please let us know. Otherwise,
         
     return message
 
-def nagging_message():
-     query = '''{
-	alliances(id: [5049], first: 1) {
+def nagging_message(num):
+    if num == 1:
+        query = '''{
+  alliances(id: [5049], first: 1) {
     data {
       id
       name
       nations {
         id
-        vmode
+        vacation_mode_turns
         score
         last_active
         nation_name
         alliance_position
+        num_cities
+        cities {
+          id
+          name
+          infrastructure
+          land
+          powered
+          oil_power
+          wind_power
+          coal_power
+          nuclear_power
+          coal_mine
+          oil_well
+          uranium_mine
+          barracks
+          farm
+          police_station
+          hospital
+          recycling_center
+          subway
+          supermarket
+          bank
+          shopping_mall
+          stadium
+          lead_mine
+          iron_mine
+          bauxite_mine
+          oil_refinery
+          steel_mill
+          munitions_factory
+          factory
+          hangar
+          drydock
+          nuke_date
+        }
         color
         continent
         leader_name
-        dompolicy
-        warpolicy
+        domestic_policy
+        war_policy
         wars {
           date
           id
           war_type
-          attacks {
-            date
-            warid
-            id
-            attid
-            attcas1
-            attcas2
-            att_mun_used
-            att_gas_used
-            aircraft_killed_by_tanks
-            moneystolen
-            loot_info
-            resistance_eliminated
-            defid
-            defcas1
-            defcas2
-            cityid
-            city_infra_before
-            infradestroyed
-            infra_destroyed_value
-            improvementslost
-            def_mun_used
-            def_gas_used
-            victor
-          }
-          attid
+          turns_left
+          naval_blockade
+          att_id
+          att_alliance_id
           att_gas_used
           att_mun_used
           att_alum_used
@@ -316,20 +330,150 @@ def nagging_message():
           att_resistance
           att_money_looted
           att_missiles_used
-          attpoints
+          att_points
           att_resistance
           att_money_looted
           att_infra_destroyed_value
           att_soldiers_killed
           att_aircraft_killed
-          defid
-          airsuperiority
-          groundcontrol
-          navalblockade
+          def_id
+          def_alliance_id
+          def_resistance
+          air_superiority
+          ground_control
+          naval_blockade
+        }
+      }
+    }
+  }
+}'''
+        
+    if num == 2:
+         query = '''{
+  alliances(id: [5049], first: 1) {
+    data {
+      id
+      name
+      nations {
+        id
+        vacation_mode_turns
+        score
+        last_active
+        nation_name
+        alliance_position
+        color
+        continent
+        leader_name
+        domestic_policy
+        war_policy
+        wars {
+          date
+          id
+          war_type
+          turns_left
+          attacker{
+            id
+            alliance_id
+            alliance_position
+            war_policy
+            num_cities
+            cities{
+              infrastructure
+              powered
+              oil_power
+              oil_well
+              coal_power
+              coal_mine
+              nuclear_power
+              uranium_mine
+              wind_power
+              barracks
+              hangar
+              factory
+              drydock
+            }
+          	continent
+            update_tz
+            population
+            beige_turns
+            score
+            espionage_available
+          }
+          defender{
+            id
+            alliance_id
+            alliance_position
+            war_policy
+            num_cities
+            cities{
+              infrastructure
+              powered
+              oil_power
+              oil_well
+              coal_power
+              coal_mine
+              nuclear_power
+              uranium_mine
+              wind_power
+              barracks
+              hangar
+              factory
+              drydock
+            }
+          	continent
+            update_tz
+            population
+            beige_turns
+            score
+            espionage_available
+          }
+          attacks {
+            date
+            war_id
+            id
+            att_id
+            attcas1
+            attcas2
+            att_mun_used
+            att_gas_used
+            aircraft_killed_by_tanks
+            money_stolen
+            loot_info
+            resistance_eliminated
+            def_id
+            defcas1
+            defcas2
+            city_id
+            city_infra_before
+            infra_destroyed
+            infra_destroyed_value
+            improvements_lost
+            def_mun_used
+            def_gas_used
+            victor
+          }
+          att_id
+          att_gas_used
+          att_mun_used
+          att_alum_used
+          att_steel_used
+          att_resistance
+          att_money_looted
+          att_missiles_used
+          att_points
+          att_resistance
+          att_money_looted
+          att_infra_destroyed_value
+          att_soldiers_killed
+          att_aircraft_killed
+          def_id
+          air_superiority
+          ground_control
+          naval_blockade
         }
       }
     }
   }
 }'''
 
-     return query
+    return query

@@ -122,8 +122,8 @@ class ticket(commands.Cog):
                             f'ticket-{num}', overwrites=overwrites)
                     chan = discord.utils.get(guild.text_channels, name=f'ticket-{num}')
                     await chan.edit(sync_permissions=True)
-                    dic = {'channel':chan.name, 'user_id':member.id}
-                    with open(f'./data/tickets/{chan.name}-{chan.id}.json', 'w') as outfile:
+                    dic = {'channel':chan.id, 'user_id':member.id}
+                    with open(f'./data/tickets/{channel_id}.json', 'w') as outfile:
                         json.dump(dic, outfile)
                             
                     pickling_on = open('./data/num.pickle', 'wb')

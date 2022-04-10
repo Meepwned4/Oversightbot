@@ -17,6 +17,8 @@ import nest_asyncio
 nest_asyncio.apply()
 import OversightData
 import logging
+from http.client import HTTPConnection # py3
+
 
 '''
 Options for logging:
@@ -27,16 +29,25 @@ logging.WARN - Only warnings and worse
 logging.ERROR - Only errors and worse
 '''
 
+'''Switches on logging of the requests module.'''
+HTTPConnection.debuglevel = 1
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.INFO)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.INFO)
+requests_log.propagate = True
+
 logger = logging.getLogger(__name__)
 c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.DEBUG)
+c_handler.setLevel(logging.INFO)
 c_format = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%b-%d-%y %H:%M:%S')
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
-logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
+logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%b-%d-%y %H:%M:%S')
 
@@ -603,8 +614,6 @@ async def daily():
                 if val != AA_color and val != 'beige' and \
                     dic.get('vacmode') == '0':
                     b = dic.get('nationid')
-                    if int(b) == 210815:
-                        continue
                     color_nationids.append(b)
                     if b not in pinglist:
                         pinglist.append(b)
