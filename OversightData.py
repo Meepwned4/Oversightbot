@@ -310,6 +310,7 @@ def nagging_message(num):
           drydock
           nuke_date
         }
+        mass_irrigation
         color
         continent
         leader_name

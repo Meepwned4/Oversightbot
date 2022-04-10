@@ -156,7 +156,7 @@ class ticket(commands.Cog):
         await msg.add_reaction(elephant)
         await ctx.message.delete()
     
-    @commands.command(help='+approve')
+    @commands.command(name='approve', help='+approve', aliases=['dm'])
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def approve(self, ctx):
         if ctx.channel.category.name == ticket_category_name and 'ticket' in ctx.channel.name:
@@ -170,11 +170,11 @@ class ticket(commands.Cog):
             adirim_role = ctx.guild.get_role(adirim_role_id)
             bot_role = ctx.guild.get_role(bot_role_id)
             pickle_off = open('./data/api_key.pickle', 'rb')
-            apikeys = pickle.load(pickle_off)
-            apikeys = apikeys.split(',')
-            api_num = apikeys[0]
-            apikeys.remove(api_num)
-            apikey = apikeys[int(api_num)]
+            apikey = pickle.load(pickle_off)
+#            apikeys = apikeys.split(',')
+#            api_num = apikeys[0]
+#            apikeys.remove(api_num)
+#            apikey = apikeys[int(api_num)]
             chan = ctx.channel
             try:
                 with open(f'./data/tickets/{chan.id}.json') as data:
