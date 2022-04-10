@@ -156,7 +156,7 @@ class ticket(commands.Cog):
         await msg.add_reaction(elephant)
         await ctx.message.delete()
     
-    @commands.command(name='approve', help='+approve', aliases=['dm'])
+    @commands.command(name='approve', help='+approve', aliases=['accept'])
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def approve(self, ctx):
         if ctx.channel.category.name == ticket_category_name and 'ticket' in ctx.channel.name:
