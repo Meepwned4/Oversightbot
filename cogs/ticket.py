@@ -115,7 +115,7 @@ class ticket(commands.Cog):
                     }
                     
                     pickle_off = open('./data/num.pickle', 'rb')
-                    num = pickle.load(pickle_off)
+                    num = int(pickle.load(pickle_off))
                     num += 1
                     await ticket_category.create_text_channel(
                             f'ticket-{num}', overwrites=overwrites)

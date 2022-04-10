@@ -29,14 +29,14 @@ logging.ERROR - Only errors and worse
 
 logger = logging.getLogger(__name__)
 c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.WARN)
+c_handler.setLevel(logging.INFO)
 c_format = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%b-%d-%y %H:%M:%S')
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
-logging.basicConfig(filename='app.log', filemode='w', level=logging.WARN,
+logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%b-%d-%y %H:%M:%S')
 
@@ -762,6 +762,7 @@ async def daily():
             await disc_channel.send(no_message)
 #            await disc_channel.send('Commencement of automatic DMing.')
     
+    dup_check = []
     for ping in no_message_list:
         for member in ping:
             if member not in temp_no_message:
@@ -807,12 +808,20 @@ async def daily():
                 user = await client.fetch_user(member)
                 channel = client.get_channel(946196124614664212)
                 try:
-                    await DMChannel.send(user, msg)
-                    await channel.send(f':white_check_mark: {user.mention} has been DMed')
-                    time.sleep(4)
+                    if user.id in dup_check:
+                        continue
+                    else:
+                        await DMChannel.send(user, msg)
+                        await channel.send(f':white_check_mark: {user.mention} has been DMed this message: \n {msg}')
+                        dup_check.append(user.id)
+                        time.sleep(4)
                 except:
-                    await channel.send(':x: Message failed to send, I might be blocked by <@{user_id}>')
-                    time.sleep(1)
+                    if user.id in dup_check:
+                        continue
+                    else:
+                        await channel.send(':x: Message failed to send, I might be blocked by <@{user.mention}>')
+                        dup_check.append(user.id)
+                        time.sleep(1)
 
 #        embed = discord.Embed(title = 'Trainee units and inactivity status.',
 #                          description = '', color=colors.dark_gold)
