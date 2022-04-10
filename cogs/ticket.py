@@ -81,7 +81,7 @@ class ticket(commands.Cog):
             guild = client.get_guild(guild_id)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
             interviewer_role = guild.get_role(interviewer_role_id)  # management role
-            senator_role = guild.get_role(senator_role_id)
+#            senator_role = guild.get_role(senator_role_id)
             pentarch_role = guild.get_role(pentarch_role_id)
             disc_role = guild.get_role(disc_role_id)
             adirim_role = guild.get_role(adirim_role_id)
@@ -90,7 +90,7 @@ class ticket(commands.Cog):
             guild = client.get_guild(645391966598594561)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
             interviewer_role = guild.get_role(interviewer_role_id)  # management role
-            senator_role = guild.get_role(senator_role_id)
+#            senator_role = guild.get_role(senator_role_id)
             pentarch_role = guild.get_role(pentarch_role_id)
             disc_role = guild.get_role(disc_role_id)
             adirim_role = guild.get(adirim_role_id)
@@ -103,13 +103,14 @@ class ticket(commands.Cog):
             for embed in user_message.embeds:
                 if message in embed.description and emoji.name == elephant and \
                 user_message.author == client.user:
+                    await user_message.reactions[0].remove(member)
                     overwrites = {
                         guild.default_role: discord.PermissionOverwrite(view_channel=False),
                         member: discord.PermissionOverwrite(view_channel=True),
                         guild.me: discord.PermissionOverwrite(view_channel=True),
                         interviewer_role: discord.PermissionOverwrite(view_channel=True),
                         pentarch_role: discord.PermissionOverwrite(view_channel=True),
-                        senator_role: discord.PermissionOverwrite(view_channel=True),
+#                        senator_role: discord.PermissionOverwrite(view_channel=True),
                         adirim_role: discord.PermissionOverwrite(view_channel=True),
                         disc_role: discord.PermissionOverwrite(view_channel=True),
                     }
@@ -128,7 +129,6 @@ class ticket(commands.Cog):
                     pickling_on = open('./data/num.pickle', 'wb')
                     pickle.dump(num, pickling_on)
                     pickling_on.close()
-                    await user_message.reactions[0].remove(member)
                     break
                 if message in embed.description and emoji.name == robot and \
                 user_message.author == client.user:
@@ -356,10 +356,11 @@ class ticket(commands.Cog):
     async def ticket_counter(self, ctx, num):
 #        pickle_off = open('./data/num.pickle', 'rb')
 #        num = pickle.load(pickle_off)
-        num = str(num)
+        num = int(num)
         pickling_on = open('./data/num.pickle', 'wb')
         pickle.dump(num, pickling_on)
         pickling_on.close()
+        await ctx.send(f'Ticket counter set to {num}.')
 
 
 def setup(client):

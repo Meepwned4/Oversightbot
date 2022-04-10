@@ -29,14 +29,14 @@ logging.ERROR - Only errors and worse
 
 logger = logging.getLogger(__name__)
 c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.INFO)
+c_handler.setLevel(logging.DEBUG)
 c_format = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%b-%d-%y %H:%M:%S')
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
-logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO,
+logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%b-%d-%y %H:%M:%S')
 
