@@ -97,6 +97,7 @@ class interview(commands.Cog):
                 try:
                     with open(f'./data/tickets/{chan_id}.json') as data:
                         dic = json.load(data)
+                        member_id = dic.get('user_id')
                 except:
                     for member in channel.members:
                         if suffet_role not in member.roles and elder_role not in member.roles \
