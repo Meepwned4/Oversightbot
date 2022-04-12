@@ -84,8 +84,9 @@ async def on_ready():
         'Hauling mad cash'))
 
 for filename in os.listdir('./cogs'):
-	if filename.endswith('.py'):
-		client.load_extension(f'cogs.{filename[:-3]}')
+    if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[:-3]}')
+        print(f'cogs.{filename[:-3]}')
 
 @client.command()
 @commands.is_owner()
@@ -184,7 +185,7 @@ async def daily():
     nerds_list = []
     raider_list = []
     piggy_id = 236978935538122754
-    
+
     fetcheddata = requests.get(
             'https://politicsandwar.com/api/alliance-members/' +
             f'?allianceid=5049&key={apikey}')
@@ -194,8 +195,8 @@ async def daily():
         'http://24.117.204.187:8080/discord/?alliance=5049' +
         '&key=davethsmellskrampuswhales')
     list_of_dics = list_of_dics.json()
-    memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)              
-    
+    memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)
+
 #    for nation in memberdata:
 #        if not nation.get('ping'):
 #            nation.update({'ping':{'color':0, 'soldiers':0, 'ships':0,
@@ -208,7 +209,7 @@ async def daily():
 #                nation_name = nation.get('nation')
 #                nationid = nation.get('nationid')
 #                print(f'{nation_name} - {nationid} - {DiscordID} - {key} - {value}\n')
-#    
+#
     for chan in server.text_channels:
         if chan.category_id == 567390184774303745:
             if chan.id != 605910228692893726 and chan.id != 845685557367144448 and \
@@ -245,7 +246,7 @@ async def daily():
     if memberdata[0].get('war_status'):
         for i in memberdata:
             i.update({'war_status':memberdata[0].get('war_status')})
-    
+
     for i in memberdata:
         if i.get('DiscordID') in nerds_list:
             i.update({'Trainee':1})
@@ -257,19 +258,19 @@ async def daily():
             i.update({'ping':{'color':0, 'soldiers':0, 'ships':0,
                             'login':0, 'tanks':0, 'spies':0,
                             'missiles':0, 'nukes':0}})
-    
+
         for dic in list_of_dics:
             if i.get('nationid') == dic.get(
                     '_id'):
                 i.update({'DiscordID':dic.get('DiscordID')})
-                                          
+
     for nation in memberdata:
         if nation.get('DiscordID') in nerds_list:
             nation.update({'Trainee':1})
         else:
             nation.update({'Trainee':0})
     OversightData.data_storage(memberdata)
-    
+
     pinglist = []
     login_nationids = []
     number = 3
@@ -381,7 +382,7 @@ async def daily():
     nerds_nsp_temp = '\n__Trainees who don\'t have max spies:__\n'
     nerds_nsp_ping = [nerds_nsp_temp]
     duplicate_ping_check = []
-    
+
     for dic in memberdata:
         if int(dic.get('intagncy'))== 1:
             if int(dic.get('spies')) != 60 and dic.get('vacmode') == '0':
@@ -439,7 +440,7 @@ async def daily():
     nerds_nmt_ping = [nerds_nmt_temp]
     nmt_no_ping = [nmt_temp]
     duplicate_ping_check = []
-    
+
     for dic in memberdata:
         tank_mmr = int(dic.get('cities') * int(mmr[1]) * 250)
         if tank_mmr > int(dic.get('tanks')) and \
@@ -487,8 +488,8 @@ async def daily():
         nmt_ping = 'Everyone has max tanks.'
     if not nerds_nmt_ping:
         nerds_nmt_ping = 'Nobody has tanks.'
-    
-    
+
+
     nms_nationids = []
     nms_temp = '\n\n__People who don\'t have max soldiers__\n'
     nms_ping = [nms_temp]
@@ -496,7 +497,7 @@ async def daily():
     nerds_nms_temp = '\n__Trainees who don\'t have max soldiers:__\n'
     nerds_nms_ping = [nerds_nms_temp]
     duplicate_ping_check = []
-    
+
     for dic in memberdata:
         soldier_mmr = int(dic.get('cities') * int(mmr[0]) * 3000)
         if soldier_mmr > int(dic.get('soldiers')) and \
@@ -548,7 +549,7 @@ async def daily():
     nerds_nmsh_ping = [nerds_nmsh_temp]
     nmsh_no_ping = [nmsh_temp]
     duplicate_ping_check = []
-    
+
     for dic in memberdata:
         ship_mmr = int(dic.get('cities') * int(mmr[3]) * 5)
         if ship_mmr > int(dic.get('ships')) and \
@@ -605,7 +606,7 @@ async def daily():
     nerds_color_ping = [nerds_color_temp]
     color_no_ping = [color_temp]
     duplicate_ping_check = []
-    
+
     for dic in memberdata:
         for key, val in dic.items():
             if key == 'color':
@@ -640,12 +641,12 @@ async def daily():
                 color_ping.append(f'<@{c}> ')
                 num += 1
                 ping_dic.update({'color':num})
-    
+
     if not color_ping:
         color_ping = 'Everyone is on the correct color.'
     if not nerds_color_ping:
         nerds_color_ping = 'Everyone is on the correct color.'
-    
+
     nmm_temp = '\n\n__People who have missiles__\n'
     nmm_ping = [nmm_temp]
     nmm_no_ping = [nmm_temp]
@@ -694,8 +695,8 @@ async def daily():
         nmp_ping = 'Nobody has missiles.'
     if not nerds_nmp_ping:
         nerds_nmp_ping = 'Nobody has missiles.'
-    
-    
+
+
     color_message_temp = f'\nChange to {AA_color}' + \
     ' <https://politicsandwar.com/nation/edit/> ' + \
     'and vote <https://politicsandwar.com/world/color/voting/> ' + \
@@ -731,7 +732,7 @@ async def daily():
                           nerds_nsp_ping, nerds_color_ping]
 
     for x in no_message_list:
-        temp_no_message += x[0] 
+        temp_no_message += x[0]
     for ping in message_list:
         if len(ping) != 1:
             for ids in ping:
@@ -763,12 +764,12 @@ async def daily():
                 if len(no_message) > 1800:
                     await disc_channel.send(no_message)
                     no_message = ''
-                    len_check += 1  
+                    len_check += 1
     if len(no_message) < 1800:
         if no_message != no_temp:
             await disc_channel.send(no_message)
 #            await disc_channel.send('Commencement of automatic DMing.')
-    
+
     dup_check = []
     for ping in no_message_list:
         for member in ping:
@@ -796,7 +797,7 @@ async def daily():
                 if color_temp == ping[0]:
                     if member != ping[0]:
                         msg_list.append('changed color')
-                
+
                 msg_num = len(msg_list)
                 for item in msg_list:
                     if msg_num == 1:
@@ -854,8 +855,8 @@ async def daily():
 #                        value = str(nerds_color_ping),
 #                        inline = False)
 #        await disc_channel.send(embed=embed)
-#        
-#        
+#
+#
 #        a = 0
 #        embed = discord.Embed(title = no_temp,
 #                          description = '', color=colors.dark_gold)

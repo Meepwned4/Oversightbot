@@ -59,16 +59,16 @@ class colors:
     greyple = 0x99aab5
 
 class ticket(commands.Cog):
-    
+
     def __init__(self, client):
         self.client = client
-    
+
     # Ignore these
     ticket_category = None
     interviewer_role = None
     guild = None
 
-    
+
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         client = self.client
@@ -76,7 +76,7 @@ class ticket(commands.Cog):
         emoji = payload.emoji
         message_id = payload.message_id
         channel_id = payload.channel_id
-        
+
         try:
             guild = client.get_guild(guild_id)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
@@ -95,10 +95,10 @@ class ticket(commands.Cog):
             disc_role = guild.get_role(disc_role_id)
             adirim_role = guild.get(adirim_role_id)
             channel = guild.get_channel(channel_id)
-        
+
         if not member.bot:
             message = 'Welcome to Carthago Co-Operative Alliance. We are glad to see you recognize the glory of the Shining City and wish to join us.'
-            
+
             user_message = await channel.fetch_message(message_id)
             for embed in user_message.embeds:
                 if message in embed.description and emoji.name == elephant and \
@@ -114,7 +114,7 @@ class ticket(commands.Cog):
                         adirim_role: discord.PermissionOverwrite(view_channel=True),
                         disc_role: discord.PermissionOverwrite(view_channel=True),
                     }
-                    
+
                     pickle_off = open('./data/num.pickle', 'rb')
                     num = int(pickle.load(pickle_off))
                     num += 1
@@ -125,7 +125,7 @@ class ticket(commands.Cog):
                     dic = {'channel':chan.id, 'user_id':member.id}
                     with open(f'./data/tickets/{channel_id}.json', 'w') as outfile:
                         json.dump(dic, outfile)
-                            
+
                     pickling_on = open('./data/num.pickle', 'wb')
                     pickle.dump(num, pickling_on)
                     pickling_on.close()
@@ -135,10 +135,10 @@ class ticket(commands.Cog):
                     await user_message.clear_reaction(elephant)
                     await user_message.add_reaction(elephant)
                     break
-                
-                
-    
-    
+
+
+
+
     @commands.command(name='sendticket', help='+sendticket')
     @commands.has_any_role('Elder', 'Suffet')
     async def sendticket(self, ctx):
@@ -146,16 +146,17 @@ class ticket(commands.Cog):
             title='Application',
             description='''
             Welcome to Carthago Co-Operative Alliance. We are glad to see you recognize the glory of the Shining City and wish to join us.
-            
+
             Please make sure you've applied at the Alliance Page: https://politicsandwar.com/alliance/join/id=5049
-            
+
             If that's done, react with :elephant: to apply.
             ''', color=colors.dark_gold
         )
         msg = await ctx.send(embed=embed)
         await msg.add_reaction(elephant)
         await ctx.message.delete()
-    
+
+
     @commands.command(name='approve', help='+approve', aliases=['accept'])
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def approve(self, ctx):
@@ -198,7 +199,7 @@ class ticket(commands.Cog):
                         user = user.json()
                         user = user[0]
                         break
-            
+
             nation_id = user.get('_id')
             try:
                 nation = requests.get(
@@ -226,6 +227,7 @@ class ticket(commands.Cog):
                     print('Login failed')
                     raise   Exception('Login failed')
                 url = 'https://politicsandwar.com/alliance/id=5049&display=acp'
+                user_name = 34
                 perms_data = {'alliance_positions_member':f'{user_name}', 'alliance_positions_member_name_type':'leader_name', 'alliance_positions_new_position_select':'284',  'alliance_positions_assign_submit':'Save Position Assignment'}
                 res2 = await session.get(url);
                 text = await res2.text()
@@ -245,65 +247,8 @@ class ticket(commands.Cog):
             else:
                 await member.add_roles(trainee_role)
                 await member.remove_roles(foreigner_role)
-    
-#    @commands.command(name='tax_bracket', help='+tax_bracket 92845 100', aliases=['tax', 'taxes'])
-#    @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
-#    async def tax_bracket(self, ctx, nation, tax_bracket):
-#        if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
-#            login_data = {'email': 'bswindellnwt08@gmail.com', 'password': 'woodcutmaster4', 'loginform': 'Login'}
-##            login_data = {'email': 'jacksonayres11@gmail.com', 'password': 'Dungeons&Dragons', 'loginform': 'Login'}
-#            tax_bracket = '30'
-#            nation = '92845'
-#            tax_bracket = str(tax_bracket)
-##            user = requests.get(
-##                    f'http://24.117.204.187:8080/discord/?_id={nation}&key=davethsmellskrampuswhales')
-##            user = user.json()
-##            user = user[0]
-#            check = False
-#            
-#            if tax_bracket == 'communism' or tax_bracket == 'commie' or \
-#            tax_bracket == '100' or tax_bracket == '13587':
-#                tax_id = '13587'
-#                check = True
-#            if tax_bracket == 'low' or tax_bracket == '30' or \
-#            tax_bracket == 'lower tier' or tax_bracket == 'lower' or\
-#            tax_bracket == '9472':
-#                tax_id = '9472'
-#                check = True
-#            if tax_bracket == 'up' or tax_bracket == 'upper' or \
-#            tax_bracket == 'upper tier' or tax_bracket == '10' or\
-#            tax_bracket == '9293':
-#                tax_id = '9293'
-#                check = True
-#            if tax_bracket == 'laissez-faire' or tax_bracket == 'laissez' or \
-#            tax_bracket == '0' or tax_bracket == '15344':
-#                tax_id = '15344'
-#            
-#            if check == False:
-#                print('Failure!')
-##                await ctx.send('Invalid tax bracket.')
-#            else:
-#                login = 'maybe'
-#                async with aiohttp.ClientSession() as session:
-#                    login_url = 'https://politicsandwar.com/login/'
-#                    res1 = await session.post(login_url, data=login_data)
-#                    if(len((BeautifulSoup(await res1.text(), 'html.parser')).body.findAll(text='Login Failure')) > 0):
-#                        print('Login failed')
-#                        login = False
-#                        raise   Exception('Login failed')
-#                    url = 'https://politicsandwar.com/alliance/id=5049&display=acp'
-#                    perms_data = {'nation_id':f'{nation}', 'bracket_id':f'{tax_id}', 'change_member_bracket':'Update Nation\'s Bracket'}
-#                    res2 = await session.get(url);
-#                    text = await res2.text()
-#                    auth_token = (BeautifulSoup(text, 'html.parser')).find('input', {'name':'token'})['value']
-#                    perms_data.update({'token': auth_token})
-#                    await session.post(url, data=perms_data)
-#                    await session.close()
-#                if login == False:
-#                    await ctx.send('Failed to change their tax bracket')
-#                else:
-#                    await ctx.send('Successfully changed their tax bracket.')
-#    
+
+
     @commands.command(help='+save')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def save(self, ctx: commands.Context):
@@ -322,10 +267,10 @@ class ticket(commands.Cog):
                         value = 'Manually saved',
                         inline = False)
             transcript = await chat_exporter.export(ctx.channel)
-        
+
             if transcript is None:
                 return
-        
+
             try:
 #                file = open(f'./data/transcripts/transcript-{ctx.channel.id}.html', 'w')
 #                file.write(transcript)
@@ -347,7 +292,8 @@ class ticket(commands.Cog):
                     await DMChannel.send(ctx.author, msg)
                     msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
                     await DMChannel.send(user, msg)
-    
+
+
     @commands.command(help='+close (reason)')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def close(self, ctx, *, reason: typing.Optional[str] = 'Not specified'):
@@ -372,7 +318,7 @@ class ticket(commands.Cog):
                             value = f'{reason}',
                             inline = False)
                 transcript = await chat_exporter.export(ctx.channel)
-            
+
                 if transcript is None:
                     return
                 try:
@@ -408,7 +354,8 @@ class ticket(commands.Cog):
                         await DMChannel.send(ctx.author, msg)
                         msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+close\" ran by <@{ctx.author.id}>'
                         await DMChannel.send(user, msg)
-    
+
+
     @commands.command(name='ticket_counter', help='+ticket_counter')
     @commands.is_owner()
     async def ticket_counter(self, ctx, num):
