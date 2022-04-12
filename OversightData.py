@@ -213,7 +213,7 @@ If you aren't interested in any of these, that’s okay, just say so. If you hav
 + reminder)
     if num == '10':
         message = ('''
-With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game? Which would you consider the least interesting? 
+With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game? 
 
 - Staying at peace, building my nation, trading and growing my income.
  
@@ -227,6 +227,8 @@ With your answer in mind, which among the following or using your own words, wou
 
 - Becoming a politically influential, well-known player.\n\n''' + reminder)
     if num == '11':
+        message = ('''Which would you consider the least interesting?''')
+    if num == '12':
         message = [('''
  These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated. 
 
@@ -254,9 +256,9 @@ We hope to see you on Discord as much as your time commitments allow, but you mu
 ---
 If you have any questions, comments, or concerns, please let us know. Otherwise, state you agree to these terms.\n\n'''
 + reminder)]
-    if num == '12':
-        message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
     if num == '13':
+        message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
+    if num == '14':
         message = ('That was the last question, a human should be along soon to review your interview.')
         
     return message

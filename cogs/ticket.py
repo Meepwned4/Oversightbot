@@ -225,12 +225,12 @@ class ticket(commands.Cog):
                 if(len((BeautifulSoup(await res1.text(), 'html.parser')).body.findAll(text='Login Failure')) > 0):
                     print('Login failed')
                     raise   Exception('Login failed')
-                url = 'https://politicsandwar.com/alliance/id=5049#permissions'
-                perms_data = {'nationperm':f'{user_name}', 'level':'2', 'permsubmit':'Go'}
-    #            res2 = await session.get(url);
-    #            text = await res2.text()
-    #            auth_token = (BeautifulSoup(text, 'html.parser')).find('input', {'name':'token'})['value']
-    #            perms_data.update({'token': auth_token})
+                url = 'https://politicsandwar.com/alliance/id=5049&display=acp'
+                perms_data = {'alliance_positions_member':f'{user_name}', 'alliance_positions_member_name_type':'leader_name', 'alliance_positions_new_position_select':'284',  'alliance_positions_assign_submit':'Save Position Assignment'}
+                res2 = await session.get(url);
+                text = await res2.text()
+                auth_token = (BeautifulSoup(text, 'html.parser')).find('input', {'name':'validation_token'})['value']
+                perms_data.update({'validation_token': auth_token})
                 await session.post(url, data=perms_data)
                 await session.close()
             await ctx.channel.edit(name=channel_name, topic=nation_link)
@@ -246,6 +246,64 @@ class ticket(commands.Cog):
                 await member.add_roles(trainee_role)
                 await member.remove_roles(foreigner_role)
     
+#    @commands.command(name='tax_bracket', help='+tax_bracket 92845 100', aliases=['tax', 'taxes'])
+#    @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
+#    async def tax_bracket(self, ctx, nation, tax_bracket):
+#        if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
+#            login_data = {'email': 'bswindellnwt08@gmail.com', 'password': 'woodcutmaster4', 'loginform': 'Login'}
+##            login_data = {'email': 'jacksonayres11@gmail.com', 'password': 'Dungeons&Dragons', 'loginform': 'Login'}
+#            tax_bracket = '30'
+#            nation = '92845'
+#            tax_bracket = str(tax_bracket)
+##            user = requests.get(
+##                    f'http://24.117.204.187:8080/discord/?_id={nation}&key=davethsmellskrampuswhales')
+##            user = user.json()
+##            user = user[0]
+#            check = False
+#            
+#            if tax_bracket == 'communism' or tax_bracket == 'commie' or \
+#            tax_bracket == '100' or tax_bracket == '13587':
+#                tax_id = '13587'
+#                check = True
+#            if tax_bracket == 'low' or tax_bracket == '30' or \
+#            tax_bracket == 'lower tier' or tax_bracket == 'lower' or\
+#            tax_bracket == '9472':
+#                tax_id = '9472'
+#                check = True
+#            if tax_bracket == 'up' or tax_bracket == 'upper' or \
+#            tax_bracket == 'upper tier' or tax_bracket == '10' or\
+#            tax_bracket == '9293':
+#                tax_id = '9293'
+#                check = True
+#            if tax_bracket == 'laissez-faire' or tax_bracket == 'laissez' or \
+#            tax_bracket == '0' or tax_bracket == '15344':
+#                tax_id = '15344'
+#            
+#            if check == False:
+#                print('Failure!')
+##                await ctx.send('Invalid tax bracket.')
+#            else:
+#                login = 'maybe'
+#                async with aiohttp.ClientSession() as session:
+#                    login_url = 'https://politicsandwar.com/login/'
+#                    res1 = await session.post(login_url, data=login_data)
+#                    if(len((BeautifulSoup(await res1.text(), 'html.parser')).body.findAll(text='Login Failure')) > 0):
+#                        print('Login failed')
+#                        login = False
+#                        raise   Exception('Login failed')
+#                    url = 'https://politicsandwar.com/alliance/id=5049&display=acp'
+#                    perms_data = {'nation_id':f'{nation}', 'bracket_id':f'{tax_id}', 'change_member_bracket':'Update Nation\'s Bracket'}
+#                    res2 = await session.get(url);
+#                    text = await res2.text()
+#                    auth_token = (BeautifulSoup(text, 'html.parser')).find('input', {'name':'token'})['value']
+#                    perms_data.update({'token': auth_token})
+#                    await session.post(url, data=perms_data)
+#                    await session.close()
+#                if login == False:
+#                    await ctx.send('Failed to change their tax bracket')
+#                else:
+#                    await ctx.send('Successfully changed their tax bracket.')
+#    
     @commands.command(help='+save')
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def save(self, ctx: commands.Context):

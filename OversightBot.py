@@ -32,22 +32,20 @@ logging.ERROR - Only errors and worse
 '''Switches on logging of the requests module.'''
 HTTPConnection.debuglevel = 1
 
-logging.basicConfig()
-logging.getLogger().setLevel(logging.INFO)
 requests_log = logging.getLogger("requests.packages.urllib3")
-requests_log.setLevel(logging.INFO)
+requests_log.setLevel(logging.WARN)
 requests_log.propagate = True
 
 logger = logging.getLogger(__name__)
 c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.INFO)
+c_handler.setLevel(logging.DEBUG)
 c_format = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%b-%d-%y %H:%M:%S')
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
-logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO,
+logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%b-%d-%y %H:%M:%S')
 
