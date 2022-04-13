@@ -298,6 +298,8 @@ class ticket(commands.Cog):
     @commands.has_any_role('Interviewer', 'Pentarch', 'Elder', 'Suffet')
     async def close(self, ctx, *, reason: typing.Optional[str] = 'Not specified'):
         ignore_channels = [605910228692893726, 845685557367144448, 568822425253576739]
+        if ctx.channel.id in ignore_channels:
+            await ctx.send(':no_entry_sign::facepalm:')
         if ctx.channel.category.name == ticket_category_name and ctx.channel.id not in ignore_channels:
             client = self.client
             guild = client.get_guild(guild_id)
@@ -359,13 +361,14 @@ class ticket(commands.Cog):
     @commands.command(name='ticket_counter', help='+ticket_counter')
     @commands.is_owner()
     async def ticket_counter(self, ctx, num):
-#        pickle_off = open('./data/num.pickle', 'rb')
-#        num = pickle.load(pickle_off)
-        num = int(num)
-        pickling_on = open('./data/num.pickle', 'wb')
-        pickle.dump(num, pickling_on)
-        pickling_on.close()
-        await ctx.send(f'Ticket counter set to {num}.')
+        if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
+#            pickle_off = open('./data/num.pickle', 'rb')
+#            num = pickle.load(pickle_off)
+            num = int(num)
+            pickling_on = open('./data/num.pickle', 'wb')
+            pickle.dump(num, pickling_on)
+            pickling_on.close()
+            await ctx.send(f'Ticket counter set to {num}.')
 
 
 def setup(client):

@@ -33,12 +33,12 @@ logging.ERROR - Only errors and worse
 HTTPConnection.debuglevel = 1
 
 requests_log = logging.getLogger("requests.packages.urllib3")
-requests_log.setLevel(logging.WARN)
+requests_log.setLevel(logging.INFO)
 requests_log.propagate = True
 
 logger = logging.getLogger(__name__)
 c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.DEBUG)
+c_handler.setLevel(logging.INFO)
 c_format = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%b-%d-%y %H:%M:%S')
