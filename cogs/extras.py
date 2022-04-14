@@ -3,38 +3,47 @@ from discord.ext import commands
 import requests
 import aiohttp
 from bs4 import BeautifulSoup
+import OversightData
 
-class Select(discord.ui.Select):
-    def __init__(self):
-        options=[
-            discord.SelectOption(label="Option 1",emoji="👌",description="This is option 1!"),
-            discord.SelectOption(label="Option 2",emoji="✨",description="This is option 2!"),
-            discord.SelectOption(label="Option 3",emoji="🎭",description="This is option 3!")
-            ]
-        super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
-    async def callback(self, interaction: discord.Interaction):
-        if self.values[0] == "Option 1":
-            await interaction.response.edit_message(content="This is the first option from the entire list!")
-        elif self.values[0] == "Option 2":
-            await interaction.response.send_message("This is the second option from the list entire wooo!",ephemeral=False)
-        elif self.values[0] == "Option 3":
-            await interaction.response.send_message("Third One!",ephemeral=True)
-
-class SelectView(discord.ui.View):
-    def __init__(self, *, timeout = 180):
-        super().__init__(timeout=timeout)
-        self.add_item(Select())
-
+#class Select(discord.ui.Select):
+#    def __init__(self):
+#        options=[
+#            discord.SelectOption(label="Option 1",emoji="👌",description="This is option 1!"),
+#            discord.SelectOption(label="Option 2",emoji="✨",description="This is option 2!"),
+#            discord.SelectOption(label="Option 3",emoji="🎭",description="This is option 3!")
+#            ]
+#        super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
+#    async def callback(self, interaction: discord.Interaction):
+#        if self.values[0] == "Option 1":
+#            await interaction.response.send_message("1", ephemeral=False)
+#        elif self.values[0] == "Option 2":
+#            await interaction.response.send_message("2",ephemeral=False)
+#        elif self.values[0] == "Option 3":
+#            await interaction.response.send_message("3",ephemeral=False)
+##            await interaction.response.edit_message(content="1")
+##        elif self.values[0] == "Option 2":
+##            await interaction.response.send_message("2",ephemeral=False)
+##        elif self.values[0] == "Option 3":
+##            await interaction.response.send_message("3",ephemeral=True)
+#
+#class SelectView(discord.ui.View):
+#    def __init__(self, *, timeout = 180):
+#        super().__init__(timeout=timeout)
+#        self.add_item(Select())
+#
 class extras(commands.Cog):
 
     def __init__(self, client):
         self.client = client
         client = self.client
-
-    @commands.command(name='menu', help='+menu')
-    @commands.is_owner()
-    async def menu(self, ctx):
-        await ctx.send("Menus!",view=SelectView())
+#
+#    @commands.command(name='menu', help='+menu')
+#    @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
+#    async def menu(self, ctx):
+#        member = None
+#        num = 8
+#        words = OversightData.interview_question(num, member)
+#        await ctx.send(words,view=SelectView())
 
 
     @commands.command(name='tax_bracket', help='+tax_bracket 92845 100', aliases=['tax', 'taxes'])

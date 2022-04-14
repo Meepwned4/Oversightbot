@@ -151,8 +151,8 @@ def interview_message(num, user):
             nation_id = user.get('_id')
             leader = user.get('leader')
             nation_name = user.get('name')
-            nation_link = f'https://politicsandwar.com/nation/id={nation_id}' 
-            
+            nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
+
             message = (f'My sources tell me that the nation {nation_name} led by {leader} at the link {nation_link} is your nation.\n' \
                            + 'Is this correct? If not, what is the link to your nation?\n\n' \
                            + reminder)
@@ -184,39 +184,39 @@ def interview_message(num, user):
         message = ('What would you consider your worst weaknesses?\n\n' \
                    + reminder)
     if num == '8':
-        message = ('''Now, please select one of the following, or use your own words to best describe what your activity would look like: 
- 
-- I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
- 
-- I will login at least once or twice a day. I want to be moderately active in the CTO community. I will be active on Discord whenever possible and participate when I'm able.
+        message = ('''Now, please select one of the following, or use your own words to best describe what your activity would look like:
 
-- I would like to be as active as I'd like, while building my Nation and income at peace and I'm just here so I don't get raided.
+1) I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
 
-- I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
+2) I will login at least once or twice a day. I want to be moderately active in the CTO community. I will be active on Discord whenever possible and participate when I'm able.
+
+3) I would like to be as active as I'd like, while building my Nation and income at peace and I'm just here so I don't get raided.
+
+4) I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
 + reminder)
     if num == '9':
         message = ('''If you were given the opportunity to choose a government department to work in, considering the descriptions provided, which would you choose?
- 
+
 - **War Department**: Defense during peacetime and wartime, making sure members meet minimum military requirements, monitoring conflicts across Orbis and assisting with Foreign Affairs when necessary; ensuring warchests are kept stocked.
- 
+
 - **Foreign Affairs Department**: Diplomacy among allies and other parties; posting in forums and keeping up the Carthago public image; constant intelligence gathering and maintenance of contacts via social interaction.
- 
+
 - **Tech Department**: Maintaining our alliance stat sites, discord bots and sheets/scripts. Having an intermediate coding knowledge and a level of alliance seniority/trust (to prevent corporate espionage) is a requirement to entry.
 
 - **Discipline Department**: Helping mentor other members, especially new members; helping members maximise income; ensuring warchests are kept up to date and ensuring members are active, aware and following alliance policies. Ensuring the smooth running of the alliance (jack-of-all trades).
 
-- **Culture Department**: Creating graphics, such as banners and flags for the Alliance and making sure members are active and having fun with events and activities; managing our Discord channel; keeping our Wiki up-to-date and looking good. 
- 
+- **Culture Department**: Creating graphics, such as banners and flags for the Alliance and making sure members are active and having fun with events and activities; managing our Discord channel; keeping our Wiki up-to-date and looking good.
+
 - **Treasury Department**: Providing loans and grants to members; managing the alliance’s taxes and resources through trade routes with other alliances; helping members maximize income.
- 
+
 If you aren't interested in any of these, that’s okay, just say so. If you have ideas for other government positions we should be offering, feel free to bring this up after this interview.\n\n''' \
 + reminder)
     if num == '10':
         message = ('''
-With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game? 
+With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game?
 
 - Staying at peace, building my nation, trading and growing my income.
- 
+
 - Fighting in wars against other Nations and Alliances.
 
 - Working in the environment of an organized Alliance government.
@@ -230,7 +230,7 @@ With your answer in mind, which among the following or using your own words, wou
         message = ('''Which would you consider the least interesting?''')
     if num == '12':
         message = [('''
- These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated. 
+ These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated.
 
 **- Economics -**
 Our economic policy includes taxes which are determined by your size and primarily by your choice. We provide the best within the two avenues of economic development, with your prosperity and freedom to choose in mind above all. While it is highly recommended that you join our growth cycles (that is, communist taxes), provided your nation has City 17+ you may choose 10/10 tax rates.
@@ -239,15 +239,15 @@ Our Treasury Department will work with you to maximize your income, within the c
 
 Any grants received by the time that you leave the AA shall be seen as debt. This debt will be calculated based on the taxes you paid versus the Grants and Aid you received (subtracted by said taxes). These will have to be repaid by you or the AA you are staying at. If no agreement on this can be made and/or no payment is received. It shall serve as a valid Casus Belli against you. Raiding shall ensue until satisfaction or recovery of the debt amount.
 
-**- New Nations -** 
-New nations are expected to take the time to read guides and listen to assigned mentors while they raid until they get to 10 Cities. After that is done, they are eligible to join our growth cycle program, previously mentioned, being taxed at 30/30 in the meantime. This is subject to change, depending on if we are in wartime or at peace.           
+**- New Nations -**
+New nations are expected to take the time to read guides and listen to assigned mentors while they raid until they get to 10 Cities. After that is done, they are eligible to join our growth cycle program, previously mentioned, being taxed at 30/30 in the meantime. This is subject to change, depending on if we are in wartime or at peace.
         '''), ('''
-**- Responsibilities -** 
-The respective departments of government enforce our Minimum Military Requirements (MMR) and Warchest (WC), Citizens will be told the level of MMR they should be expected to maintain, dependent on the state of affairs in Orbis (e.g. peace/war/high alert). 
- 
-You will be encouraged to be involved and take on as much responsibility in the different government departments and in the community as you are comfortable with, subject to promotion based on good performance. 
+**- Responsibilities -**
+The respective departments of government enforce our Minimum Military Requirements (MMR) and Warchest (WC), Citizens will be told the level of MMR they should be expected to maintain, dependent on the state of affairs in Orbis (e.g. peace/war/high alert).
 
-Our policies on Raids must be followed strictly. If you are unsure if your intended target is allowed, ask War Corps in war-general. 
+You will be encouraged to be involved and take on as much responsibility in the different government departments and in the community as you are comfortable with, subject to promotion based on good performance.
+
+Our policies on Raids must be followed strictly. If you are unsure if your intended target is allowed, ask War Corps in war-general.
 
 You are encouraged to log on every 3 days. You must be active in-game at least once every 7 days in game or you will be set to applicant and if your nation turns purple in-game, you will be removed from the alliance. This policy is enforced at the discretion of the Discipline and Oversight department. Fighting actively in alliance wars is mandatory, should you opt to go into vacation mode without warning and without just cause, as determined by the Oversight Department, you will be removed from the alliance. If you take any other actions deemed detrimental to the alliance, you will be removed, with just cause given to you to explain the decision.
 
@@ -260,7 +260,7 @@ If you have any questions, comments, or concerns, please let us know. Otherwise,
         message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
     if num == '14':
         message = ('That was the last question, a human should be along soon to review your interview.')
-        
+
     return message
 
 def nagging_message(num):
@@ -350,7 +350,7 @@ def nagging_message(num):
     }
   }
 }'''
-        
+
     if num == 2:
          query = '''{
   alliances(id: [5049], first: 1) {
