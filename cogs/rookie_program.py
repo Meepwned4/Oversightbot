@@ -1,9 +1,10 @@
 import discord
 from discord.ext import commands
 import typing
+import pickle
 import nest_asyncio
 nest_asyncio.apply()
-from OversightData import lesson_message
+from OversightData import lesson_message, build
 
 class colors:
     default = 0
@@ -30,7 +31,9 @@ class colors:
     blurple = 0x7289da
     greyple = 0x99aab5
 
-apikey = 'a00d3f1cd6f1ad'
+pickle_off = open('./data/api_key.pickle', 'rb')
+apikeys = pickle.load(pickle_off)
+apikeys = apikeys.split(',')
 token = 'NzM1MjU3Mzc3NjA3MjU0MTE3.Xxdnyw.yCKnVzcCHxY_vS5GMelz2ElqSXs'
 oversight_channel_id = 812131124489879552
 disc_channel_id = 605910228692893726
@@ -41,30 +44,30 @@ nerds_id = 712071416505172090
 raider_id = 853790553375768586
 
 class rookie_program(commands.Cog):
-    
+
     def __init__(self, client):
         self.client = client
 
     @commands.command(name='lesson', help='+lesson (number 1-6)')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
-    async def lesson(self, ctx, lesson: typing.Optional[str] = 'default' ):
-         if ctx.channel.category.name != '[The Harbour]':
+    async def lesson(self, ctx, lesson: typing.Optional[str] = 'default'):
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
              message = lesson_message(lesson)
              await ctx.send(message)
-    
+
     @commands.command(name='beige', help='+beige')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def beige(self, ctx):
-         if ctx.channel.category.name != '[The Harbour]':
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
              message = 'The only color bloc that offers protection to your nation; while on beige no new wars can be declared on you (and you cannot declare new wars).'
              embed = discord.Embed(title = 'Beige',
                               description = f'{message}', color=colors.dark_gold)
              await ctx.send(embed=embed)
-    
+
     @commands.command(name='raiding_rules', help='+raiding_rules')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def raiding_rules(self, ctx):
-         if ctx.channel.category.name != '[The Harbour]':
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
              message = '''
                  **Raiding/War Policy**:
     - Raid targets must not be in an alliance that is ranked in the top 50.
@@ -77,25 +80,37 @@ class rookie_program(commands.Cog):
              embed = discord.Embed(title = 'Raiding rules',
                               description = f'{message}', color=colors.dark_gold)
              await ctx.send(embed=embed)
-    
-    @commands.command(name='mass_infra', help='+mass_infra')
+
+    @commands.command(name='mass_infra', help='+mass_infra', aliases=['bulk_infra'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def mass_infra(self, ctx):
-         if ctx.channel.category.name != '[The Harbour]':
-             message = 'https://politicsandwar.com/cities/mass-infra-purchase/'
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
+             message = '<https://politicsandwar.com/cities/mass-infra-purchase/>'
              await ctx.send(message)
-    
-    @commands.command(name='mass_land', help='+mass_land')
+
+    @commands.command(name='mass_land', help='+mass_land', aliases=['bulk_land'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def mass_land(self, ctx):
-         if ctx.channel.category.name != '[The Harbour]':
-             message = 'https://politicsandwar.com/cities/mass-land-purchase/'
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
+             message = '<https://politicsandwar.com/cities/mass-land-purchase/>'
              await ctx.send(message)
-    
+
+    @commands.command(name='bulk', help='+bulk')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
+    async def bulk(self, ctx):
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
+             message = '<https://politicsandwar.com/cities/mass-land-purchase/>'
+             message += '\n<https://politicsandwar.com/cities/mass-infra-purchase/>'
+             await ctx.send(message)
+             message = 'Use these tools to calculate the cost for 1k infrastructure/land.'
+             message += '\nThen screenshot those and send them here.'
+#             message += '\nhttps://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif'
+             await ctx.send(message)
+
     @commands.command(name='beige_cycle', help='+beige_cycle')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def beige_cycle(self, ctx):
-         if ctx.channel.category.name != '[The Harbour]':
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
              message = '''
                  During a war, beige cycling is used to make sure that an enemy nation always has at least one war ongoing.
                  Since a nation gets 2 days (24 turns) of beige after each defeat, the attacking nations will take turns beiging the enemy.
@@ -105,28 +120,50 @@ class rookie_program(commands.Cog):
              embed = discord.Embed(title = 'Beige cycle',
                               description = f'{message}', color=colors.dark_gold)
              await ctx.send(embed=embed)
-    
+
+    @commands.command(name='build_plan', help='+build_plan')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
+    async def build_plan(self, ctx):
+         if ctx.channel.category.name != '[The Harbour]':
+             message = 'https://cdn.discordapp.com/attachments/837098970827194399/958021082412113990/unknown-4.png'
+             await ctx.send(message)
+
     @commands.command(name='overextension', help='+overextension')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
     async def overextension(self, ctx):
-         if ctx.channel.category.name != '[The Harbour]':
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
              message = '''
                  Overextension refers to when a nation attacks more nations than they can handle.
      '''
              embed = discord.Embed(title = 'Overextension',
                               description = f'{message}', color=colors.dark_gold)
              await ctx.send(embed=embed)
-    
-    @commands.command(name='import_file', help='+import', aliases=['import'])
+
+    @commands.command(name='import_file', help='+import', aliases=['import', 'bulk_import'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Citizen', 'Trainee')
-    async def import_file(self, ctx):
-         if ctx.channel.category.name != '[The Harbour]':
-            await ctx.send('https://media.discordapp.net/attachments/605910228692893726/885588943947583488/ImportTemplate.gif')
-    
+    async def import_file(self, ctx, gif: typing.Optional[str] = 'default'):
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
+                await ctx.send('https://media.discordapp.net/attachments/750164611499688026/912091985085628486/import_bulk.gif')
+
+    @commands.command(name='build_oil', help='+build_oil')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer', 'Trainee')
+    async def build_oil(self, ctx):
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
+             rss = 'oil'
+             import_build = build(rss)
+             await ctx.send(import_build)
+
+    @commands.command(name='build_coal', help='+build_coal')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer', 'Trainee')
+    async def build_coal(self, ctx):
+         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
+             rss = 'coal'
+             import_build = build(rss)
+             await ctx.send(import_build)
 #    '''
 #    What is beige?
 #    A nation defeated gets 2 more days of being on the beige color. Beige protects from new war declarations. We want to have active enemies always in war, so they don't have the opportunity to build back up.
-#    
+#
 #    Tips for avoiding unnecessary attacks:
 #     - Don't open with navals if they have units which are a threat. Ships can't attack planes, tanks or soldiers.
 #     - Dont naval if you already have them blockaded
@@ -134,21 +171,21 @@ class rookie_program(commands.Cog):
 #     - If they just have some soldiers and can't get a victory against you, don't spam ground attacks.
 #     - If the enemy only has soldiers (no tanks) and you have max planes. Airstriking soldiers kills more soldiers than a ground attack will.
 #     - Missiles/Nukes do NOT kill any units
-#    
+#
 #    note: You can do some unnecessary attacks if the war is going to expire, or you need to beige them as part of a beige cycle
-#    
+#
 #    What is beige cycling?
 #    Beige cycling is when we have a weakened enemy, and 3 strong nations declared on that enemy - then 1 nation defeats them, whilst the other two sit on them whilst they are on beige
 #    When their 2 days of beige from the defeat ends, another nation declares on the enemies free slot and the next nation defeats the enemy.
-#    
+#
 #    Beige cycling checklist:
 #    1. Is the enemy military mostly weakened/gone?
 #    2. Is the enemy not currently on beige?
 #    3. Do they have 3 defensive wars, with the other two attackers having enough military?
 #    4. Are you the first person to have declared?
-#    
+#
 #    Tip: Save your MAP. Avoid going below 40 resistance until you are GO for beiging them
-#    
+#
 #    Allowed beige reasons:
 #     - NOT_AN_ENEMY: Non enemies are not subject to beige/cycle orders
 #     - DO_NOT_RAID: Try to peace nations that are on the Do Not Raid list

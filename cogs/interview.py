@@ -32,7 +32,6 @@ class colors:
     blurple = 0x7289da
     greyple = 0x99aab5
 
-apikey = 'a00d3f1cd6f1ad'
 token = 'NzM1MjU3Mzc3NjA3MjU0MTE3.Xxdnyw.yCKnVzcCHxY_vS5GMelz2ElqSXs'
 oversight_channel_id = 812131124489879552
 disc_channel_id = 605910228692893726
@@ -51,6 +50,7 @@ pentarch_role_id = 567389583289876490
 trainee_role_id = 712071416505172090
 foreigner_role_id = 569519945847930911
 citizen_role_id = 567389586934726677
+bot_role_id = 567722813335535622
 
 right_arrow = '➡' # right arrow emoji
 robot = '🤖' # robot emoji
@@ -62,7 +62,6 @@ class interview(commands.Cog):
     
     def __init__(self, client):
         self.client = client
-        
     @commands.Cog.listener()
     async def on_message(self, message):
         client = self.client
@@ -85,6 +84,7 @@ class interview(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel):
         if channel.category.id == 567390184774303745 or channel.category.id == 876639217042751578:
+            client = self.client
             chan_name = channel.name.split('-')
             chan_id = channel.id
             suffet_role = channel.guild.get_role(suffet_role_id)
@@ -92,20 +92,27 @@ class interview(commands.Cog):
             pentarch_role = channel.guild.get_role(pentarch_role_id)
             interviewer_role = channel.guild.get_role(management_role_id)
             adirim_role = channel.guild.get_role(adirim_role_id)
+            bot_role = channel.guild.get_role(bot_role_id)
             if chan_name[0] == 'ticket':
                 try:
                     with open(f'./data/tickets/{chan_id}.json') as data:
                         dic = json.load(data)
+                        member_id = dic.get('user_id')
                 except:
                     for member in channel.members:
                         if suffet_role not in member.roles and elder_role not in member.roles \
                         and pentarch_role not in member.roles and interviewer_role not in member.roles \
-                        and adirim_role not in member.roles:
+                        and adirim_role not in member.roles and bot_role not in member.roles:
                             member_id = member.id
                             break
                     dic = {'channel':chan_name, 'user_id':member_id}
                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                     json.dump(dic, outfile)
+                await channel.send(f'<@{member_id}>')
+                async for message in channel.history(limit=5):
+                    if message == f'<@{member_id}>' and message.author == client.user:
+                        await message.delete()
+                        break
                 message = f'''
                 Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
 
@@ -203,13 +210,14 @@ class interview(commands.Cog):
                         dic.update({'num':num})
                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
-                        if num == '9':
-                            message_list = OversightData.interview_message(num, member)
+            
+                        message_list = OversightData.interview_message(num, member)
+                        if isinstance(message_list, list) == True:
                             l = 0
                             for item in message_list:
                                 l += 1
                                 if l == 1:
-                                    embed = discord.Embed(title = f'Question number {num}',
+                                    embed = discord.Embed(title = f'--- TERMS AND CONDITIONS of Carthago ---',
                                                 description = f'{item}', color=colors.dark_gold)
                                     await chan.send(embed=embed)
                                 else:
@@ -219,7 +227,7 @@ class interview(commands.Cog):
                                     await msg.add_reaction(right_arrow)
                                     await msg.add_reaction(person)
                             await user_message.reactions[0].remove(member)
-                        elif num == '11':
+                        elif num == '14':
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'',
                                                 description = f'{message}', color=colors.dark_gold)
@@ -313,14 +321,14 @@ class interview(commands.Cog):
             with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                 json.dump(dic, outfile)
             user = None
-            if num != '11':
-                if num == '9':
-                    message_list = OversightData.interview_message(num, user)
+            message_list = OversightData.interview_message(num, user)
+            if num != '13':
+                if isinstance(message_list, list) == True:
                     l = 0
                     for item in message_list:
                         l += 1
                         if l == 1:
-                            embed = discord.Embed(title = f'Question number {num}',
+                            embed = discord.Embed(title = f'--- TERMS AND CONDITIONS of Carthago ---',
                                         description = f'{item}', color=colors.dark_gold)
                             await ctx.send(embed=embed)
                         else:
@@ -343,7 +351,7 @@ class interview(commands.Cog):
                     if 'foreigner' in user.roles:
                         user_id = user.id
                         dic.update({'user_id':user_id})
-            elif num == '11':
+            elif num == '13':
                 embed = discord.Embed(title = f'',
                                     description = f'{item}', color=colors.dark_gold)
                 msg = await ctx.send(embed=embed)

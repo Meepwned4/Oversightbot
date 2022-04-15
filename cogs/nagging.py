@@ -44,14 +44,14 @@ nerds_id = 712071416505172090
 raider_id = 853790553375768586
 
 class nagging(commands.Cog):
-    
+
     def __init__(self, client):
         self.client = client
 
 
     @commands.command(name='DM', help='+DM test', aliases=['dm'])
-    @commands.is_owner()
-    async def DM(self, ctx, user_id, msg):
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim')
+    async def DM(self, ctx, user_id, *, msg):
         client = self.client
         user = await client.fetch_user(user_id)
         try:
@@ -70,7 +70,7 @@ class nagging(commands.Cog):
 #        'http://24.117.204.187:8080/discord/?DiscordID=800760164680204340' +
 #        '&key=davethsmellskrampuswhales')
 #                    test = test.json()
-    
+
     @commands.command(name='ping', help='+ping')
     @commands.is_owner()
     async def ping(self,ctx):
@@ -83,7 +83,7 @@ class nagging(commands.Cog):
             await channel.send(file=discord.File('./assets/ping.gif'))
 #            await channel.send('<@730268552149336107> <@735199419045249099> Get pinged nerds.')
 #            await channel.send('<@734551328184991845> You da best.')
-            
+
     @commands.command(name='reset')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim')
     async def reset(self, ctx):
@@ -109,11 +109,12 @@ class nagging(commands.Cog):
                     OversightData.data_storage(memberdata)
                     reset_message = 'Reset ping counter for everyone'
                     await ctx.send(reset_message)
-    
+
     @commands.command(name='war_status', help='+war_status True')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim')
     async def war_status(self, ctx, status: typing.Optional[str] = 'False'):
-         if ctx.channel.category.name != '[The Harbour]':
+         if ctx.channel.category.name != '[The Harbour]' and \
+         ctx.channel.category.name != '[Discussion]':
              if status != 'True' and status != 'true' and \
              status != 'False' and status != 'false' and \
              status != '1' and status != '0':
@@ -132,21 +133,22 @@ class nagging(commands.Cog):
                      await ctx.send('War status set to true')
                  if status == '0':
                      await ctx.send('War status set to false')
-    
+
     @commands.command(name='mmr_set', help='+mmr_set 0350')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim')
     async def mmr_set(self, ctx, mmr, mmr2: typing.Optional[str] = '10',
                       all_check: typing.Optional[str] = '5051'):
-         if ctx.channel.category.name != '[The Harbour]':
+         if ctx.channel.category.name != '[The Harbour]' and \
+         ctx.channel.category.name != '[Discussion]':
                     mmr = mmr + ' ' + all_check
                     pickling_on = open('./data/mmr.pickle', 'wb')
                     pickle.dump(mmr, pickling_on)
                     pickling_on.close()
-                    
+
                     #pickle_off = open('./data/mmr.pickle', 'rb')
-                    #mmr = pickle.load(pickle_off)   
+                    #mmr = pickle.load(pickle_off)
                     await ctx.send('MMR locked and loaded')
-    
+
     @commands.command(name='inactive', help='+inactive 3 days')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
     async def inactive(self, ctx, number: float, time):
@@ -158,14 +160,14 @@ class nagging(commands.Cog):
                 await ctx.send('ERROR: numbers below 1 not allowed')
             elif number < 0:
                 await ctx.send('ERROR: Negative numbers not allowed')
-                
+
             else:
     #            disc_channel = client.get_channel(disc_channel_id)
                 server = client.get_guild(carthago_server_id)
                 nerds_list = []
-                
+
                 for member in server.members:
-                    for role in member.roles: 
+                    for role in member.roles:
                         if role.name == 'Trainee':
                             nerds_list.append(str(member.id))
                 fetcheddata = requests.get(
@@ -203,7 +205,7 @@ class nagging(commands.Cog):
                 #            number = number
                 else:
                     await ctx.send('Invalid specified time')
-        
+
                 for dic1 in memberdata:
                     for key, val in dic1.items():
                         if key == 'minutessinceactive':
@@ -230,8 +232,8 @@ class nagging(commands.Cog):
                 await ctx.send(login_ping)
                 await ctx.send(nerds_login_ping)
     #            await disc_channel.send(nerds_login_ping)
-    
-    
+
+
     @commands.command(name='nsp', help='+nsp')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
     async def nsp(self, ctx):
@@ -256,14 +258,14 @@ class nagging(commands.Cog):
             nationids = []
             nerds_list = []
             for member in server.members:
-                for role in member.roles: 
+                for role in member.roles:
                     if role.name == 'Trainee':
                         nerds_list.append(str(member.id))
             nsp_temp = '__People who don\'t have max spies:__\n'
             nsp_ping = ''
             nerds_nsp_temp = '__Trainees who don\'t have max spies:__\n'
             nerds_nsp_ping = ''
-            
+
             for dic1 in memberdata:
                 if int(dic1.get('intagncy')):
                     if int(dic1.get('spies')) != 60 and dic1.get('vacmode') == '0':
@@ -301,8 +303,8 @@ class nagging(commands.Cog):
             pickling_on.close()
             await ctx.send(nsp_ping)
             await disc_channel.send(nerds_nsp_ping)
-    
-    
+
+
     @commands.command(name='nmp', help='+nmp')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
     async def nmp(self, ctx):
@@ -329,7 +331,7 @@ class nagging(commands.Cog):
             nerds_list = []
             if all_check[1] != 'all' and all_check[1] == '':
                 for member in server.members:
-                    for role in member.roles: 
+                    for role in member.roles:
                         if role.name == 'Trainee':
                             nerds_list.append(str(member.id))
             nationids = []
@@ -338,7 +340,7 @@ class nagging(commands.Cog):
             nerds_nmp_temp = '__Trainees who don\'t have max planes__\n'
             nerds_nmp_ping = ''
             planesnewmemory = {}
-        
+
             for dic in memberdata:
                 plane_mmr = int(dic.get('cities') * int(mmr[2]) * 15)
                 if plane_mmr > int(dic.get('aircraft')) and \
@@ -363,7 +365,7 @@ class nagging(commands.Cog):
                                         '<@' + c + '>' + ' '
                                 else:
                                     nmp_ping = nmp_ping + '<@' + c + '>' + ' '
-                                            
+
             if not nmp_ping:
                 nmp_ping = 'Everyone has max planes.'
             nmp_ping = nmp_temp + nmp_ping
@@ -375,8 +377,8 @@ class nagging(commands.Cog):
             pickling_on.close()
             await ctx.send(nmp_ping)
             await disc_channel.send(nerds_nmp_ping)
-    
-    
+
+
     @commands.command(name='nmt', help='+nmt')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
     async def nmt(self, ctx):
@@ -401,7 +403,7 @@ class nagging(commands.Cog):
             nerds_list = []
             if all_check[1] != 'all' and all_check[1] == '':
                 for member in server.members:
-                    for role in member.roles: 
+                    for role in member.roles:
                         if role.name == 'Trainee':
                             nerds_list.append(str(member.id))
             pickle_off = open('./data/tankoldmemory.pickle', 'rb')
@@ -412,7 +414,7 @@ class nagging(commands.Cog):
             nerds_nmt_temp = '__Trainees who don\'t have max tanks__\n'
             nerds_nmt_ping = ''
             tanknewmemory = {}
-        
+
             for dic in memberdata:
                 tank_mmr = int(dic.get('cities') * int(mmr[1]) * 250)
                 if tank_mmr > int(dic.get('tanks')) and \
@@ -446,8 +448,8 @@ class nagging(commands.Cog):
             pickling_on.close()
             await ctx.send(nmt_ping)
             await disc_channel.send(nerds_nmt_ping)
-    
-    
+
+
     @commands.command(name='nms', help='+nms')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
     async def nms(self, ctx):
@@ -472,7 +474,7 @@ class nagging(commands.Cog):
             nerds_list = []
             if all_check[1] != 'all' and all_check[1] == '':
                 for member in server.members:
-                    for role in member.roles: 
+                    for role in member.roles:
                         if role.name == 'Trainee':
                             nerds_list.append(str(member.id))
             pickle_off = open('./data/soldieroldmemory.pickle', 'rb')
@@ -483,7 +485,7 @@ class nagging(commands.Cog):
             nerds_nms_temp = '__Trainees who don\'t have max soldiers__\n'
             nerds_nms_ping = ''
             soldiernewmemory = {}
-        
+
             for dic in memberdata:
                 soldier_mmr = int(dic.get('cities') * int(mmr[0]) * 3000)
                 if soldier_mmr > int(dic.get('soldiers')) and \
@@ -519,8 +521,8 @@ class nagging(commands.Cog):
             pickling_on.close()
             await ctx.send(nms_ping)
             await disc_channel.send(nerds_nms_ping)
-    
-    
+
+
     @commands.command(name='nmsh', help='+nmsh')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
     async def nmsh(self, ctx):
@@ -545,7 +547,7 @@ class nagging(commands.Cog):
             nerds_list = []
             if all_check[1] != 'all' and all_check[1] == '':
                 for member in server.members:
-                    for role in member.roles: 
+                    for role in member.roles:
                         if role.name == 'Trainee':
                             nerds_list.append(str(member.id))
             pickle_off = open('./data/shipoldmemory.pickle', 'rb')
@@ -556,7 +558,7 @@ class nagging(commands.Cog):
             nerds_nmsh_temp = '__Trainees who don\'t have max ships__\n'
             nerds_nmsh_ping = ''
             shipnewmemory = {}
-        
+
             for dic in memberdata:
                 ship_mmr = int(dic.get('cities') * int(mmr[3]) * 5)
                 if ship_mmr > int(dic.get('ships')) and \
@@ -592,8 +594,8 @@ class nagging(commands.Cog):
             pickling_on.close()
             await ctx.send(nmsh_ping)
             await disc_channel.send(nerds_nmsh_ping)
-    
-    
+
+
     @commands.command(name='color', help='+color')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'DisC')
     async def color(self, ctx):
@@ -614,7 +616,7 @@ class nagging(commands.Cog):
             server = client.get_guild(carthago_server_id)
             nerds_list = []
             for member in server.members:
-                for role in member.roles: 
+                for role in member.roles:
                     if role.name == 'Trainee':
                         nerds_list.append(str(member.id))
             nationids = []
@@ -652,9 +654,9 @@ class nagging(commands.Cog):
             nerds_color_ping = nerds_color_temp + nerds_color_ping
             await ctx.send(color_ping)
             await disc_channel.send(nerds_color_ping)
-    
-    
-    
+
+
+
     @commands.command(name='timer', help='+timer (nationid)')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim',
                            'Senator', 'Citizen')
@@ -694,7 +696,7 @@ class nagging(commands.Cog):
                 elif projecttimer < 0:
                     await ctx.send(leader + ' has ' + ' 0 ' + ' turns(' +
                             ' 0 ' + ' hours) left before they can buy a project.')
-                    
+
             elif citytimer > 0:
                 await ctx.send(leader + ' has ' + str(
                     citytimer) + ' turns(' +
@@ -737,7 +739,7 @@ class nagging(commands.Cog):
             x = 0
             dup_check = []
             message = f'__People who don\'t meet MMR({mmr}):__\n'
-            
+
             for dic in memberdata:
                 soldiers_max = int(dic.get('cities') * int(mmr[0]) * 3000)
                 tanks_max = int(dic.get('cities') * int(mmr[1]) * 250)
@@ -821,7 +823,7 @@ class nagging(commands.Cog):
                     dup_check.append(dic.get('nationid'))
             if len_check == 0:
                 mmr_message = message + mmr_message
-            await ctx.send(mmr_message)        
+            await ctx.send(mmr_message)
 
 
 def setup(client):
