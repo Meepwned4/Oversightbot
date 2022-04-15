@@ -213,6 +213,7 @@ class interview(commands.Cog):
 
                         message_list = OversightData.interview_message(num, member)
                         if isinstance(message_list, list) == True:
+                            skip = True
                             l = 0
                             for item in message_list:
                                 l += 1
@@ -286,7 +287,7 @@ class interview(commands.Cog):
                             await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                             os.remove(f'./data/tickets/{chan_name}-{chan_id}.json')
                             await user_message.reactions[0].remove(member)
-                        else:
+                        elif skip != True:
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'Question number {num}',
                                             description = f'{message}', color=colors.dark_gold)
@@ -327,6 +328,7 @@ class interview(commands.Cog):
             user = None
             message = OversightData.interview_message(num, user)
             if isinstance(message, list) == True:
+                skip = True
                 l = 0
                 for item in message:
                     l += 1
@@ -343,7 +345,7 @@ class interview(commands.Cog):
             elif num != '0':
                 embed = discord.Embed(title = f'Question number {num}',
                             description = f'{message}', color=colors.dark_gold)
-            else:
+            elif skip != True:
                 embed = discord.Embed(title = f'Interview information',
                             description = f'{message}', color=colors.dark_gold)
             msg = await ctx.send(embed=embed)
@@ -389,6 +391,7 @@ class interview(commands.Cog):
             message_list = OversightData.interview_message(num, user)
             if num != '14':
                 if isinstance(message_list, list) == True:
+                    skip = True
                     l = 0
                     for item in message_list:
                         l += 1
@@ -402,7 +405,7 @@ class interview(commands.Cog):
                             msg = await ctx.send(embed=embed)
                             await msg.add_reaction(right_arrow)
                             await msg.add_reaction(person)
-                else:
+                elif skip != True:
                     message = OversightData.interview_message(num, user)
                     embed = discord.Embed(title = f'Question number {num}',
                                     description = f'{message}', color=colors.dark_gold)
