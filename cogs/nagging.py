@@ -826,5 +826,5 @@ class nagging(commands.Cog):
             await ctx.send(mmr_message)
 
 
-def setup(client):
-	client.add_cog(nagging(client))
+async def setup(client):
+	await client.add_cog(nagging(client))

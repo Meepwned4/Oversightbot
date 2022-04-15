@@ -207,5 +207,5 @@ class rookie_program(commands.Cog):
 #     - BLOCKADED: If you are being sat on/blockaded and need to restock on warchest
 #    '''
 
-def setup(client):
-	client.add_cog(rookie_program(client))
+async def setup(client):
+	await client.add_cog(rookie_program(client))

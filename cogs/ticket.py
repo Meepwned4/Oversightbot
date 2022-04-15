@@ -371,5 +371,5 @@ class ticket(commands.Cog):
             await ctx.send(f'Ticket counter set to {num}.')
 
 
-def setup(client):
-	client.add_cog(ticket(client))
+async def setup(client):
+	await client.add_cog(ticket(client))

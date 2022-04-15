@@ -1,24 +1,26 @@
-import discord
-import requests
-import traceback
 import sys
 import os
 import importlib
-from discord.ext import commands
-from discord.ext.commands import MissingRequiredArgument
-from discord.ext.commands import MissingAnyRole, CommandOnCooldown
-from discord import DMChannel
+import requests
+import traceback
 import time
 import pickle
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from pytz import utc
+import asyncio
 import nest_asyncio
 nest_asyncio.apply()
 import OversightData
 import logging
 from http.client import HTTPConnection # py3
 import subprocess
+subprocess.check_call([sys.executable, '-m', 'pip', 'install', './discord.py.zip'])
+import discord
+from discord.ext import commands
+from discord.ext.commands import MissingRequiredArgument
+from discord.ext.commands import MissingAnyRole, CommandOnCooldown
+from discord import DMChannel
 
 
 '''
@@ -48,7 +50,7 @@ c_format = logging.Formatter(
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
-logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO,
+logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%b-%d-%y %H:%M:%S')
 
@@ -86,9 +88,11 @@ async def on_ready():
     await client.change_presence(activity=discord.Game(
         'Hauling mad cash'))
 
-for filename in os.listdir('./cogs'):
-	if filename.endswith('.py'):
-		client.load_extension(f'cogs.{filename[:-3]}')
+async def load_extensions():
+    for filename in os.listdir("./cogs"):
+        if filename.endswith(".py"):
+            await client.load_extension(f"cogs.{filename[:-3]}")
+            print(f"cogs.{filename[:-3]} loaded")
 
 @client.command()
 @commands.is_owner()
@@ -112,7 +116,7 @@ async def pip_install(ctx, module):
         if len(message) > 1800:
             await DMChannel.send(user, message)
             message = ''
-    await ctx.send(message)
+    await DMChannel.send(user, message)
 
 @client.command()
 @commands.is_owner()
@@ -998,4 +1002,9 @@ async def on_error(ctx, error):
         await channel.send('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         await channel.send(traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr))
 
-client.run(token)
+async def main():
+    async with client:
+        await load_extensions()
+        await client.start(token)
+
+asyncio.run(main())

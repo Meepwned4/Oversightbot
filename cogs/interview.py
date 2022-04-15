@@ -59,7 +59,7 @@ interview_emoji = '📝' # interview emoji
 x_emoji = '❌' # x emoji
 
 class interview(commands.Cog):
-    
+
     def __init__(self, client):
         self.client = client
     @commands.Cog.listener()
@@ -74,13 +74,13 @@ class interview(commands.Cog):
             if message.author != client.user:
                 channel = client.get_channel(946196124614664212)
                 author_id = message.author.id
-                author_name = message.author.name 
-                
+                author_name = message.author.name
+
                 message_content = message.content
                 embed = discord.Embed(title = f'USER: {author_name}\nID: {author_id}',
                                 description = f'MESSAGE: {message_content}', color=colors.teal)
                 await channel.send(embed=embed)
-    
+
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel):
         if channel.category.id == 567390184774303745 or channel.category.id == 876639217042751578:
@@ -152,7 +152,7 @@ class interview(commands.Cog):
                     channel = channel
                     break
             user_message = await channel.fetch_message(message_id)
-            
+
             if f'React with {right_arrow} to begin the automated interview' in \
             user_message.embeds[0].description or f'react with {right_arrow} to continue' in \
             user_message.embeds[0].description  or f'React with {interview_emoji} if you are applying' in \
@@ -194,7 +194,7 @@ class interview(commands.Cog):
                         await msg.add_reaction(right_arrow)
                         await msg.add_reaction(person)
                         await user_message.reactions[0].remove(member)
-                        
+
                     if emoji.name == right_arrow:
                         disc_channel = client.get_channel(disc_channel_id)
                         try:
@@ -210,7 +210,7 @@ class interview(commands.Cog):
                         dic.update({'num':num})
                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
-            
+
                         message_list = OversightData.interview_message(num, member)
                         if isinstance(message_list, list) == True:
                             l = 0
@@ -245,7 +245,7 @@ class interview(commands.Cog):
                             with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                 json.dump(dic, outfile)
                             await user_message.reactions[0].remove(member)
-    
+
     @commands.command(name='start', help='+start')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer')
     async def start(self, ctx, num: typing.Optional[str] = '0' ):
@@ -357,9 +357,9 @@ class interview(commands.Cog):
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction(right_arrow)
                 await msg.add_reaction(person)
-                os.remove(f'./data/tickets/{chan_id}.json') 
+                os.remove(f'./data/tickets/{chan_id}.json')
             await ctx.message.delete()
 
 
-def setup(client):
-	client.add_cog(interview(client))
+async def setup(client):
+	await client.add_cog(interview(client))
