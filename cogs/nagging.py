@@ -660,7 +660,6 @@ class nagging(commands.Cog):
     @commands.command(name='timer', help='+timer (nationid)')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim',
                            'Senator', 'Citizen')
-    @commands.cooldown(1, 1, commands.BucketType.user)
     async def timer(self, ctx, nation):
         if ctx.channel.category.name != '[The Harbour]':
             fetcheddata = requests.get(

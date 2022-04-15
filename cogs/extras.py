@@ -42,7 +42,7 @@ class extras(commands.Cog):
     async def menu(self, ctx):
         member = None
         num = 8
-        words = OversightData.interview_question(num, member)
+        words = OversightData.interview_message(num, member)
         await ctx.send(words,view=SelectView())
 
 

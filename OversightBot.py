@@ -15,7 +15,7 @@ import OversightData
 import logging
 from http.client import HTTPConnection # py3
 import subprocess
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', './discord.py.zip'])
+#subprocess.check_call([sys.executable, '-m', 'pip', 'install', './discord.py.zip'])
 import discord
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
@@ -80,6 +80,7 @@ interview = '📝' # interview emoji
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 client = commands.Bot(command_prefix='+', intents=intents)
 
 @client.event
@@ -138,7 +139,7 @@ async def pip_uninstall(ctx, module):
 @commands.is_owner()
 async def load(ctx, extension):
     try:
-        client.load_extension(f'cogs.{extension}')
+        await client.load_extension(f'cogs.{extension}')
         await ctx.send(f'{extension} loaded')
     except:
         await ctx.send(f'{extension} not recognized')
@@ -147,7 +148,7 @@ async def load(ctx, extension):
 @commands.is_owner()
 async def unload(ctx, extension):
     try:
-        client.unload_extension(f'cogs.{extension}')
+        await client.unload_extension(f'cogs.{extension}')
         await ctx.send(f'{extension} unloaded')
     except:
         await ctx.send(f'{extension} not recognized')
@@ -163,8 +164,8 @@ async def reload(ctx, extension):
             await ctx.send(f'{extension} not recognized')
     else:
         try:
-            client.unload_extension(f'cogs.{extension}')
-            client.load_extension(f'cogs.{extension}')
+            await client.unload_extension(f'cogs.{extension}')
+            await client.load_extension(f'cogs.{extension}')
             await ctx.send(f'{extension} reloaded')
         except:
             await ctx.send(f'{extension} not recognized')
