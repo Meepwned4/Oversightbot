@@ -1,9 +1,9 @@
-import sys
-import os
-import importlib
 import discord
 import requests
 import traceback
+import sys
+import os
+import importlib
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
 from discord.ext.commands import MissingAnyRole, CommandOnCooldown
@@ -48,7 +48,7 @@ c_format = logging.Formatter(
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
-logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
+logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%b-%d-%y %H:%M:%S')
 
@@ -129,15 +129,6 @@ async def pip_uninstall(ctx, module):
             await DMChannel.send(user, message)
             message = ''
     await DMChannel.send(user, message)
-
-@client.command()
-@commands.is_owner()
-async def load(ctx, extension):
-    try:
-        client.load_extension(f'cogs.{extension}')
-        await ctx.send(f'{extension} loaded')
-    except:
-        await ctx.send(f'{extension} not recognized')
 
 @client.command()
 @commands.is_owner()
