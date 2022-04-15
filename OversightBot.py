@@ -36,7 +36,7 @@ logging.ERROR - Only errors and worse
 '''Switches on logging of the requests module.'''
 HTTPConnection.debuglevel = 1
 
-logging.basicConfig()
+#logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.INFO)

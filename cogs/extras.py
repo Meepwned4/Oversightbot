@@ -33,18 +33,18 @@ class colors:
 class Select(discord.ui.Select):
     def __init__(self):
         options=[
-            discord.SelectOption(label="UTC -1"),
-            discord.SelectOption(label="UTC -2"),
-            discord.SelectOption(label="UTC -3"),
-            discord.SelectOption(label="UTC -4"),
-            discord.SelectOption(label="UTC -5"),
-            discord.SelectOption(label="UTC -6"),
-            discord.SelectOption(label="UTC -7"),
-            discord.SelectOption(label="UTC -8"),
-            discord.SelectOption(label="UTC -9"),
-            discord.SelectOption(label="UTC -10"),
-            discord.SelectOption(label="UTC -11"),
             discord.SelectOption(label="UTC -12"),
+            discord.SelectOption(label="UTC -11"),
+            discord.SelectOption(label="UTC -10"),
+            discord.SelectOption(label="UTC -9"),
+            discord.SelectOption(label="UTC -8"),
+            discord.SelectOption(label="UTC -7"),
+            discord.SelectOption(label="UTC -6"),
+            discord.SelectOption(label="UTC -5"),
+            discord.SelectOption(label="UTC -4"),
+            discord.SelectOption(label="UTC -3"),
+            discord.SelectOption(label="UTC -2"),
+            discord.SelectOption(label="UTC -1"),
             discord.SelectOption(label="UTC +0"),
             discord.SelectOption(label="UTC +1"),
             discord.SelectOption(label="UTC +2"),
@@ -61,12 +61,56 @@ class Select(discord.ui.Select):
             ]
         super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
     async def callback(self, interaction: discord.Interaction):
-        if self.values[0] == "Option 1":
-            await interaction.response.send_message("1", ephemeral=False)
-        elif self.values[0] == "Option 2":
-            await interaction.response.send_message("2",ephemeral=False)
-        elif self.values[0] == "Option 3":
-            await interaction.response.send_message("3",ephemeral=False)
+        if self.values[0] == "UTC -12":
+            await interaction.response.send_message("UTC -12", ephemeral=False)
+        elif self.values[0] == "UTC -11":
+            await interaction.response.send_message("UTC -11",ephemeral=False)
+        elif self.values[0] == "UTC -10":
+            await interaction.response.send_message("UTC -10",ephemeral=False)
+        elif self.values[0] == "UTC -9":
+            await interaction.response.send_message("UTC -9",ephemeral=False)
+        elif self.values[0] == "UTC -8":
+            await interaction.response.send_message("UTC -8",ephemeral=False)
+        elif self.values[0] == "UTC -7":
+            await interaction.response.send_message("UTC -7",ephemeral=False)
+        elif self.values[0] == "UTC -6":
+            await interaction.response.send_message("UTC -6",ephemeral=False)
+        elif self.values[0] == "UTC -5":
+            await interaction.response.send_message("UTC -5",ephemeral=False)
+        elif self.values[0] == "UTC -4":
+            await interaction.response.send_message("UTC -4",ephemeral=False)
+        elif self.values[0] == "UTC -3":
+            await interaction.response.send_message("UTC -3",ephemeral=False)
+        elif self.values[0] == "UTC -2":
+            await interaction.response.send_message("UTC -2",ephemeral=False)
+        elif self.values[0] == "UTC -1":
+            await interaction.response.send_message("UTC -1",ephemeral=False)
+        elif self.values[0] == "UTC +0":
+            await interaction.response.send_message("UTC +0",ephemeral=False)
+        elif self.values[0] == "UTC +1":
+            await interaction.response.send_message("UTC +1",ephemeral=False)
+        elif self.values[0] == "UTC +2":
+            await interaction.response.send_message("UTC +2",ephemeral=False)
+        elif self.values[0] == "UTC +3":
+            await interaction.response.send_message("UTC +3",ephemeral=False)
+        elif self.values[0] == "UTC +4":
+            await interaction.response.send_message("UTC +4",ephemeral=False)
+        elif self.values[0] == "UTC +5":
+            await interaction.response.send_message("UTC +5",ephemeral=False)
+        elif self.values[0] == "UTC +6":
+            await interaction.response.send_message("UTC +6",ephemeral=False)
+        elif self.values[0] == "UTC +7":
+            await interaction.response.send_message("UTC +7",ephemeral=False)
+        elif self.values[0] == "UTC +8":
+            await interaction.response.send_message("UTC +8",ephemeral=False)
+        elif self.values[0] == "UTC +9":
+            await interaction.response.send_message("UTC +9",ephemeral=False)
+        elif self.values[0] == "UTC +10":
+            await interaction.response.send_message("UTC +10",ephemeral=False)
+        elif self.values[0] == "UTC +11":
+            await interaction.response.send_message("UTC +11",ephemeral=False)
+        elif self.values[0] == "UTC +12":
+            await interaction.response.send_message("UTC +12",ephemeral=False)
 #            await interaction.response.edit_message(content="1")
 #        elif self.values[0] == "Option 2":
 #            await interaction.response.send_message("2",ephemeral=False)
