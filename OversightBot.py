@@ -1,9 +1,9 @@
-import discord
-import requests
-import traceback
 import sys
 import os
 import importlib
+import discord
+import requests
+import traceback
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
 from discord.ext.commands import MissingAnyRole, CommandOnCooldown
@@ -18,6 +18,7 @@ nest_asyncio.apply()
 import OversightData
 import logging
 from http.client import HTTPConnection # py3
+import subprocess
 
 
 '''
@@ -32,6 +33,8 @@ logging.ERROR - Only errors and worse
 '''Switches on logging of the requests module.'''
 HTTPConnection.debuglevel = 1
 
+logging.basicConfig()
+logging.getLogger().setLevel(logging.INFO)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.INFO)
 requests_log.propagate = True
@@ -84,9 +87,21 @@ async def on_ready():
         'Hauling mad cash'))
 
 for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
-        print(f'cogs.{filename[:-3]}')
+	if filename.endswith('.py'):
+		client.load_extension(f'cogs.{filename[:-3]}')
+
+@client.command()
+@commands.is_owner()
+async def pip_install(ctx, module):
+    if module == 'requirements.txt':
+        subprocess.check_call([sys.executable, 'pip', 'install', '-r', module])
+    else:
+        subprocess.check_call([sys.executable, 'pip', 'install', module])
+
+    # process output with an API in the subprocess module:
+    reqs = subprocess.check_output([sys.executable, 'pip', 'freeze'])
+    installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
+    await ctx.send(installed_packages)
 
 @client.command()
 @commands.is_owner()
