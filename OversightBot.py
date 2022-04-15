@@ -94,7 +94,7 @@ for filename in os.listdir('./cogs'):
 @commands.is_owner()
 async def pip_install(ctx, module):
     user = ctx.author
-    await ctx.send(user, f'Installing {module} module.')
+    await ctx.send(f'Installing {module} module.')
     if module == 'requirements.txt':
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', module])
     if module == 'discord':
