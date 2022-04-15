@@ -16,6 +16,7 @@ import logging
 from http.client import HTTPConnection # py3
 import subprocess
 #subprocess.check_call([sys.executable, '-m', 'pip', 'install', './discord.py.zip'])
+subprocess.check_call([sys.executable, '-m', 'pip', 'install', './chat_exporter.zip'])
 import discord
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
@@ -124,7 +125,7 @@ async def pip_install(ctx, module):
 async def pip_uninstall(ctx, module):
     user = ctx.author
     await ctx.send(f'Uninstalling {module} module.')
-    subprocess.check_call([sys.executable, '-m', 'pip', 'uninstall', module])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'uninstal', module])
     reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
     installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
     message = ''
