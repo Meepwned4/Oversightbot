@@ -5,14 +5,61 @@ import aiohttp
 from bs4 import BeautifulSoup
 import OversightData
 
+class colors:
+    default = 0
+    teal = 0x1abc9c
+    dark_teal = 0x11806a
+    green = 0x2ecc71
+    dark_green = 0x1f8b4c
+    blue = 0x3498db
+    dark_blue = 0x206694
+    purple = 0x9b59b6
+    dark_purple = 0x71368a
+    magenta = 0xe91e63
+    dark_magenta = 0xad1457
+    gold = 0xf1c40f
+    dark_gold = 0xc27c0e
+    orange = 0xe67e22
+    dark_orange = 0xa84300
+    red = 0xe74c3c
+    dark_red = 0x992d22
+    lighter_grey = 0x95a5a6
+    dark_grey = 0x607d8b
+    light_grey = 0x979c9f
+    darker_grey = 0x546e7a
+    blurple = 0x7289da
+    greyple = 0x99aab5
+
 class Select(discord.ui.Select):
     def __init__(self):
         options=[
-            discord.SelectOption(label="Option 1",emoji="👌",description="This is option 1!"),
-            discord.SelectOption(label="Option 2",emoji="✨",description="This is option 2!"),
-            discord.SelectOption(label="Option 3",emoji="🎭",description="This is option 3!")
+            discord.SelectOption(label="UTC -1"),
+            discord.SelectOption(label="UTC -2"),
+            discord.SelectOption(label="UTC -3"),
+            discord.SelectOption(label="UTC -4"),
+            discord.SelectOption(label="UTC -5"),
+            discord.SelectOption(label="UTC -6"),
+            discord.SelectOption(label="UTC -7"),
+            discord.SelectOption(label="UTC -8"),
+            discord.SelectOption(label="UTC -9"),
+            discord.SelectOption(label="UTC -10"),
+            discord.SelectOption(label="UTC -11"),
+            discord.SelectOption(label="UTC -12"),
+            discord.SelectOption(label="UTC +0"),
+            discord.SelectOption(label="UTC +1"),
+            discord.SelectOption(label="UTC +2"),
+            discord.SelectOption(label="UTC +3"),
+            discord.SelectOption(label="UTC +4"),
+            discord.SelectOption(label="UTC +5"),
+            discord.SelectOption(label="UTC +6"),
+            discord.SelectOption(label="UTC +7"),
+            discord.SelectOption(label="UTC +8"),
+            discord.SelectOption(label="UTC +9"),
+            discord.SelectOption(label="UTC +10"),
+            discord.SelectOption(label="UTC +11"),
+            discord.SelectOption(label="UTC +12")
             ]
-        super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
+        super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
     async def callback(self, interaction: discord.Interaction):
         if self.values[0] == "Option 1":
             await interaction.response.send_message("1", ephemeral=False)
@@ -31,24 +78,50 @@ class SelectView(discord.ui.View):
         super().__init__(timeout=timeout)
         self.add_item(Select())
 
+class Questionnaire(discord.ui.Modal, title='Questionnaire Response'):
+    name = discord.ui.TextInput(label='Name')
+    answer = discord.ui.TextInput(label='Answer', style=discord.TextStyle.paragraph)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.send_message(f'Thanks for your response, {self.name}!', ephemeral=True)
+
+
+class Buttons(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label="Button",style=discord.ButtonStyle.gray)
+    async def gray_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        await interaction.response.edit_message(content=f"This is an edited button response!")
+
 class extras(commands.Cog):
 
     def __init__(self, client):
         self.client = client
         client = self.client
 
+    @commands.command(name='modal', help='+modal')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
+    async def modal(self, ctx):
+        await ctx.send("This is a modal?",view=Questionnaire())
+
     @commands.command(name='menu', help='+menu')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
     async def menu(self, ctx):
         member = None
-        num = 8
+        num = '13'
         words = OversightData.interview_message(num, member)
-        await ctx.send(words,view=SelectView())
+        embed = discord.Embed(title = f'',
+                            description = f'{words}', color=colors.dark_gold)
+        await ctx.send(embed=embed,view=SelectView())
 
+    @commands.command(name='button', help='+button')
+    @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
+    async def button(self, ctx):
+        await ctx.send("This message has buttons!",view=Buttons())
 
     @commands.command(name='tax_bracket', help='+tax_bracket 92845 100', aliases=['tax', 'taxes'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
-    async def tax_bracket(self, ctx, nation, tax):
+    async def tax_bracket(self, ctx, nation, tax: str):
         if ctx.channel.category.name != '[The Harbour]' and ctx.channel.category.name != '[Discussion]':
             login_data = {'email': 'jacksonayres11@gmail.com', 'password': 'Dungeons&Dragons', 'loginform': 'Login'}
             check = False

@@ -186,13 +186,13 @@ def interview_message(num, user):
     if num == '8':
         message = ('''Now, please select one of the following, or use your own words to best describe what your activity would look like:
 
-1) I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
+- I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
 
-2) I will login at least once or twice a day. I want to be moderately active in the CTO community. I will be active on Discord whenever possible and participate when I'm able.
+- I will login at least once or twice a day. I want to be moderately active in the CTO community. I will be active on Discord whenever possible and participate when I'm able.
 
-3) I would like to be as active as I'd like, while building my Nation and income at peace and I'm just here so I don't get raided.
+- I would like to be as active as I'd like, while building my Nation and income at peace and I'm just here so I don't get raided.
 
-4) I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
+- I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
 + reminder)
     if num == '9':
         message = ('''If you were given the opportunity to choose a government department to work in, considering the descriptions provided, which would you choose?
@@ -227,7 +227,7 @@ With your answer in mind, which among the following or using your own words, wou
 
 - Becoming a politically influential, well-known player.\n\n''' + reminder)
     if num == '11':
-        message = ('''Which would you consider the least interesting?''')
+        message = 'Which would you consider the least interesting?\n\n' + reminder
     if num == '12':
         message = [('''
  These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated.
@@ -257,7 +257,7 @@ We hope to see you on Discord as much as your time commitments allow, but you mu
 If you have any questions, comments, or concerns, please let us know. Otherwise, state you agree to these terms.\n\n'''
 + reminder)]
     if num == '13':
-        message = ('For coordination purposes, what\'s your Timezone?\n\n' + reminder)
+        message = ('For coordination purposes, what\'s your Timezone?' + reminder)
     if num == '14':
         message = ('That was the last question, a human should be along soon to review your interview.')
 

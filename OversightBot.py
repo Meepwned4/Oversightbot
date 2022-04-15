@@ -16,7 +16,7 @@ import logging
 from http.client import HTTPConnection # py3
 import subprocess
 #subprocess.check_call([sys.executable, '-m', 'pip', 'install', './discord.py.zip'])
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', './chat_exporter.zip'])
+#subprocess.check_call([sys.executable, '-m', 'pip', 'install', './chat_exporter.zip'])
 import discord
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument

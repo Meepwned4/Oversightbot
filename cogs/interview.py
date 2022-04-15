@@ -227,6 +227,57 @@ class interview(commands.Cog):
                                     await msg.add_reaction(right_arrow)
                                     await msg.add_reaction(person)
                             await user_message.reactions[0].remove(member)
+#                        elif num == '13':
+#                            class Select(discord.ui.Select):
+#                                def __init__(self):
+#                                    options=[
+#                                        discord.SelectOption(label="UTC -1",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -2",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -3",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -4",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -5",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -6",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -7",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -8",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -9",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -10",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -11",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC -12",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +1",description="This is option 1!"),
+#                                        discord.SelectOption(label="UTC +2",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +3",description="This is option 3!"),
+#                                        discord.SelectOption(label="UTC +4",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +5",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +6",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +7",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +8",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +9",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +10",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +11",description="This is option 2!"),
+#                                        discord.SelectOption(label="UTC +12",description="This is option 2!"),
+#                                        ]
+#                                    super().__init__(placeholder="Select a timezone that best fits",max_values=1,min_values=1,options=options)
+#                                async def callback(self, interaction: discord.Interaction):
+#                                    if self.values[0] == "Option 1":
+#                                        await interaction.response.send_message("UTC +1", ephemeral=False)
+#                                    elif self.values[0] == "Option 2":
+#                                        await interaction.response.send_message("UTC +2",ephemeral=False)
+#                                    elif self.values[0] == "Option 3":
+#                                        await interaction.response.send_message("UTC +3",ephemeral=False)
+#                            #            await interaction.response.edit_message(content="1")
+#                            #        elif self.values[0] == "Option 2":
+#                            #            await interaction.response.send_message("2",ephemeral=False)
+#                            #        elif self.values[0] == "Option 3":
+#                            #            await interaction.response.send_message("3",ephemeral=True)
+#
+#                            class SelectView(discord.ui.View):
+#                                def __init__(self, *, timeout = 180):
+#                                    super().__init__(timeout=timeout)
+#                                    self.add_item(Select())
+#                            message = OversightData.interview_message(num, member)
+#                            embed = discord.Embed(title = f'Question number {num}',
+#                                                description = f'{message}', color=colors.dark_gold)
+#                            await chan.send(embed=embed,view=SelectView())
                         elif num == '14':
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'',
@@ -275,7 +326,21 @@ class interview(commands.Cog):
                     json.dump(dic, outfile)
             user = None
             message = OversightData.interview_message(num, user)
-            if num != '0':
+            if isinstance(message, list) == True:
+                l = 0
+                for item in message:
+                    l += 1
+                    if l == 1:
+                        embed = discord.Embed(title = f'--- TERMS AND CONDITIONS of Carthago ---',
+                                    description = f'{item}', color=colors.dark_gold)
+                        await ctx.send(embed=embed)
+                    else:
+                        embed = discord.Embed(title = f'',
+                                    description = f'{item}', color=colors.dark_gold)
+                        msg = await ctx.send(embed=embed)
+                        await msg.add_reaction(right_arrow)
+                        await msg.add_reaction(person)
+            elif num != '0':
                 embed = discord.Embed(title = f'Question number {num}',
                             description = f'{message}', color=colors.dark_gold)
             else:
@@ -322,7 +387,7 @@ class interview(commands.Cog):
                 json.dump(dic, outfile)
             user = None
             message_list = OversightData.interview_message(num, user)
-            if num != '13':
+            if num != '14':
                 if isinstance(message_list, list) == True:
                     l = 0
                     for item in message_list:
@@ -351,7 +416,7 @@ class interview(commands.Cog):
                     if 'foreigner' in user.roles:
                         user_id = user.id
                         dic.update({'user_id':user_id})
-            elif num == '13':
+            elif num == '14':
                 embed = discord.Embed(title = f'',
                                     description = f'{item}', color=colors.dark_gold)
                 msg = await ctx.send(embed=embed)
