@@ -212,12 +212,12 @@ class interview(commands.Cog):
                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                             json.dump(dic, outfile)
 
-                        message_list = OversightData.interview_message(num, member)
+                        message = OversightData.interview_message(num, member)
                         skip = False
-                        if isinstance(message_list, list) == True:
+                        if isinstance(message, list) == True:
                             skip = True
                             l = 0
-                            for item in message_list:
+                            for item in message:
                                 l += 1
                                 if l == 1:
                                     embed = discord.Embed(title = f'--- TERMS AND CONDITIONS of Carthago ---',
@@ -230,97 +230,400 @@ class interview(commands.Cog):
                                     await msg.add_reaction(right_arrow)
                                     await msg.add_reaction(person)
                             await user_message.reactions[0].remove(member)
-#                        elif num == '13':
-#                            class Select(discord.ui.Select):
-#                                def __init__(self):
-#                                    options=[
-#                                        discord.SelectOption(label="UTC -12"),
-#                                        discord.SelectOption(label="UTC -11"),
-#                                        discord.SelectOption(label="UTC -10"),
-#                                        discord.SelectOption(label="UTC -9"),
-#                                        discord.SelectOption(label="UTC -8"),
-#                                        discord.SelectOption(label="UTC -7"),
-#                                        discord.SelectOption(label="UTC -6"),
-#                                        discord.SelectOption(label="UTC -5"),
-#                                        discord.SelectOption(label="UTC -4"),
-#                                        discord.SelectOption(label="UTC -3"),
-#                                        discord.SelectOption(label="UTC -2"),
-#                                        discord.SelectOption(label="UTC -1"),
-#                                        discord.SelectOption(label="UTC +0"),
-#                                        discord.SelectOption(label="UTC +1"),
-#                                        discord.SelectOption(label="UTC +2"),
-#                                        discord.SelectOption(label="UTC +3"),
-#                                        discord.SelectOption(label="UTC +4"),
-#                                        discord.SelectOption(label="UTC +5"),
-#                                        discord.SelectOption(label="UTC +6"),
-#                                        discord.SelectOption(label="UTC +7"),
-#                                        discord.SelectOption(label="UTC +8"),
-#                                        discord.SelectOption(label="UTC +9"),
-#                                        discord.SelectOption(label="UTC +10"),
-#                                        discord.SelectOption(label="UTC +11"),
-#                                        discord.SelectOption(label="UTC +12")
-#                                        ]
-#                                    super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
-#                                async def callback(self, interaction: discord.Interaction):
-#                                    if self.values[0] == "UTC -12":
-#                                        await interaction.response.send_message("UTC -12", ephemeral=False)
-#                                    elif self.values[0] == "UTC -11":
-#                                        await interaction.response.send_message("UTC -11",ephemeral=False)
-#                                    elif self.values[0] == "UTC -10":
-#                                        await interaction.response.send_message("UTC -10",ephemeral=False)
-#                                    elif self.values[0] == "UTC -9":
-#                                        await interaction.response.send_message("UTC -9",ephemeral=False)
-#                                    elif self.values[0] == "UTC -8":
-#                                        await interaction.response.send_message("UTC -8",ephemeral=False)
-#                                    elif self.values[0] == "UTC -7":
-#                                        await interaction.response.send_message("UTC -7",ephemeral=False)
-#                                    elif self.values[0] == "UTC -6":
-#                                        await interaction.response.send_message("UTC -6",ephemeral=False)
-#                                    elif self.values[0] == "UTC -5":
-#                                        await interaction.response.send_message("UTC -5",ephemeral=False)
-#                                    elif self.values[0] == "UTC -4":
-#                                        await interaction.response.send_message("UTC -4",ephemeral=False)
-#                                    elif self.values[0] == "UTC -3":
-#                                        await interaction.response.send_message("UTC -3",ephemeral=False)
-#                                    elif self.values[0] == "UTC -2":
-#                                        await interaction.response.send_message("UTC -2",ephemeral=False)
-#                                    elif self.values[0] == "UTC -1":
-#                                        await interaction.response.send_message("UTC -1",ephemeral=False)
-#                                    elif self.values[0] == "UTC +0":
-#                                        await interaction.response.send_message("UTC +0",ephemeral=False)
-#                                    elif self.values[0] == "UTC +1":
-#                                        await interaction.response.send_message("UTC +1",ephemeral=False)
-#                                    elif self.values[0] == "UTC +2":
-#                                        await interaction.response.send_message("UTC +2",ephemeral=False)
-#                                    elif self.values[0] == "UTC +3":
-#                                        await interaction.response.send_message("UTC +3",ephemeral=False)
-#                                    elif self.values[0] == "UTC +4":
-#                                        await interaction.response.send_message("UTC +4",ephemeral=False)
-#                                    elif self.values[0] == "UTC +5":
-#                                        await interaction.response.send_message("UTC +5",ephemeral=False)
-#                                    elif self.values[0] == "UTC +6":
-#                                        await interaction.response.send_message("UTC +6",ephemeral=False)
-#                                    elif self.values[0] == "UTC +7":
-#                                        await interaction.response.send_message("UTC +7",ephemeral=False)
-#                                    elif self.values[0] == "UTC +8":
-#                                        await interaction.response.send_message("UTC +8",ephemeral=False)
-#                                    elif self.values[0] == "UTC +9":
-#                                        await interaction.response.send_message("UTC +9",ephemeral=False)
-#                                    elif self.values[0] == "UTC +10":
-#                                        await interaction.response.send_message("UTC +10",ephemeral=False)
-#                                    elif self.values[0] == "UTC +11":
-#                                        await interaction.response.send_message("UTC +11",ephemeral=False)
-#                                    elif self.values[0] == "UTC +12":
-#                                        await interaction.response.send_message("UTC +12",ephemeral=False)
-#
-#                            class SelectView(discord.ui.View):
-#                                def __init__(self, *, timeout = 180):
-#                                    super().__init__(timeout=timeout)
-#                                    self.add_item(Select())
-#                            message = OversightData.interview_message(num, member)
-#                            embed = discord.Embed(title = f'Question number {num}',
-#                                                description = f'{message}', color=colors.dark_gold)
-#                            await chan.send(embed=embed,view=SelectView())
+                        elif num == '13':
+                            class Select(discord.ui.Select):
+                                def __init__(self):
+                                    options=[
+                            discord.SelectOption(label="UTC -12",emoji='🕛'),
+                            discord.SelectOption(label="UTC -11",emoji='🕚'),
+                            discord.SelectOption(label="UTC -10",emoji='🕙'),
+                            discord.SelectOption(label="UTC -9",emoji='🕘'),
+                            discord.SelectOption(label="UTC -8",emoji='🕗'),
+                            discord.SelectOption(label="UTC -7",emoji='🕖'),
+                            discord.SelectOption(label="UTC -6",emoji='🕕'),
+                            discord.SelectOption(label="UTC -5",emoji='🕔'),
+                            discord.SelectOption(label="UTC -4",emoji='🕓'),
+                            discord.SelectOption(label="UTC -3",emoji='🕒'),
+                            discord.SelectOption(label="UTC -2",emoji='🕑'),
+                            discord.SelectOption(label="UTC -1",emoji='🕐'),
+                            discord.SelectOption(label="UTC +0",emoji='⏳'),
+                            discord.SelectOption(label="UTC +1",emoji='🕐'),
+                            discord.SelectOption(label="UTC +2",emoji='🕑'),
+                            discord.SelectOption(label="UTC +3",emoji='🕒'),
+                            discord.SelectOption(label="UTC +4",emoji='🕓'),
+                            discord.SelectOption(label="UTC +5",emoji='🕔'),
+                            discord.SelectOption(label="UTC +6",emoji='🕕'),
+                            discord.SelectOption(label="UTC +7",emoji='🕖'),
+                            discord.SelectOption(label="UTC +8",emoji='🕗'),
+                            discord.SelectOption(label="UTC +9",emoji='🕘'),
+                            discord.SelectOption(label="UTC +10",emoji='🕙'),
+                            discord.SelectOption(label="UTC +11",emoji='🕚'),
+                            discord.SelectOption(label="UTC +12",emoji='🕛')
+                            ]
+                                    super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
+                                async def callback(self, interaction: discord.Interaction):
+                                    if self.values[0] == "UTC -12":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -12", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -11":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -11", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -10":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -10", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -9":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -9", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -8":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -8", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -7":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -7", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -6":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -6", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -5":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -5", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -4":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -4", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -3":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -3", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -2":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -2", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC -1":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC -1", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +0":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +0", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        await user_message.reactions[0].remove(member)
+                                    elif self.values[0] == "UTC +1":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +1", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +2":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +2", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +3":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +3", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +4":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +4", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +5":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +5", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +6":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +6", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +7":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC 7", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +8":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +8", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +9":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +9", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +10":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +10", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +11":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +11", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                    elif self.values[0] == "UTC +12":
+                                        num = int(dic.get('num'))
+                                        num += 1
+                                        num = str(num)
+                                        dic.update({'num':num})
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+                                        message = OversightData.interview_message(num, member)
+                                        embed = discord.Embed(title = f'Question number {num}',
+                                                        description = f'{message}', color=colors.dark_gold)
+                                        await interaction.response.send_message("UTC +12", ephemeral=False)
+                                        await chan.send(embed=embed)
+                                        with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                            json.dump(dic, outfile)
+
+                            class SelectView(discord.ui.View):
+                                def __init__(self, *, timeout = 180):
+                                    super().__init__(timeout=timeout)
+                                    self.add_item(Select())
+                            message = OversightData.interview_message(num, member)
+                            embed = discord.Embed(title = f'Question number {num}',
+                                                description = f'{message}', color=colors.dark_gold)
+                            await chan.send(embed=embed,view=SelectView())
+
                         elif num == '14':
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'',
@@ -399,6 +702,7 @@ class interview(commands.Cog):
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer')
     async def next(self, ctx):
         if ctx.channel.category.id == 567390184774303745 or ctx.channel.category.id == 876639217042751578 or ctx.channel.id == 736099358344478764:
+            member = None
             chan_name = ctx.channel.name
             chan_id = ctx.channel.id
             suffet_role = ctx.guild.get_role(suffet_role_id)
@@ -431,13 +735,13 @@ class interview(commands.Cog):
             with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                 json.dump(dic, outfile)
             user = None
-            message_list = OversightData.interview_message(num, user)
+            message = OversightData.interview_message(num, user)
             skip = False
-            if num != '14':
-                if isinstance(message_list, list) == True:
+            if num != '14' and int(num) <= 14:
+                if isinstance(message, list) == True:
                     skip = True
                     l = 0
-                    for item in message_list:
+                    for item in message:
                         l += 1
                         if l == 1:
                             embed = discord.Embed(title = f'--- TERMS AND CONDITIONS of Carthago ---',
@@ -449,7 +753,422 @@ class interview(commands.Cog):
                             msg = await ctx.send(embed=embed)
                             await msg.add_reaction(right_arrow)
                             await msg.add_reaction(person)
-                elif skip != True:
+                elif num == '13':
+                    class Select(discord.ui.Select):
+                        def __init__(self):
+                            options=[
+                    discord.SelectOption(label="UTC -12",emoji='🕛'),
+                    discord.SelectOption(label="UTC -11",emoji='🕚'),
+                    discord.SelectOption(label="UTC -10",emoji='🕙'),
+                    discord.SelectOption(label="UTC -9",emoji='🕘'),
+                    discord.SelectOption(label="UTC -8",emoji='🕗'),
+                    discord.SelectOption(label="UTC -7",emoji='🕖'),
+                    discord.SelectOption(label="UTC -6",emoji='🕕'),
+                    discord.SelectOption(label="UTC -5",emoji='🕔'),
+                    discord.SelectOption(label="UTC -4",emoji='🕓'),
+                    discord.SelectOption(label="UTC -3",emoji='🕒'),
+                    discord.SelectOption(label="UTC -2",emoji='🕑'),
+                    discord.SelectOption(label="UTC -1",emoji='🕐'),
+                    discord.SelectOption(label="UTC +0",emoji='⏳'),
+                    discord.SelectOption(label="UTC +1",emoji='🕐'),
+                    discord.SelectOption(label="UTC +2",emoji='🕑'),
+                    discord.SelectOption(label="UTC +3",emoji='🕒'),
+                    discord.SelectOption(label="UTC +4",emoji='🕓'),
+                    discord.SelectOption(label="UTC +5",emoji='🕔'),
+                    discord.SelectOption(label="UTC +6",emoji='🕕'),
+                    discord.SelectOption(label="UTC +7",emoji='🕖'),
+                    discord.SelectOption(label="UTC +8",emoji='🕗'),
+                    discord.SelectOption(label="UTC +9",emoji='🕘'),
+                    discord.SelectOption(label="UTC +10",emoji='🕙'),
+                    discord.SelectOption(label="UTC +11",emoji='🕚'),
+                    discord.SelectOption(label="UTC +12",emoji='🕛')
+                    ]
+                            super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
+                        async def callback(self, interaction: discord.Interaction):
+                            if self.values[0] == "UTC -12":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                if int(num) >= 14:
+                                    dic.update({'num':num})
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -12", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -11":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -11", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -10":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -10", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -9":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -9", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -8":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -8", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -7":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -7", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -6":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -6", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -5":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                    json.dump(dic, outfile)
+                                message = OversightData.interview_message(num, member)
+                                embed = discord.Embed(title = f'Question number {num}',
+                                                description = f'{message}', color=colors.dark_gold)
+                                await interaction.response.send_message("UTC -5", ephemeral=False)
+                                await ctx.send(embed=embed)
+                                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                    json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -4":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -4", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -3":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -3", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -2":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -2", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC -1":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC -1", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +0":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +0", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +1":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +1", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +2":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +2", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +3":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +3", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +4":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +4", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +5":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +5", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +6":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) >= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +6", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +7":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                if int(num) <= 14:
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC 7", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +8":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                if int(num) <= 14:
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +8", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +9":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                if int(num) <= 14:
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +9", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +10":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                if int(num) <= 14:
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +10", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +11":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                if int(num) <= 14:
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +11", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                            elif self.values[0] == "UTC +12":
+                                num = int(dic.get('num'))
+                                num += 1
+                                num = str(num)
+                                dic.update({'num':num})
+                                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+                                if int(num) <= 14:
+                                    message = OversightData.interview_message(num, member)
+                                    embed = discord.Embed(title = f'Question number {num}',
+                                                    description = f'{message}', color=colors.dark_gold)
+                                    await interaction.response.send_message("UTC +12", ephemeral=False)
+                                    await ctx.send(embed=embed)
+                                    with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
+                                        json.dump(dic, outfile)
+
+                    class SelectView(discord.ui.View):
+                        def __init__(self, *, timeout = 180):
+                            super().__init__(timeout=timeout)
+                            self.add_item(Select())
+                    message = OversightData.interview_message(num, member)
+                    embed = discord.Embed(title = f'Question number {num}',
+                                        description = f'{message}', color=colors.dark_gold)
+                    await ctx.send(embed=embed,view=SelectView())
+                elif skip != False and int(num) <= 14:
                     message = OversightData.interview_message(num, user)
                     embed = discord.Embed(title = f'Question number {num}',
                                     description = f'{message}', color=colors.dark_gold)
@@ -464,8 +1183,9 @@ class interview(commands.Cog):
                         user_id = user.id
                         dic.update({'user_id':user_id})
             elif num == '14':
+                message = OversightData.interview_message(num, member)
                 embed = discord.Embed(title = f'',
-                                    description = f'{item}', color=colors.dark_gold)
+                                    description = f'{message}', color=colors.dark_gold)
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction(right_arrow)
                 await msg.add_reaction(person)

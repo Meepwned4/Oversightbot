@@ -33,35 +33,36 @@ class colors:
 class Select(discord.ui.Select):
     def __init__(self):
         options=[
-            discord.SelectOption(label="UTC -12"),
-            discord.SelectOption(label="UTC -11"),
-            discord.SelectOption(label="UTC -10"),
-            discord.SelectOption(label="UTC -9"),
-            discord.SelectOption(label="UTC -8"),
-            discord.SelectOption(label="UTC -7"),
-            discord.SelectOption(label="UTC -6"),
-            discord.SelectOption(label="UTC -5"),
-            discord.SelectOption(label="UTC -4"),
-            discord.SelectOption(label="UTC -3"),
-            discord.SelectOption(label="UTC -2"),
-            discord.SelectOption(label="UTC -1"),
-            discord.SelectOption(label="UTC +0"),
-            discord.SelectOption(label="UTC +1"),
-            discord.SelectOption(label="UTC +2"),
-            discord.SelectOption(label="UTC +3"),
-            discord.SelectOption(label="UTC +4"),
-            discord.SelectOption(label="UTC +5"),
-            discord.SelectOption(label="UTC +6"),
-            discord.SelectOption(label="UTC +7"),
-            discord.SelectOption(label="UTC +8"),
-            discord.SelectOption(label="UTC +9"),
-            discord.SelectOption(label="UTC +10"),
-            discord.SelectOption(label="UTC +11"),
-            discord.SelectOption(label="UTC +12")
+            discord.SelectOption(label="UTC -12",emoji='🕛'),
+            discord.SelectOption(label="UTC -11",emoji='🕚'),
+            discord.SelectOption(label="UTC -10",emoji='🕙'),
+            discord.SelectOption(label="UTC -9",emoji='🕘'),
+            discord.SelectOption(label="UTC -8",emoji='🕗'),
+            discord.SelectOption(label="UTC -7",emoji='🕖'),
+            discord.SelectOption(label="UTC -6",emoji='🕕'),
+            discord.SelectOption(label="UTC -5",emoji='🕔'),
+            discord.SelectOption(label="UTC -4",emoji='🕓'),
+            discord.SelectOption(label="UTC -3",emoji='🕒'),
+            discord.SelectOption(label="UTC -2",emoji='🕑'),
+            discord.SelectOption(label="UTC -1",emoji='🕐'),
+            discord.SelectOption(label="UTC +0",emoji='⏳'),
+            discord.SelectOption(label="UTC +1",emoji='🕐'),
+            discord.SelectOption(label="UTC +2",emoji='🕑'),
+            discord.SelectOption(label="UTC +3",emoji='🕒'),
+            discord.SelectOption(label="UTC +4",emoji='🕓'),
+            discord.SelectOption(label="UTC +5",emoji='🕔'),
+            discord.SelectOption(label="UTC +6",emoji='🕕'),
+            discord.SelectOption(label="UTC +7",emoji='🕖'),
+            discord.SelectOption(label="UTC +8",emoji='🕗'),
+            discord.SelectOption(label="UTC +9",emoji='🕘'),
+            discord.SelectOption(label="UTC +10",emoji='🕙'),
+            discord.SelectOption(label="UTC +11",emoji='🕚'),
+            discord.SelectOption(label="UTC +12",emoji='🕛')
             ]
         super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
     async def callback(self, interaction: discord.Interaction):
         if self.values[0] == "UTC -12":
+            await interaction.response.send_message("UTC -12", ephemeral=False)
             await interaction.response.send_message("UTC -12", ephemeral=False)
         elif self.values[0] == "UTC -11":
             await interaction.response.send_message("UTC -11",ephemeral=False)
@@ -118,7 +119,7 @@ class Select(discord.ui.Select):
 #            await interaction.response.send_message("3",ephemeral=True)
 
 class SelectView(discord.ui.View):
-    def __init__(self, *, timeout = 180):
+    def __init__(self, *, timeout = None):
         super().__init__(timeout=timeout)
         self.add_item(Select())
 
@@ -133,9 +134,12 @@ class Questionnaire(discord.ui.Modal, title='Questionnaire Response'):
 class Buttons(discord.ui.View):
     def __init__(self, timeout=None):
         super().__init__()
-    @discord.ui.button(label="Button",style=discord.ButtonStyle.gray)
+    @discord.ui.button(label="Button 1",style=discord.ButtonStyle.gray)
     async def gray_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-        await interaction.response.edit_message(content=f"This is an edited button response!")
+        await interaction.response.edit_message(content=f"This was edited by button 1!")
+    @discord.ui.button(label="Button 2",style=discord.ButtonStyle.red)
+    async def red_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        await interaction.response.edit_message(content=f"This was edited by button 2!")
 
 class extras(commands.Cog):
 
@@ -151,9 +155,14 @@ class extras(commands.Cog):
     @commands.command(name='menu', help='+menu')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
     async def menu(self, ctx):
+        right_arrow = '➡' # right arrow emoji
+        person = '🧑' # person emoji
+        reminder = f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \
+    + f'**After** you\'ve answered, react with {right_arrow} to continue'
         member = None
         num = '13'
         words = OversightData.interview_message(num, member)
+        words = words.replace(reminder, '')
         embed = discord.Embed(title = f'',
                             description = f'{words}', color=colors.dark_gold)
         await ctx.send(embed=embed,view=SelectView())

@@ -18,6 +18,8 @@ interview_emoji = '📝' # interview emoji
 elephant = '\N{ELEPHANT}' # elephant emoji
 x_emoji = '❌' # x emoji
 guild_id = 567336454632636416
+guild_id_1 = 567336454632636416
+guild_id_2 = 645391966598594561
 information_board = 714233548332204084
 archive_channel = 754640623276916756
 ticket_category_name = '[Admission & Training]'
@@ -76,9 +78,8 @@ class ticket(commands.Cog):
         emoji = payload.emoji
         message_id = payload.message_id
         channel_id = payload.channel_id
-
-        try:
-            guild = client.get_guild(guild_id)
+        if payload.guild_id == guild_id_1:
+            guild = client.get_guild(guild_id_1)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
             interviewer_role = guild.get_role(interviewer_role_id)  # management role
 #            senator_role = guild.get_role(senator_role_id)
@@ -86,14 +87,14 @@ class ticket(commands.Cog):
             disc_role = guild.get_role(disc_role_id)
             adirim_role = guild.get_role(adirim_role_id)
             channel = guild.get_channel(channel_id)
-        except:
-            guild = client.get_guild(645391966598594561)
+        if payload.guild_id == guild_id_2:
+            guild = client.get_guild(guild_id_2)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
             interviewer_role = guild.get_role(interviewer_role_id)  # management role
 #            senator_role = guild.get_role(senator_role_id)
             pentarch_role = guild.get_role(pentarch_role_id)
             disc_role = guild.get_role(disc_role_id)
-            adirim_role = guild.get(adirim_role_id)
+            adirim_role = guild.get_role(adirim_role_id)
             channel = guild.get_channel(channel_id)
 
         if not member.bot:
@@ -126,7 +127,7 @@ class ticket(commands.Cog):
                     with open(f'./data/tickets/{channel_id}.json', 'w') as outfile:
                         json.dump(dic, outfile)
 
-                    pickling_on = open('./data/num.pickle', 'wb')
+                    pickling_on = open('./data/num.pickle', 'w')
                     pickle.dump(num, pickling_on)
                     pickling_on.close()
                     break
