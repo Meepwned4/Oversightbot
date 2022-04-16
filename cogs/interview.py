@@ -262,6 +262,8 @@ class interview(commands.Cog):
                             ]
                                     super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
                                 async def callback(self, interaction: discord.Interaction):
+                                    reminder = f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \
+                                    + f'**After** you\'ve answered, react with {right_arrow} to continue'
                                     if self.values[0] == "UTC -12":
                                         num = int(dic.get('num'))
                                         num += 1
@@ -270,6 +272,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -12", ephemeral=False)
@@ -285,6 +288,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -11", ephemeral=False)
@@ -300,6 +304,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -10", ephemeral=False)
@@ -315,6 +320,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -9", ephemeral=False)
@@ -330,6 +336,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -8", ephemeral=False)
@@ -345,6 +352,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -7", ephemeral=False)
@@ -360,6 +368,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -6", ephemeral=False)
@@ -375,6 +384,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -5", ephemeral=False)
@@ -390,6 +400,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -4", ephemeral=False)
@@ -405,6 +416,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -3", ephemeral=False)
@@ -420,6 +432,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -2", ephemeral=False)
@@ -435,6 +448,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -1", ephemeral=False)
@@ -450,6 +464,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +0", ephemeral=False)
@@ -466,6 +481,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +1", ephemeral=False)
@@ -481,6 +497,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +2", ephemeral=False)
@@ -496,6 +513,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +3", ephemeral=False)
@@ -511,6 +529,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +4", ephemeral=False)
@@ -526,6 +545,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +5", ephemeral=False)
@@ -541,6 +561,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +6", ephemeral=False)
@@ -556,6 +577,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC 7", ephemeral=False)
@@ -571,6 +593,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +8", ephemeral=False)
@@ -586,6 +609,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +9", ephemeral=False)
@@ -601,6 +625,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +10", ephemeral=False)
@@ -616,6 +641,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +11", ephemeral=False)
@@ -631,6 +657,7 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
+                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +12", ephemeral=False)
@@ -640,7 +667,7 @@ class interview(commands.Cog):
                                             json.dump(dic, outfile)
 
                             class SelectView(discord.ui.View):
-                                def __init__(self, *, timeout = 180):
+                                def __init__(self, *, timeout = None):
                                     super().__init__(timeout=timeout)
                                     self.add_item(Select())
                             message = OversightData.interview_message(num, member)

@@ -94,7 +94,7 @@ async def load_extensions():
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             await client.load_extension(f"cogs.{filename[:-3]}")
-            print(f"cogs.{filename[:-3]} loaded")
+#            print(f"cogs.{filename[:-3]} loaded")
 
 @client.command()
 @commands.is_owner()

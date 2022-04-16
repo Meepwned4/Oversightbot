@@ -10,6 +10,7 @@ import aiohttp
 from bs4 import BeautifulSoup
 import os
 import io
+import random
 
 right_arrow = '➡' # right arrow emoji
 robot = '🤖' # robot emoji
@@ -116,21 +117,22 @@ class ticket(commands.Cog):
                         disc_role: discord.PermissionOverwrite(view_channel=True),
                     }
 
-                    pickle_off = open('./data/num.pickle', 'rb')
-                    num = int(pickle.load(pickle_off))
-                    num += 1
+                    discord_id = member.id
+                    try:
+                        user = requests.get(f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                        user = user.json()
+                        user = user[0]
+                        nation_id = user.get('_id')
+                    except:
+                        nation_id = random.randrange(1,100)
                     await ticket_category.create_text_channel(
-                            f'ticket-{num}', overwrites=overwrites)
-                    chan = discord.utils.get(guild.text_channels, name=f'ticket-{num}')
+                            f'ticket-{nation_id}', overwrites=overwrites)
+                    chan = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
                     await chan.edit(sync_permissions=True)
                     dic = {'channel':chan.id, 'user_id':member.id}
                     with open(f'./data/tickets/{channel_id}.json', 'w') as outfile:
                         json.dump(dic, outfile)
 
-                    pickling_on = open('./data/num.pickle', 'w')
-                    pickle.dump(num, pickling_on)
-                    pickling_on.close()
-                    break
                 if message in embed.description and emoji.name == robot and \
                 user_message.author == client.user:
                     await user_message.clear_reaction(elephant)
