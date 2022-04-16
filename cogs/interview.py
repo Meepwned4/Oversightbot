@@ -162,7 +162,7 @@ class interview(commands.Cog):
                 or emoji.name == interview_emoji:
                     chan = user_message.channel
                     chan_id = chan.id
-                    chan_name = chan.name
+#                    chan_name = chan.name
                     for reaction in user_message.reactions:
                         users = reaction.users()
                         async for user in users:
@@ -274,6 +274,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -12", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -11":
@@ -288,6 +289,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -11", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -10":
@@ -302,6 +304,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -10", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -9":
@@ -316,6 +319,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -9", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -8":
@@ -330,6 +334,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -8", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -7":
@@ -344,6 +349,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -7", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -6":
@@ -358,6 +364,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -6", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -5":
@@ -372,6 +379,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -5", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -4":
@@ -386,6 +394,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -4", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -3":
@@ -400,6 +409,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -3", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -2":
@@ -414,6 +424,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -2", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC -1":
@@ -428,6 +439,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC -1", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +0":
@@ -442,6 +454,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +0", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         await user_message.reactions[0].remove(member)
@@ -457,6 +470,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +1", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +2":
@@ -471,6 +485,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +2", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +3":
@@ -485,7 +500,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +3", ephemeral=False)
                                         await chan.send(embed=embed)
-                                        await msg.add_reaction(right_arrow)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +4":
@@ -500,6 +515,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +4", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +5":
@@ -514,6 +530,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +5", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +6":
@@ -528,6 +545,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +6", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +7":
@@ -542,6 +560,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC 7", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +8":
@@ -556,6 +575,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +8", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +9":
@@ -570,6 +590,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +9", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +10":
@@ -584,6 +605,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +10", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +11":
@@ -598,6 +620,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +11", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == "UTC +12":
@@ -612,6 +635,7 @@ class interview(commands.Cog):
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message("UTC +12", ephemeral=False)
                                         await chan.send(embed=embed)
+                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
 
@@ -623,15 +647,6 @@ class interview(commands.Cog):
                             embed = discord.Embed(title = f'Question number {num}',
                                                 description = f'{message}', color=colors.dark_gold)
                             await chan.send(embed=embed,view=SelectView())
-
-                        elif num == '14':
-                            message = OversightData.interview_message(num, member)
-                            embed = discord.Embed(title = f'',
-                                                description = f'{message}', color=colors.dark_gold)
-                            msg = await chan.send(embed=embed)
-                            await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
-                            os.remove(f'./data/tickets/{chan_name}-{chan_id}.json')
-                            await user_message.reactions[0].remove(member)
                         elif skip != True:
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'Question number {num}',
