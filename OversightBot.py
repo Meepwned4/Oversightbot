@@ -36,15 +36,15 @@ logging.ERROR - Only errors and worse
 '''Switches on logging of the requests module.'''
 HTTPConnection.debuglevel = 1
 
-#logging.basicConfig()
-logging.getLogger().setLevel(logging.WARN)
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
-requests_log.setLevel(logging.WARN)
+requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
 logger = logging.getLogger(__name__)
 c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.WARN)
+c_handler.setLevel(logging.DEBUG)
 c_format = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%b-%d-%y %H:%M:%S')
@@ -257,7 +257,7 @@ async def daily():
 #                nation_name = nation.get('nation')
 #                nationid = nation.get('nationid')
 #                print(f'{nation_name} - {nationid} - {DiscordID} - {key} - {value}\n')
-#
+
     for chan in server.text_channels:
         if chan.category_id == 567390184774303745:
             if chan.id != 605910228692893726 and chan.id != 845685557367144448 and \
@@ -386,6 +386,9 @@ async def daily():
         if plane_mmr > int(dic.get('aircraft')) and \
             dic.get('vacmode') == '0':
             planes = int(dic.get('aircraft'))
+            percent = str(int(planes) / int(plane_mmr) * 100)
+            percent = str(round(float(percent), 2))
+            percent += '%'
             b = dic.get('nationid')
             nmp_nationids.append(b)
             if b not in pinglist:
@@ -410,12 +413,12 @@ async def daily():
                             continue
                         if ping_dic.get('aircraft') >= 3:
                             duplicate_ping_check.append(c)
-                            nmp_no_ping.append(f'<@{c}> ')
+                            nmp_no_ping.append(f'<@{c}> ({percent})')
                             num += 1
                             ping_dic.update({'aircraft':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
-                            nmp_ping.append(f'<@{c}> ')
+                            nmp_ping.append(f'<@{c}> ({percent})')
                             num += 1
                             ping_dic.update({'aircraft':num})
     if not nmp_ping:
@@ -435,6 +438,9 @@ async def daily():
         if int(dic.get('intagncy'))== 1:
             if int(dic.get('spies')) != 60 and dic.get('vacmode') == '0':
                 spies = int(dic.get('spies'))
+                percent = str(int(spies) / 60 * 100)
+                percent = str(round(float(percent), 2))
+                percent += '%'
                 spies = str(f'{spies}/60')
                 b = dic.get('nationid')
                 nsp_nationids.append(b)
@@ -443,6 +449,9 @@ async def daily():
         if int(dic.get('intagncy'))== 0:
             if int(dic.get('spies')) != 50 and dic.get('vacmode') == '0':
                 spies = int(dic.get('spies'))
+                percent = str(int(spies) / 50 * 100)
+                percent = str(round(float(percent), 2))
+                percent += '%'
                 spies = str(f'{spies}/50')
                 b = dic.get('nationid')
                 nsp_nationids.append(b)
@@ -468,11 +477,11 @@ async def daily():
                             continue
                         if ping_dic.get('spies') >= 3:
                             duplicate_ping_check.append(c)
-                            nsp_no_ping.append(f'<@{c}> ')
+                            nsp_no_ping.append(f'<@{c}> ({percent}) ')
                             ping_dic.update({'spies':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
-                            nsp_ping.append(f'<@{c}> ')
+                            nsp_ping.append(f'<@{c}> ({percent}) ')
                             num += 1
                             ping_dic.update({'spies':num})
     if not nsp_ping:
@@ -494,6 +503,9 @@ async def daily():
         if tank_mmr > int(dic.get('tanks')) and \
             dic.get('vacmode') == '0':
                 tanks = int(dic.get('tanks'))
+                percent = str(int(tanks) / int(tank_mmr) * 100)
+                percent = str(round(float(percent), 2))
+                percent += '%'
                 b = dic.get('nationid')
                 nmt_nationids.append(b)
                 if b not in pinglist:
@@ -523,11 +535,11 @@ async def daily():
                             continue
                         if ping_dic.get('tanks') >= 3:
                             duplicate_ping_check.append(c)
-                            nmt_no_ping.append(f'<@{c}> ')
+                            nmt_no_ping.append(f'<@{c}> ({percent})')
                             ping_dic.update({'tanks':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
-                            nmt_ping.append(f'<@{c}> ')
+                            nmt_ping.append(f'<@{c}> ({percent})')
                             num += 1
                             ping_dic.update({'tanks':num})
             else:
@@ -551,6 +563,9 @@ async def daily():
         if soldier_mmr > int(dic.get('soldiers')) and \
             dic.get('vacmode') == '0':
             soldiers = int(dic.get('soldiers'))
+            percent = str(int(soldiers) / int(soldier_mmr) * 100)
+            percent = str(round(float(percent), 2))
+            percent += '%'
             b = dic.get('nationid')
             nms_nationids.append(b)
             if b not in pinglist:
@@ -577,11 +592,11 @@ async def daily():
                             continue
                         if ping_dic.get('soldiers') >= 3:
                             duplicate_ping_check.append(c)
-                            nms_no_ping.append(f'<@{c}> ')
+                            nms_no_ping.append(f'<@{c}> ({percent})')
                             ping_dic.update({'soldiers':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
-                            nms_ping.append(f'<@{c}> ')
+                            nms_ping.append(f'<@{c}> ({percent})')
                             num += 1
                             ping_dic.update({'soldiers':num})
     if not nms_ping:
@@ -602,6 +617,10 @@ async def daily():
         ship_mmr = int(dic.get('cities') * int(mmr[3]) * 5)
         if ship_mmr > int(dic.get('ships')) and \
             dic.get('vacmode') == '0':
+            ships = int(dic.get('ships'))
+            percent = str(int(ships) / int(ship_mmr) * 100)
+            percent = str(round(float(percent), 2))
+            percent += '%'
             b = dic.get('nationid')
             nmsh_nationids.append(b)
             if b not in pinglist:
@@ -610,7 +629,6 @@ async def daily():
             if dic.get('DiscordID') in duplicate_ping_check:
                 continue
             if dic.get('nationid') == dic2.get('nationid'):
-                ships = int(dic.get('ships'))
                 if dic.get('nationid') in nmsh_nationids:
                     if dic2.get('ships') >= dic.get('ships'):
                         ping_dic = dic.get('ping')
@@ -629,11 +647,11 @@ async def daily():
                             continue
                         if ping_dic.get('ships') >= 3:
                             duplicate_ping_check.append(c)
-                            nmsh_no_ping.append(f'<@{c}> ')
+                            nmsh_no_ping.append(f'<@{c}> ({percent})')
                             ping_dic.update({'ships':num})
                         if c not in nerds_list:
                             duplicate_ping_check.append(c)
-                            nmsh_ping.append(f'<@{c}> ')
+                            nmsh_ping.append(f'<@{c}> ({percent})')
                             num += 1
                             ping_dic.update({'ships':num})
     if not nmsh_ping:
@@ -697,7 +715,7 @@ async def daily():
 
     nmm_temp = '\n\n__People who have missiles__\n'
     nmm_ping = [nmm_temp]
-    nmm_no_ping = [nmm_temp]
+#    nmm_no_ping = [nmm_temp]
     nmm_nationids = []
     nerds_nmm_temp = '\n__Trainees who has missiles:__\n'
     nerds_nmm_ping = [nerds_nmm_temp]
@@ -729,20 +747,20 @@ async def daily():
                             nerds_nmm_ping.append(f'<#{c}> {missiles}\n')
                             ping_dic.update({'missiles':num})
                             continue
-                        if ping_dic.get('missiles') >= 3:
-                            duplicate_ping_check.append(c)
-                            nmm_no_ping.append(f'<@{c}> ')
-                            num += 1
-                            ping_dic.update({'missiles':num})
-                        if c not in nerds_list:
-                            duplicate_ping_check.append(c)
-                            nmm_ping.append(f'<@{c}> ')
-                            num += 1
-                            ping_dic.update({'missiles':num})
-    if not nmp_ping:
-        nmp_ping = 'Nobody has missiles.'
-    if not nerds_nmp_ping:
-        nerds_nmp_ping = 'Nobody has missiles.'
+#                        if ping_dic.get('missiles') >= 3:
+#                            duplicate_ping_check.append(c)
+#                            nmm_no_ping.append(f'<@{c}> ')
+#                            num += 1
+#                            ping_dic.update({'missiles':num})
+#                        if c not in nerds_list:
+#                            duplicate_ping_check.append(c)
+#                            nmm_ping.append(f'<@{c}> ')
+#                            num += 1
+#                            ping_dic.update({'missiles':num})
+    if not nmm_ping:
+        nmm_ping = 'Nobody has missiles.'
+    if not nerds_nmm_ping:
+        nerds_nmm_ping = 'Nobody has missiles.'
 
 
     color_message_temp = f'\nChange to {AA_color}' + \
