@@ -32,9 +32,10 @@ class colors:
     greyple = 0x99aab5
 
 pickle_off = open('./data/api_key.pickle', 'rb')
-apikeys = pickle.load(pickle_off)
-apikeys = apikeys.split(',')
-token = 'NzM1MjU3Mzc3NjA3MjU0MTE3.Xxdnyw.yCKnVzcCHxY_vS5GMelz2ElqSXs'
+apikey = pickle.load(pickle_off)
+#apikeys = apikeys.split(',')
+pickle_off = open('./data/token.pickle', 'rb')
+token = pickle.load(pickle_off)
 oversight_channel_id = 812131124489879552
 disc_channel_id = 605910228692893726
 test_oversight_channel_id = 736099358344478764

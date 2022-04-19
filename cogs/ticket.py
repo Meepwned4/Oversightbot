@@ -22,6 +22,7 @@ guild_id = 567336454632636416
 guild_id_1 = 567336454632636416
 guild_id_2 = 645391966598594561
 information_board = 714233548332204084
+information_board_2 = 876651793428414485
 archive_channel = 754640623276916756
 ticket_category_name = '[Admission & Training]'
 interviewer_role_id = 568141320011382825
@@ -130,7 +131,7 @@ class ticket(commands.Cog):
                     chan = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
                     await chan.edit(sync_permissions=True)
                     dic = {'channel':chan.id, 'user_id':member.id}
-                    with open(f'./data/tickets/{channel_id}.json', 'w') as outfile:
+                    with open(f'./data/tickets/{nation_id}.json', 'w') as outfile:
                         json.dump(dic, outfile)
 
                 if message in embed.description and emoji.name == robot and \
@@ -139,24 +140,26 @@ class ticket(commands.Cog):
                     await user_message.add_reaction(elephant)
                     break
 
-
-
-
     @commands.command(name='sendticket', help='+sendticket')
-    @commands.has_any_role('Elder', 'Suffet')
+    @commands.has_any_role('Elder', 'Suffet', 'Pentarch')
     async def sendticket(self, ctx):
         embed = discord.Embed(
-            title='Application',
+            title='Greetings',
             description='''
             Welcome to Carthago Co-Operative Alliance. We are glad to see you recognize the glory of the Shining City and wish to join us.
 
             Please make sure you've applied at the Alliance Page: https://politicsandwar.com/alliance/join/id=5049
 
-            If that's done, react with :elephant: to apply.
+            If that's done, press the button.
             ''', color=colors.dark_gold
         )
-        msg = await ctx.send(embed=embed)
-        await msg.add_reaction(elephant)
+        class Button(discord.ui.View):
+            def __init__(self, timeout=None):
+                super().__init__()
+            @discord.ui.button(label='Apply',emoji=elephant,style=discord.ButtonStyle.blurple)
+            async def blue_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                await interaction.response.send_message('Ticket created',ephemeral=True)
+        await ctx.send(embed=embed, view=Button())
         await ctx.message.delete()
 
 
@@ -287,13 +290,13 @@ class ticket(commands.Cog):
             except:
                 if ctx.author == client.is_owner:
                     user = await client.fetch_user(175719252995604480)
-                    msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
+                    msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\'+save\' ran by <@{ctx.author.id}>'
                     await DMChannel.send(user, msg)
                 else:
                     msg = f'❌ Failed to archive <#{ctx.channel.id}>'
                     user = await client.fetch_user(175719252995604480)
                     await DMChannel.send(ctx.author, msg)
-                    msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+save\" ran by <@{ctx.author.id}>'
+                    msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\'+save\' ran by <@{ctx.author.id}>'
                     await DMChannel.send(user, msg)
 
 
@@ -351,13 +354,13 @@ class ticket(commands.Cog):
                 except:
                     if ctx.author == client.is_owner:
                         user = await client.fetch_user(175719252995604480)
-                        msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+close\" ran by <@{ctx.author.id}>'
+                        msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\'+close\' ran by <@{ctx.author.id}>'
                         await DMChannel.send(user, msg)
                     else:
                         msg = f'❌ Failed to archive <#{ctx.channel.id}>'
                         user = await client.fetch_user(175719252995604480)
                         await DMChannel.send(ctx.author, msg)
-                        msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\"+close\" ran by <@{ctx.author.id}>'
+                        msg = f'❌ Failed to archive <#{ctx.channel.id}> \n\'+close\' ran by <@{ctx.author.id}>'
                         await DMChannel.send(user, msg)
 
 

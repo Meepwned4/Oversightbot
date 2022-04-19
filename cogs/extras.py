@@ -128,10 +128,18 @@ class Questionnaire(discord.ui.Modal, title='Questionnaire Response'):
     answer = discord.ui.TextInput(label='Answer', style=discord.TextStyle.paragraph)
 
     async def on_submit(self, interaction: discord.Interaction):
+        data = interaction.data
+        data = data.get('components')
+        name = data[0].get('components')
+        name = name[0].get('value')
+        answer = data[1].get('components')
+        answer = answer[0].get('value')
+        print(name)
+        print(answer)
         await interaction.response.send_message(f'Thanks for your response, {self.name}!', ephemeral=True)
 
 
-class Buttons(discord.ui.View):
+class Button(discord.ui.View):
     def __init__(self, timeout=None):
         super().__init__()
     @discord.ui.button(label="Button 1",style=discord.ButtonStyle.gray)
@@ -150,7 +158,13 @@ class extras(commands.Cog):
     @commands.command(name='modal', help='+modal')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
     async def modal(self, ctx):
-        await ctx.send("This is a modal?",view=Questionnaire())
+        class button(discord.ui.View):
+            def __init__(self, timeout=None):
+                super().__init__()
+            @discord.ui.button(label="Button 1",style=discord.ButtonStyle.gray)
+            async def gray_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                await interaction.response.send_modal(Questionnaire())
+        await ctx.send(view=button())
 
     @commands.command(name='menu', help='+menu')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
@@ -170,7 +184,7 @@ class extras(commands.Cog):
     @commands.command(name='button', help='+button')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet')
     async def button(self, ctx):
-        await ctx.send("This message has buttons!",view=Buttons())
+        await ctx.send("This message has buttons!",view=Button())
 
     @commands.command(name='tax_bracket', help='+tax_bracket 92845 100', aliases=['tax', 'taxes'])
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet')

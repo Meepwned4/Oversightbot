@@ -5,6 +5,9 @@ import json
 import typing
 import nest_asyncio
 nest_asyncio.apply()
+import requests
+import random
+import pickle
 import OversightData
 
 class colors:
@@ -32,7 +35,8 @@ class colors:
     blurple = 0x7289da
     greyple = 0x99aab5
 
-token = 'NzM1MjU3Mzc3NjA3MjU0MTE3.Xxdnyw.yCKnVzcCHxY_vS5GMelz2ElqSXs'
+pickle_off = open('./data/token.pickle', 'rb')
+token = pickle.load(pickle_off)
 oversight_channel_id = 812131124489879552
 disc_channel_id = 605910228692893726
 test_oversight_channel_id = 736099358344478764
@@ -42,7 +46,7 @@ nerds_id = 712071416505172090
 raider_id = 853790553375768586
 guild_id_1 = 567336454632636416
 guild_id_2 = 645391966598594561
-management_role_id = 568141320011382825
+trainee_role_id = 568141320011382825
 suffet_role_id = 567338425443942420
 elder_role_id = 567338487380967430
 adirim_role_id = 752227315832062063
@@ -51,17 +55,135 @@ trainee_role_id = 712071416505172090
 foreigner_role_id = 569519945847930911
 citizen_role_id = 567389586934726677
 bot_role_id = 567722813335535622
+information_board = 714233548332204084
+information_board_2 = 876651793428414485
+archive_channel = 754640623276916756
+ticket_category_name = '[Admission & Training]'
+interviewer_role_id = 568141320011382825
+disc_role_id = 605910328613535784
 
 right_arrow = '➡' # right arrow emoji
 robot = '🤖' # robot emoji
 person = '🧑' # person emoji
 interview_emoji = '📝' # interview emoji
-x_emoji = '❌' # x emoji
+x_emoji = '✖️' # x emoji
 
 class interview(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+
+    @commands.Cog.listener()
+    async def on_interaction(self, interaction):
+        client = self.client
+        custom_id = interaction.data.get('custom_id')
+        components = interaction.message.components
+        for component in components:
+            for child in component.children:
+                if child.custom_id == custom_id:
+                    label = child.label
+                    break
+        member = interaction.user
+        guild_id = interaction.guild_id
+        channel_id = interaction.channel_id
+        message_embed = interaction.message.embeds
+        author = interaction.message.author
+        embed_title = ''
+        if message_embed != []:
+            message_embed = message_embed[0]
+            embed_title = message_embed.title
+#            embed_desc = message_embed.description
+        if embed_title == 'Greetings' and label == 'Apply' and author == client.user:
+            if channel_id == information_board or channel_id == information_board_2:
+                if guild_id == guild_id_1:
+                    guild = client.get_guild(guild_id_1)
+                    ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
+                    interviewer_role = guild.get_role(interviewer_role_id)  # management role
+#                    senator_role = guild.get_role(senator_role_id)
+                    pentarch_role = guild.get_role(pentarch_role_id)
+                    disc_role = guild.get_role(disc_role_id)
+                    adirim_role = guild.get_role(adirim_role_id)
+                    overwrites = {
+                        guild.default_role: discord.PermissionOverwrite(view_channel=False),
+                        member: discord.PermissionOverwrite(view_channel=True),
+                        guild.me: discord.PermissionOverwrite(view_channel=True),
+                        interviewer_role: discord.PermissionOverwrite(view_channel=True),
+                        pentarch_role: discord.PermissionOverwrite(view_channel=True),
+#                        senator_role: discord.PermissionOverwrite(view_channel=True),
+                        adirim_role: discord.PermissionOverwrite(view_channel=True),
+                        disc_role: discord.PermissionOverwrite(view_channel=True),
+                    }
+                if guild_id == guild_id_2:
+                    guild = client.get_guild(guild_id_2)
+                    ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
+                    interviewer_role = guild.get_role(874085960885878786)
+                    pentarch_role = guild.get_role(736050504089731173)
+                    overwrites = {
+                        guild.default_role: discord.PermissionOverwrite(view_channel=False),
+                        member: discord.PermissionOverwrite(view_channel=True),
+                        guild.me: discord.PermissionOverwrite(view_channel=True),
+                        interviewer_role: discord.PermissionOverwrite(view_channel=True),
+                        pentarch_role: discord.PermissionOverwrite(view_channel=True),
+                    }
+
+
+                discord_id = member.id
+                try:
+                    user = requests.get(f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                    user = user.json()
+                    user = user[0]
+                    nation_id = user.get('_id')
+                except:
+                    nation_id = random.randrange(1,100)
+                print('check 123')
+                await interaction.response.send_message('Ticket created',ephemeral=True)
+                await ticket_category.create_text_channel(f'ticket-{nation_id}', overwrites=overwrites)
+                chan = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
+                await chan.edit(sync_permissions=True)
+                dic = {'channel':chan.id, 'user_id':member.id}
+                with open(f'./data/tickets/{nation_id}.json', 'w') as outfile:
+                    json.dump(dic, outfile)
+                client = self.client
+                message = f'''
+                Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
+
+                - Apply to us at: https://politicsandwar.com/alliance/join/id=5049
+                - No current in-game wars or alliance;
+                - No unsettled debt or loans;
+                - You must be active on Discord and in-game, inactivity is not acceptable;
+                - You must obey orders in a timely manner, abide by our rules and listen to your superiors, insubordination will not be tolerated.
+                - You cannot possess two or more nations/accounts in the same network. This is a grave offense that may lead to banishment.
+                '''
+                ping = f'<@{member.id}>'
+                class pre_application_buttons(discord.ui.View):
+                    def __init__(self, timeout=None):
+                        super().__init__()
+                    @discord.ui.button(emoji=robot,label='Start',style=discord.ButtonStyle.blurple)
+                    async def start_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                        await interaction.response.defer()
+                    @discord.ui.button(emoji=person,label='Help',style=discord.ButtonStyle.gray)
+                    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                        await interaction.response.defer()
+                    @discord.ui.button(emoji=x_emoji,label='Close',style=discord.ButtonStyle.red)
+                    async def close_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                        await interaction.response.defer()
+                embed = discord.Embed(title = 'Pre-Application',
+                                    description = f'{message}', color=colors.dark_gold)
+                await chan.send(ping, embed=embed, view=pre_application_buttons())
+        if embed_title == 'Pre-Application' and label == 'Start' and author == client.user:
+            class interview_button_1(discord.ui.View):
+                def __init__(self, timeout=None):
+                    super().__init__()
+                @discord.ui.button(emoji=robot,label='Next',style=discord.ButtonStyle.blurple)
+                async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                    await interaction.response.defer()
+                @discord.ui.button(emoji=person,label='Help',style=discord.ButtonStyle.gray)
+                async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                    await interaction.response.defer()
+            embed = discord.Embed(title = 'Pre-Application',
+                                  description = f'{message}', color=colors.dark_gold)
+            await chan.send(ping, embed=embed, view=interview_button_1())
+
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -82,56 +204,6 @@ class interview(commands.Cog):
                                 description = f'MESSAGE: {message_content}', color=colors.teal)
                 await channel.send(embed=embed)
 
-    @commands.Cog.listener()
-    async def on_guild_channel_create(self, channel):
-        if channel.category.id == 567390184774303745 or channel.category.id == 876639217042751578:
-            client = self.client
-            chan_name = channel.name.split('-')
-            chan_id = channel.id
-            suffet_role = channel.guild.get_role(suffet_role_id)
-            elder_role = channel.guild.get_role(elder_role_id)
-            pentarch_role = channel.guild.get_role(pentarch_role_id)
-            interviewer_role = channel.guild.get_role(management_role_id)
-            adirim_role = channel.guild.get_role(adirim_role_id)
-            bot_role = channel.guild.get_role(bot_role_id)
-            if chan_name[0] == 'ticket':
-                try:
-                    with open(f'./data/tickets/{chan_id}.json') as data:
-                        dic = json.load(data)
-                        member_id = dic.get('user_id')
-                except:
-                    for member in channel.members:
-                        if suffet_role not in member.roles and elder_role not in member.roles \
-                        and pentarch_role not in member.roles and interviewer_role not in member.roles \
-                        and adirim_role not in member.roles and bot_role not in member.roles:
-                            member_id = member.id
-                            break
-                    dic = {'channel':chan_name, 'user_id':member_id}
-                with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
-                    json.dump(dic, outfile)
-                await channel.send(f'<@{member_id}>')
-                async for message in channel.history(limit=5):
-                    if message == f'<@{member_id}>' and message.author == client.user:
-                        await message.delete()
-                        break
-                message = f'''
-                Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
-
-                - Apply to us at: https://politicsandwar.com/alliance/join/id=5049
-                - No current in-game wars or alliance;
-                - No unsettled debt or loans;
-                - You must be active on Discord and in-game, inactivity is not acceptable;
-                - You must obey orders in a timely manner, abide by our rules and listen to your superiors, insubordination will not be tolerated.
-                - You cannot possess two or more nations/accounts in the same network. This is a grave offense that may lead to banishment.
-
-                React with {interview_emoji} if you are applying
-                React with {person} if you stumbled upon this place for any other reason
-                '''
-                embed = discord.Embed(title = f'Application',
-                                    description = f'{message}', color=colors.dark_gold)
-                msg = await channel.send(embed=embed)
-                await msg.add_reaction(interview_emoji)
-                await msg.add_reaction(person)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
@@ -234,37 +306,37 @@ class interview(commands.Cog):
                             class Select(discord.ui.Select):
                                 def __init__(self):
                                     options=[
-                            discord.SelectOption(label="UTC -12",emoji='🕛'),
-                            discord.SelectOption(label="UTC -11",emoji='🕚'),
-                            discord.SelectOption(label="UTC -10",emoji='🕙'),
-                            discord.SelectOption(label="UTC -9",emoji='🕘'),
-                            discord.SelectOption(label="UTC -8",emoji='🕗'),
-                            discord.SelectOption(label="UTC -7",emoji='🕖'),
-                            discord.SelectOption(label="UTC -6",emoji='🕕'),
-                            discord.SelectOption(label="UTC -5",emoji='🕔'),
-                            discord.SelectOption(label="UTC -4",emoji='🕓'),
-                            discord.SelectOption(label="UTC -3",emoji='🕒'),
-                            discord.SelectOption(label="UTC -2",emoji='🕑'),
-                            discord.SelectOption(label="UTC -1",emoji='🕐'),
-                            discord.SelectOption(label="UTC +0",emoji='⏳'),
-                            discord.SelectOption(label="UTC +1",emoji='🕐'),
-                            discord.SelectOption(label="UTC +2",emoji='🕑'),
-                            discord.SelectOption(label="UTC +3",emoji='🕒'),
-                            discord.SelectOption(label="UTC +4",emoji='🕓'),
-                            discord.SelectOption(label="UTC +5",emoji='🕔'),
-                            discord.SelectOption(label="UTC +6",emoji='🕕'),
-                            discord.SelectOption(label="UTC +7",emoji='🕖'),
-                            discord.SelectOption(label="UTC +8",emoji='🕗'),
-                            discord.SelectOption(label="UTC +9",emoji='🕘'),
-                            discord.SelectOption(label="UTC +10",emoji='🕙'),
-                            discord.SelectOption(label="UTC +11",emoji='🕚'),
-                            discord.SelectOption(label="UTC +12",emoji='🕛')
+                            discord.SelectOption(label='UTC -12',emoji='🕛'),
+                            discord.SelectOption(label='UTC -11',emoji='🕚'),
+                            discord.SelectOption(label='UTC -10',emoji='🕙'),
+                            discord.SelectOption(label='UTC -9',emoji='🕘'),
+                            discord.SelectOption(label='UTC -8',emoji='🕗'),
+                            discord.SelectOption(label='UTC -7',emoji='🕖'),
+                            discord.SelectOption(label='UTC -6',emoji='🕕'),
+                            discord.SelectOption(label='UTC -5',emoji='🕔'),
+                            discord.SelectOption(label='UTC -4',emoji='🕓'),
+                            discord.SelectOption(label='UTC -3',emoji='🕒'),
+                            discord.SelectOption(label='UTC -2',emoji='🕑'),
+                            discord.SelectOption(label='UTC -1',emoji='🕐'),
+                            discord.SelectOption(label='UTC +0',emoji='⏳'),
+                            discord.SelectOption(label='UTC +1',emoji='🕐'),
+                            discord.SelectOption(label='UTC +2',emoji='🕑'),
+                            discord.SelectOption(label='UTC +3',emoji='🕒'),
+                            discord.SelectOption(label='UTC +4',emoji='🕓'),
+                            discord.SelectOption(label='UTC +5',emoji='🕔'),
+                            discord.SelectOption(label='UTC +6',emoji='🕕'),
+                            discord.SelectOption(label='UTC +7',emoji='🕖'),
+                            discord.SelectOption(label='UTC +8',emoji='🕗'),
+                            discord.SelectOption(label='UTC +9',emoji='🕘'),
+                            discord.SelectOption(label='UTC +10',emoji='🕙'),
+                            discord.SelectOption(label='UTC +11',emoji='🕚'),
+                            discord.SelectOption(label='UTC +12',emoji='🕛')
                             ]
-                                    super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
+                                    super().__init__(placeholder='Select a timezone',max_values=1,min_values=1,options=options)
                                 async def callback(self, interaction: discord.Interaction):
                                     reminder = f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \
                                     + f'**After** you\'ve answered, react with {right_arrow} to continue'
-                                    if self.values[0] == "UTC -12":
+                                    if self.values[0] == 'UTC -12':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -275,12 +347,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -12", ephemeral=False)
+                                        await interaction.response.send_message('UTC -12', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -11":
+                                    elif self.values[0] == 'UTC -11':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -291,12 +363,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -11", ephemeral=False)
+                                        await interaction.response.send_message('UTC -11', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -10":
+                                    elif self.values[0] == 'UTC -10':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -307,12 +379,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -10", ephemeral=False)
+                                        await interaction.response.send_message('UTC -10', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -9":
+                                    elif self.values[0] == 'UTC -9':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -323,12 +395,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -9", ephemeral=False)
+                                        await interaction.response.send_message('UTC -9', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -8":
+                                    elif self.values[0] == 'UTC -8':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -339,12 +411,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -8", ephemeral=False)
+                                        await interaction.response.send_message('UTC -8', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -7":
+                                    elif self.values[0] == 'UTC -7':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -355,12 +427,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -7", ephemeral=False)
+                                        await interaction.response.send_message('UTC -7', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -6":
+                                    elif self.values[0] == 'UTC -6':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -371,12 +443,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -6", ephemeral=False)
+                                        await interaction.response.send_message('UTC -6', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -5":
+                                    elif self.values[0] == 'UTC -5':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -387,12 +459,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -5", ephemeral=False)
+                                        await interaction.response.send_message('UTC -5', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -4":
+                                    elif self.values[0] == 'UTC -4':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -403,12 +475,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -4", ephemeral=False)
+                                        await interaction.response.send_message('UTC -4', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -3":
+                                    elif self.values[0] == 'UTC -3':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -419,12 +491,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -3", ephemeral=False)
+                                        await interaction.response.send_message('UTC -3', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -2":
+                                    elif self.values[0] == 'UTC -2':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -435,12 +507,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -2", ephemeral=False)
+                                        await interaction.response.send_message('UTC -2', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC -1":
+                                    elif self.values[0] == 'UTC -1':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -451,12 +523,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC -1", ephemeral=False)
+                                        await interaction.response.send_message('UTC -1', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +0":
+                                    elif self.values[0] == 'UTC +0':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -467,13 +539,13 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +0", ephemeral=False)
+                                        await interaction.response.send_message('UTC +0', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         await user_message.reactions[0].remove(member)
-                                    elif self.values[0] == "UTC +1":
+                                    elif self.values[0] == 'UTC +1':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -484,12 +556,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +1", ephemeral=False)
+                                        await interaction.response.send_message('UTC +1', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +2":
+                                    elif self.values[0] == 'UTC +2':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -500,12 +572,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +2", ephemeral=False)
+                                        await interaction.response.send_message('UTC +2', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +3":
+                                    elif self.values[0] == 'UTC +3':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -516,12 +588,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +3", ephemeral=False)
+                                        await interaction.response.send_message('UTC +3', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +4":
+                                    elif self.values[0] == 'UTC +4':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -532,12 +604,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +4", ephemeral=False)
+                                        await interaction.response.send_message('UTC +4', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +5":
+                                    elif self.values[0] == 'UTC +5':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -548,12 +620,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +5", ephemeral=False)
+                                        await interaction.response.send_message('UTC +5', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +6":
+                                    elif self.values[0] == 'UTC +6':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -564,12 +636,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +6", ephemeral=False)
+                                        await interaction.response.send_message('UTC +6', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +7":
+                                    elif self.values[0] == 'UTC +7':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -580,12 +652,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC 7", ephemeral=False)
+                                        await interaction.response.send_message('UTC 7', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +8":
+                                    elif self.values[0] == 'UTC +8':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -596,12 +668,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +8", ephemeral=False)
+                                        await interaction.response.send_message('UTC +8', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +9":
+                                    elif self.values[0] == 'UTC +9':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -612,12 +684,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +9", ephemeral=False)
+                                        await interaction.response.send_message('UTC +9', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +10":
+                                    elif self.values[0] == 'UTC +10':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -628,12 +700,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +10", ephemeral=False)
+                                        await interaction.response.send_message('UTC +10', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +11":
+                                    elif self.values[0] == 'UTC +11':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -644,12 +716,12 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +11", ephemeral=False)
+                                        await interaction.response.send_message('UTC +11', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
-                                    elif self.values[0] == "UTC +12":
+                                    elif self.values[0] == 'UTC +12':
                                         num = int(dic.get('num'))
                                         num += 1
                                         num = str(num)
@@ -660,7 +732,7 @@ class interview(commands.Cog):
                                         message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
-                                        await interaction.response.send_message("UTC +12", ephemeral=False)
+                                        await interaction.response.send_message('UTC +12', ephemeral=False)
                                         await chan.send(embed=embed)
                                         await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
@@ -693,7 +765,7 @@ class interview(commands.Cog):
             suffet_role = ctx.guild.get_role(suffet_role_id)
             elder_role = ctx.guild.get_role(elder_role_id)
             pentarch_role = ctx.guild.get_role(pentarch_role_id)
-            interviewer_role = ctx.guild.get_role(management_role_id)
+            interviewer_role = ctx.guild.get_role(trainee_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
             try:
                 with open(f'./data/tickets/{chan_id}.json') as data:
@@ -750,7 +822,7 @@ class interview(commands.Cog):
             suffet_role = ctx.guild.get_role(suffet_role_id)
             elder_role = ctx.guild.get_role(elder_role_id)
             pentarch_role = ctx.guild.get_role(pentarch_role_id)
-            interviewer_role = ctx.guild.get_role(management_role_id)
+            interviewer_role = ctx.guild.get_role(trainee_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
             try:
                 with open(f'./data/tickets/{chan_id}.json') as data:
@@ -799,35 +871,35 @@ class interview(commands.Cog):
                     class Select(discord.ui.Select):
                         def __init__(self):
                             options=[
-                    discord.SelectOption(label="UTC -12",emoji='🕛'),
-                    discord.SelectOption(label="UTC -11",emoji='🕚'),
-                    discord.SelectOption(label="UTC -10",emoji='🕙'),
-                    discord.SelectOption(label="UTC -9",emoji='🕘'),
-                    discord.SelectOption(label="UTC -8",emoji='🕗'),
-                    discord.SelectOption(label="UTC -7",emoji='🕖'),
-                    discord.SelectOption(label="UTC -6",emoji='🕕'),
-                    discord.SelectOption(label="UTC -5",emoji='🕔'),
-                    discord.SelectOption(label="UTC -4",emoji='🕓'),
-                    discord.SelectOption(label="UTC -3",emoji='🕒'),
-                    discord.SelectOption(label="UTC -2",emoji='🕑'),
-                    discord.SelectOption(label="UTC -1",emoji='🕐'),
-                    discord.SelectOption(label="UTC +0",emoji='⏳'),
-                    discord.SelectOption(label="UTC +1",emoji='🕐'),
-                    discord.SelectOption(label="UTC +2",emoji='🕑'),
-                    discord.SelectOption(label="UTC +3",emoji='🕒'),
-                    discord.SelectOption(label="UTC +4",emoji='🕓'),
-                    discord.SelectOption(label="UTC +5",emoji='🕔'),
-                    discord.SelectOption(label="UTC +6",emoji='🕕'),
-                    discord.SelectOption(label="UTC +7",emoji='🕖'),
-                    discord.SelectOption(label="UTC +8",emoji='🕗'),
-                    discord.SelectOption(label="UTC +9",emoji='🕘'),
-                    discord.SelectOption(label="UTC +10",emoji='🕙'),
-                    discord.SelectOption(label="UTC +11",emoji='🕚'),
-                    discord.SelectOption(label="UTC +12",emoji='🕛')
+                    discord.SelectOption(label='UTC -12',emoji='🕛'),
+                    discord.SelectOption(label='UTC -11',emoji='🕚'),
+                    discord.SelectOption(label='UTC -10',emoji='🕙'),
+                    discord.SelectOption(label='UTC -9',emoji='🕘'),
+                    discord.SelectOption(label='UTC -8',emoji='🕗'),
+                    discord.SelectOption(label='UTC -7',emoji='🕖'),
+                    discord.SelectOption(label='UTC -6',emoji='🕕'),
+                    discord.SelectOption(label='UTC -5',emoji='🕔'),
+                    discord.SelectOption(label='UTC -4',emoji='🕓'),
+                    discord.SelectOption(label='UTC -3',emoji='🕒'),
+                    discord.SelectOption(label='UTC -2',emoji='🕑'),
+                    discord.SelectOption(label='UTC -1',emoji='🕐'),
+                    discord.SelectOption(label='UTC +0',emoji='⏳'),
+                    discord.SelectOption(label='UTC +1',emoji='🕐'),
+                    discord.SelectOption(label='UTC +2',emoji='🕑'),
+                    discord.SelectOption(label='UTC +3',emoji='🕒'),
+                    discord.SelectOption(label='UTC +4',emoji='🕓'),
+                    discord.SelectOption(label='UTC +5',emoji='🕔'),
+                    discord.SelectOption(label='UTC +6',emoji='🕕'),
+                    discord.SelectOption(label='UTC +7',emoji='🕖'),
+                    discord.SelectOption(label='UTC +8',emoji='🕗'),
+                    discord.SelectOption(label='UTC +9',emoji='🕘'),
+                    discord.SelectOption(label='UTC +10',emoji='🕙'),
+                    discord.SelectOption(label='UTC +11',emoji='🕚'),
+                    discord.SelectOption(label='UTC +12',emoji='🕛')
                     ]
-                            super().__init__(placeholder="Select a timezone",max_values=1,min_values=1,options=options)
+                            super().__init__(placeholder='Select a timezone',max_values=1,min_values=1,options=options)
                         async def callback(self, interaction: discord.Interaction):
-                            if self.values[0] == "UTC -12":
+                            if self.values[0] == 'UTC -12':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -838,11 +910,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -12", ephemeral=False)
+                                    await interaction.response.send_message('UTC -12', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -11":
+                            elif self.values[0] == 'UTC -11':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -853,11 +925,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -11", ephemeral=False)
+                                    await interaction.response.send_message('UTC -11', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -10":
+                            elif self.values[0] == 'UTC -10':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -868,11 +940,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -10", ephemeral=False)
+                                    await interaction.response.send_message('UTC -10', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -9":
+                            elif self.values[0] == 'UTC -9':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -883,11 +955,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -9", ephemeral=False)
+                                    await interaction.response.send_message('UTC -9', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -8":
+                            elif self.values[0] == 'UTC -8':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -898,11 +970,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -8", ephemeral=False)
+                                    await interaction.response.send_message('UTC -8', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -7":
+                            elif self.values[0] == 'UTC -7':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -913,11 +985,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -7", ephemeral=False)
+                                    await interaction.response.send_message('UTC -7', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -6":
+                            elif self.values[0] == 'UTC -6':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -928,11 +1000,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -6", ephemeral=False)
+                                    await interaction.response.send_message('UTC -6', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -5":
+                            elif self.values[0] == 'UTC -5':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -942,11 +1014,11 @@ class interview(commands.Cog):
                                 message = OversightData.interview_message(num, member)
                                 embed = discord.Embed(title = f'Question number {num}',
                                                 description = f'{message}', color=colors.dark_gold)
-                                await interaction.response.send_message("UTC -5", ephemeral=False)
+                                await interaction.response.send_message('UTC -5', ephemeral=False)
                                 await ctx.send(embed=embed)
                                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                     json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -4":
+                            elif self.values[0] == 'UTC -4':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -957,11 +1029,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -4", ephemeral=False)
+                                    await interaction.response.send_message('UTC -4', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -3":
+                            elif self.values[0] == 'UTC -3':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -972,11 +1044,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -3", ephemeral=False)
+                                    await interaction.response.send_message('UTC -3', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -2":
+                            elif self.values[0] == 'UTC -2':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -987,11 +1059,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -2", ephemeral=False)
+                                    await interaction.response.send_message('UTC -2', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC -1":
+                            elif self.values[0] == 'UTC -1':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1002,11 +1074,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC -1", ephemeral=False)
+                                    await interaction.response.send_message('UTC -1', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +0":
+                            elif self.values[0] == 'UTC +0':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1017,11 +1089,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +0", ephemeral=False)
+                                    await interaction.response.send_message('UTC +0', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +1":
+                            elif self.values[0] == 'UTC +1':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1032,11 +1104,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +1", ephemeral=False)
+                                    await interaction.response.send_message('UTC +1', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +2":
+                            elif self.values[0] == 'UTC +2':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1047,11 +1119,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +2", ephemeral=False)
+                                    await interaction.response.send_message('UTC +2', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +3":
+                            elif self.values[0] == 'UTC +3':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1062,11 +1134,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +3", ephemeral=False)
+                                    await interaction.response.send_message('UTC +3', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +4":
+                            elif self.values[0] == 'UTC +4':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1077,11 +1149,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +4", ephemeral=False)
+                                    await interaction.response.send_message('UTC +4', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +5":
+                            elif self.values[0] == 'UTC +5':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1092,11 +1164,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +5", ephemeral=False)
+                                    await interaction.response.send_message('UTC +5', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +6":
+                            elif self.values[0] == 'UTC +6':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1107,11 +1179,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +6", ephemeral=False)
+                                    await interaction.response.send_message('UTC +6', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +7":
+                            elif self.values[0] == 'UTC +7':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1122,11 +1194,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC 7", ephemeral=False)
+                                    await interaction.response.send_message('UTC 7', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +8":
+                            elif self.values[0] == 'UTC +8':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1137,11 +1209,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +8", ephemeral=False)
+                                    await interaction.response.send_message('UTC +8', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +9":
+                            elif self.values[0] == 'UTC +9':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1152,11 +1224,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +9", ephemeral=False)
+                                    await interaction.response.send_message('UTC +9', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +10":
+                            elif self.values[0] == 'UTC +10':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1167,11 +1239,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +10", ephemeral=False)
+                                    await interaction.response.send_message('UTC +10', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +11":
+                            elif self.values[0] == 'UTC +11':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1182,11 +1254,11 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +11", ephemeral=False)
+                                    await interaction.response.send_message('UTC +11', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                            elif self.values[0] == "UTC +12":
+                            elif self.values[0] == 'UTC +12':
                                 num = int(dic.get('num'))
                                 num += 1
                                 num = str(num)
@@ -1197,7 +1269,7 @@ class interview(commands.Cog):
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
-                                    await interaction.response.send_message("UTC +12", ephemeral=False)
+                                    await interaction.response.send_message('UTC +12', ephemeral=False)
                                     await ctx.send(embed=embed)
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
@@ -1210,7 +1282,7 @@ class interview(commands.Cog):
                     embed = discord.Embed(title = f'Question number {num}',
                                         description = f'{message}', color=colors.dark_gold)
                     await ctx.send(embed=embed,view=SelectView())
-                elif skip != False and int(num) <= 14:
+                elif skip != True and int(num) <= 14:
                     message = OversightData.interview_message(num, user)
                     embed = discord.Embed(title = f'Question number {num}',
                                     description = f'{message}', color=colors.dark_gold)

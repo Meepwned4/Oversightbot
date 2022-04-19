@@ -36,7 +36,11 @@ logging.ERROR - Only errors and worse
 '''Switches on logging of the requests module.'''
 HTTPConnection.debuglevel = 1
 
-logging.basicConfig()
+#logging.basicConfig()
+logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%b-%d-%y %H:%M:%S')
+
 logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
@@ -50,10 +54,6 @@ c_format = logging.Formatter(
         datefmt='%b-%d-%y %H:%M:%S')
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
-
-logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    datefmt='%b-%d-%y %H:%M:%S')
 
 pickle_off = open('./data/api_key.pickle', 'rb')
 apikey = pickle.load(pickle_off)
@@ -387,7 +387,7 @@ async def daily():
             dic.get('vacmode') == '0':
             planes = int(dic.get('aircraft'))
             percent = str(int(planes) / int(plane_mmr) * 100)
-            percent = str(round(float(percent), 2))
+            percent = str(round(float(percent)))
             percent += '%'
             b = dic.get('nationid')
             nmp_nationids.append(b)
@@ -408,7 +408,7 @@ async def daily():
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
                             c = dic.get('ChannelID')
-                            nerds_nmp_ping.append(f'<#{c}> {planes}\n')
+                            nerds_nmp_ping.append(f'<#{c}> {planes}({percent})\n')
                             ping_dic.update({'aircraft':num})
                             continue
                         if ping_dic.get('aircraft') >= 3:
@@ -439,7 +439,7 @@ async def daily():
             if int(dic.get('spies')) != 60 and dic.get('vacmode') == '0':
                 spies = int(dic.get('spies'))
                 percent = str(int(spies) / 60 * 100)
-                percent = str(round(float(percent), 2))
+                percent = str(round(float(percent)))
                 percent += '%'
                 spies = str(f'{spies}/60')
                 b = dic.get('nationid')
@@ -450,7 +450,7 @@ async def daily():
             if int(dic.get('spies')) != 50 and dic.get('vacmode') == '0':
                 spies = int(dic.get('spies'))
                 percent = str(int(spies) / 50 * 100)
-                percent = str(round(float(percent), 2))
+                percent = str(round(float(percent)))
                 percent += '%'
                 spies = str(f'{spies}/50')
                 b = dic.get('nationid')
@@ -472,7 +472,7 @@ async def daily():
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
                             c = dic.get('ChannelID')
-                            nerds_nsp_ping.append(f'<#{c}> {spies}\n')
+                            nerds_nsp_ping.append(f'<#{c}> {spies}({percent})\n')
                             ping_dic.update({'spies':num})
                             continue
                         if ping_dic.get('spies') >= 3:
@@ -504,7 +504,7 @@ async def daily():
             dic.get('vacmode') == '0':
                 tanks = int(dic.get('tanks'))
                 percent = str(int(tanks) / int(tank_mmr) * 100)
-                percent = str(round(float(percent), 2))
+                percent = str(round(float(percent)))
                 percent += '%'
                 b = dic.get('nationid')
                 nmt_nationids.append(b)
@@ -530,7 +530,7 @@ async def daily():
                                 tanks = str(tanks)
                                 duplicate_ping_check.append(c)
                                 c = dic.get('ChannelID')
-                                nerds_nmt_ping.append(f'<#{c}> {tanks}\n')
+                                nerds_nmt_ping.append(f'<#{c}> {tanks}({percent})\n')
                                 ping_dic.update({'tanks':num})
                             continue
                         if ping_dic.get('tanks') >= 3:
@@ -564,7 +564,7 @@ async def daily():
             dic.get('vacmode') == '0':
             soldiers = int(dic.get('soldiers'))
             percent = str(int(soldiers) / int(soldier_mmr) * 100)
-            percent = str(round(float(percent), 2))
+            percent = str(round(float(percent)))
             percent += '%'
             b = dic.get('nationid')
             nms_nationids.append(b)
@@ -587,7 +587,7 @@ async def daily():
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
                             c = dic.get('ChannelID')
-                            nerds_nms_ping.append(f'<#{c}> {soldiers}\n')
+                            nerds_nms_ping.append(f'<#{c}> {soldiers}({percent})\n')
                             ping_dic.update({'soldiers':num})
                             continue
                         if ping_dic.get('soldiers') >= 3:
@@ -619,7 +619,7 @@ async def daily():
             dic.get('vacmode') == '0':
             ships = int(dic.get('ships'))
             percent = str(int(ships) / int(ship_mmr) * 100)
-            percent = str(round(float(percent), 2))
+            percent = str(round(float(percent)))
             percent += '%'
             b = dic.get('nationid')
             nmsh_nationids.append(b)
@@ -642,7 +642,7 @@ async def daily():
                                 ships = str(ships)
                                 duplicate_ping_check.append(c)
                                 c = dic.get('ChannelID')
-                                nerds_nmsh_ping.append(f'<#{c}> {ships}\n')
+                                nerds_nmsh_ping.append(f'<#{c}> {ships}({percent})\n')
                                 ping_dic.update({'ships':num})
                             continue
                         if ping_dic.get('ships') >= 3:
