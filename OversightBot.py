@@ -75,14 +75,14 @@ nerds_id = 712071416505172090
 raider_id = 853790553375768586
 
 right_arrow = '➡' # right arrow emoji
-robot = '🤖' # robot emoji
+#robot = '🤖' # robot emoji
 person = '🧑' # person emoji
 interview = '📝' # interview emoji
 
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
-client = commands.Bot(command_prefix='+', intents=intents)
+client = commands.Bot(command_prefix='.', intents=intents)
 
 @client.event
 async def on_ready():

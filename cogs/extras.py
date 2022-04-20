@@ -134,9 +134,7 @@ class Questionnaire(discord.ui.Modal, title='Questionnaire Response'):
         name = name[0].get('value')
         answer = data[1].get('components')
         answer = answer[0].get('value')
-        print(name)
-        print(answer)
-        await interaction.response.send_message(f'Thanks for your response, {self.name}!', ephemeral=True)
+        await interaction.response.send_message(f'Thanks for your response, {self.name}, {self.answer}!', ephemeral=True)
 
 
 class Button(discord.ui.View):
