@@ -391,7 +391,7 @@ class interview(commands.Cog):
             suffet_role = channel.guild.get_role(suffet_role_id)
             elder_role = channel.guild.get_role(elder_role_id)
             pentarch_role = channel.guild.get_role(pentarch_role_id)
-            interviewer_role = channel.guild.get_role(management_role_id)
+            interviewer_role = channel.guild.get_role(interviewer_role_id)
             adirim_role = channel.guild.get_role(adirim_role_id)
             bot_role = channel.guild.get_role(bot_role_id)
             if chan_name[0] == 'ticket':
