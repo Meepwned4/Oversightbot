@@ -87,8 +87,7 @@ client = commands.Bot(command_prefix='.', intents=intents)
 @client.event
 async def on_ready():
     print(f'{client.user.name} has connected to Discord!')
-    await client.change_presence(activity=discord.Game(
-        'Hauling mad cash'))
+    await client.change_presence(activity=discord.Game('Hauling mad cash'))
 
 async def load_extensions():
     for filename in os.listdir("./cogs"):
