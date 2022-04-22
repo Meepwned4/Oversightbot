@@ -141,15 +141,9 @@ class interview(commands.Cog):
                     if ticket_channel.name == f'ticket-{nation_id}':
                         dup = True
                 if dup == True:
-                    try:
-                        await interaction.followup.send_message('Can\'t freate more than one ticket',ephemeral=True)
-                    except:
-                        await interaction.response.send_message('Can\'t freate more than one ticket',ephemeral=True)
+                    await interaction.response.send_message('Can\'t create more than one ticket',ephemeral=True)
                 else:
-                    try:
-                        await interaction.followup.send_message('Ticket created',ephemeral=True)
-                    except:
-                        await interaction.response.send_message('Ticket created',ephemeral=True)
+                    await interaction.response.send_message('Ticket created',ephemeral=True)
                     await ticket_category.create_text_channel(f'ticket-{nation_id}', overwrites=overwrites)
                     chan = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
                     await chan.edit(sync_permissions=True)
@@ -173,192 +167,159 @@ class interview(commands.Cog):
                             super().__init__()
                         @discord.ui.button(label='Start',style=discord.ButtonStyle.blurple)
                         async def start_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+
+                        @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
+                        async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                            disc_channel = client.get_channel(disc_channel_id)
+#                            await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+                            message = 'Staff have been notified. Please be patient.'
+                            await channel.send(message)
+                        @discord.ui.button(label='Close',style=discord.ButtonStyle.red)
+                        async def close_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                            ignore_channels = [605910228692893726, 845685557367144448, 568822425253576739]
+                            if channel.id in ignore_channels:
+                                await interaction.response.send_message(':no_entry_sign::facepalm:', ephemeral=True)
+                            if category.name == ticket_category_name and channel.id not in ignore_channels:
+                                client = self.client
+                                channel_name = channel.name.split('-')
+                                channel_name = channel_name[0]
+                                channel_name = channel.name
+                                class close_modal(discord.ui.Modal, title='Questionnaire Response'):
+                                    answer = discord.ui.TextInput(label='Reason', style=discord.TextStyle.short)
+
+                                    async def on_submit(self, interaction: discord.Interaction):
+                                        data = interaction.data
+                                        data = data.get('components')
+                                        reason = data[0].get('components')
+                                        reason = reason[0].get('value')
+                                        try:
+                                            await interaction.followup.send_message(f'Ticket closing!', ephemeral=True)
+                                        except:
+                                            await interaction.response.send_message(f'Ticket closing!', ephemeral=True)
+                                try:
+                                    await interaction.followup.send_modal(close_modal())
+                                except:
+                                    await interaction.response.send_modal(close_modal())
+                                embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
+                                embed.add_field(name = 'Closed by',
+                                            value = f'<@{ctx.author.id}>',
+                                            inline = True)
+                                embed.add_field(name = 'Ticket name',
+                                            value = f'{channel_name}',
+                                            inline = True)
+                                embed.add_field(name = 'Reason',
+                                            value = f'{reason}',
+                                            inline = False)
+                                transcript = await chat_exporter.export(channel)
+
+                                if transcript is None:
+                                    return
+                                try:
+                #                    file = open(f'./data/transcripts/transcript-{channel_id}.html', 'w')
+                #                    file.write(transcript)
+                #                    file.close()
+                #                    transcript_file = open(f'./data/transcripts/transcript-{channel_id}.html', 'r')
+                                    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{channel_id}.html')
+                                    channel = client.get_channel(archive_channel)
+                #                    await channel.send(embed=embed, file=discord.File(transcript_file))
+                                    await channel.send(embed=embed, file=transcript_file)
+                                    try:
+                                        for filename in os.listdir('./data/transcripts'):
+                                            if str(ctx.channel.id) in filename:
+                                                os.remove(f'./data/transcripts/transcript-{channel_id}.html')
+                                    except:
+                                        pass
+                                    try:
+                                        for filename in os.listdir('./data/tickets'):
+                                            if str(ctx.channel.id) in filename:
+                                                os.remove(f'./data/tickets/{channel_id}.json')
+                                    except:
+                                        pass
+                                    await ctx.channel.delete()
+                                except:
+                                    if member == client.is_owner:
+                                        msg = f'❌ Failed to archive <#{channel_id}> \n\'+close\' ran by <@{member.id}>'
+                                        await DMChannel.send(member, msg)
+                                    else:
+                                        msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+                                        user = await client.fetch_user(175719252995604480)
+                                        await DMChannel.send(user, msg)
+                    embed = discord.Embed(title = 'Pre-Application',
+                                        description = f'{message}', color=colors.dark_gold)
+                    await chan.send(ping, embed=embed, view=pre_application_buttons())
+        if embed_title == 'Pre-Application' and label == 'Start':
+            class interview_buttons_1(discord.ui.View):
+                def __init__(self, timeout=None):
+                    super().__init__()
+                @discord.ui.button(label='Yes',style=discord.ButtonStyle.blurple)
+                async def yes_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                    class interview_buttons_2(discord.ui.View):
+                        def __init__(self, timeout=None):
+                            super().__init__()
+                        @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
+                        async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
                             try:
                                 await interaction.followup.defer()
                             except:
                                 await interaction.response.defer()
                         @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                         async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                            try:
-                                await interaction.followup.defer()
-                            except:
-                                await interaction.response.defer()
-                        @discord.ui.button(label='Close',style=discord.ButtonStyle.red)
-                        async def close_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                            try:
-                                await interaction.followup.defer()
-                            except:
-                                await interaction.response.defer()
-                    embed = discord.Embed(title = 'Pre-Application',
-                                        description = f'{message}', color=colors.dark_gold)
-                    await chan.send(ping, embed=embed, view=pre_application_buttons())
-        if label == 'Help' and author == client.user:
-            disc_channel = client.get_channel(disc_channel_id)
-#            await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
-            message = 'Staff have been notified. Please be patient.'
-            await channel.send(message)
-
-        if label == 'Close' and author == client.user:
-            ignore_channels = [605910228692893726, 845685557367144448, 568822425253576739]
-            if channel.id in ignore_channels:
-                await interaction.response.send_message(':no_entry_sign::facepalm:', ephemeral=True)
-            if category.name == ticket_category_name and channel.id not in ignore_channels:
-                client = self.client
-                channel_name = channel.name.split('-')
-                channel_name = channel_name[0]
-                channel_name = channel.name
-                class close_modal(discord.ui.Modal, title='Questionnaire Response'):
-                    answer = discord.ui.TextInput(label='Reason', style=discord.TextStyle.short)
-
-                    async def on_submit(self, interaction: discord.Interaction):
-                        data = interaction.data
-                        data = data.get('components')
-                        reason = data[0].get('components')
-                        reason = reason[0].get('value')
-                        try:
-                            await interaction.followup.send_message(f'Ticket closing!', ephemeral=True)
-                        except:
-                            await interaction.response.send_message(f'Ticket closing!', ephemeral=True)
-                try:
-                    await interaction.followup.send_modal(close_modal())
-                except:
-                    await interaction.response.send_modal(close_modal())
-                embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
-                embed.add_field(name = 'Closed by',
-                            value = f'<@{ctx.author.id}>',
-                            inline = True)
-                embed.add_field(name = 'Ticket name',
-                            value = f'{channel_name}',
-                            inline = True)
-                embed.add_field(name = 'Reason',
-                            value = f'{reason}',
-                            inline = False)
-                transcript = await chat_exporter.export(channel)
-
-                if transcript is None:
-                    return
-                try:
-#                    file = open(f'./data/transcripts/transcript-{channel_id}.html', 'w')
-#                    file.write(transcript)
-#                    file.close()
-#                    transcript_file = open(f'./data/transcripts/transcript-{channel_id}.html', 'r')
-                    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{channel_id}.html')
-                    channel = client.get_channel(archive_channel)
-#                    await channel.send(embed=embed, file=discord.File(transcript_file))
-                    await channel.send(embed=embed, file=transcript_file)
-                    try:
-                        for filename in os.listdir('./data/transcripts'):
-                            if str(ctx.channel.id) in filename:
-                                os.remove(f'./data/transcripts/transcript-{channel_id}.html')
-                    except:
-                        pass
-                    try:
-                        for filename in os.listdir('./data/tickets'):
-                            if str(ctx.channel.id) in filename:
-                                os.remove(f'./data/tickets/{channel_id}.json')
-                    except:
-                        pass
-                    await ctx.channel.delete()
-                except:
-                    if member == client.is_owner:
-                        msg = f'❌ Failed to archive <#{channel_id}> \n\'+close\' ran by <@{member.id}>'
-                        await DMChannel.send(member, msg)
-                    else:
-                        msg = f'❌ Failed to archive <#{ctx.channel.id}>'
-                        user = await client.fetch_user(175719252995604480)
-                        await DMChannel.send(user, msg)
-        if embed_title == 'Pre-Application' and label == 'Start' and author == client.user:
-            class interview_buttons_1(discord.ui.View):
-                def __init__(self, timeout=None):
-                    super().__init__()
-                @discord.ui.button(label='Yes',style=discord.ButtonStyle.blurple)
-                async def yes_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                            disc_channel = client.get_channel(disc_channel_id)
+        #                    await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+                            message = 'Staff have been notified. Please be patient.'
+                            await channel.send(message)
+                    await interaction.response.send_message('Nation link is correct')
+                    discord_id = member.id
+                    user = requests.get(
+                    f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                    user = requests.get(f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                    user = user.json()
+                    user = user[0]
+                    nation_id = user.get('_id')
+                    nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
+                    await channel.edit(topic=nation_link)
+                    message = OversightData.interview_message('2', member)
+                    embed = discord.Embed(title = 'Question number 2',
+                                          description = f'{message}', color=colors.dark_gold)
+                    await channel.send(embed=embed, view=interview_buttons_2())
                 @discord.ui.button(label='No',style=discord.ButtonStyle.blurple)
                 async def no_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
-                @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
-                async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
-            message = OversightData.interview_message('1', member)
-            embed = discord.Embed(title = 'Question number 1',
-                                  description = f'{message}', color=colors.dark_gold)
-            await channel.send(embed=embed, view=interview_buttons_1())
-        if embed_title == 'Question number 1' and label == 'Yes':
-            class interview_buttons_2(discord.ui.View):
-                def __init__(self, timeout=None):
-                    super().__init__()
-                @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
-                async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
-                @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
-                async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
-            try:
-                await interaction.followup.send('Nation link is correct')
-            except:
-                await interaction.response.send_message('Nation link is correct')
-            discord_id = member.id
-            user = requests.get(
-            f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
-            user = requests.get(f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
-            user = user.json()
-            user = user[0]
-            nation_id = user.get('_id')
-            nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
-            await channel.edit(topic=nation_link)
-            message = OversightData.interview_message('2', member)
-            embed = discord.Embed(title = 'Question number 2',
-                                  description = f'{message}', color=colors.dark_gold)
-            await channel.send(embed=embed, view=interview_buttons_2())
+                    class link_question(discord.ui.Modal, title='What is your nation link?'):
+                        answer = discord.ui.TextInput(label='Politics and War nation link', style=discord.TextStyle.short)
+                        async def on_submit(self, interaction: discord.Interaction):
+                            answer = self.answer
+                            await channel.edit(topic=answer)
+                            try:
+                                await interaction.followup.send_message(f'Nation link is {self.answer}')
+                            except:
+                                await interaction.response.send_message(f'Nation link is {self.answer}')
+#                    try:
+#                        await interaction.followup.send_modal(link_question())
+#                    except:
+                    await interaction.response.send_modal(link_question())
+                    class interview_buttons_2(discord.ui.View):
+                        def __init__(self, timeout=None):
+                            super().__init__()
+                        @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
+                        async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                            message = OversightData.interview_message('2', member)
+                            embed = discord.Embed(title = 'Question number 2',
+                                                  description = f'{message}', color=colors.dark_gold)
+                            await channel.send(embed=embed, view=interview_buttons_2())
+                        @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
+                        async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                            disc_channel = client.get_channel(disc_channel_id)
+#                                        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+                            message = 'Staff have been notified. Please be patient.'
+                            await channel.send(message)
+                    message = OversightData.interview_message('1', member)
+                    embed = discord.Embed(title = 'Question number 1',
+                                          description = f'{message}', color=colors.dark_gold)
+                    await channel.send(embed=embed, view=interview_buttons_1())
         if embed_title == 'Question number 1' and label == 'No':
-            class link_question(discord.ui.Modal, title='What is your nation link?'):
-                answer = discord.ui.TextInput(label='Politics and War nation link', style=discord.TextStyle.short)
-                async def on_submit(self, interaction: discord.Interaction):
-                    answer = self.answer
-                    await channel.edit(topic=answer)
-                    try:
-                        await interaction.followup.send_message(f'Nation link is {self.answer}')
-                    except:
-                        await interaction.response.send_message(f'Nation link is {self.answer}')
-#            try:
-#                await interaction.followup.send_modal(link_question())
-#            except:
-            await interaction.response.send_modal(link_question())
-            class interview_buttons_2(discord.ui.View):
-                def __init__(self, timeout=None):
-                    super().__init__()
-                @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
-                async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
-                @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
-                async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
-            message = OversightData.interview_message('2', member)
-            embed = discord.Embed(title = 'Question number 2',
-                                  description = f'{message}', color=colors.dark_gold)
-            await channel.send(embed=embed, view=interview_buttons_2())
+
+
+
 #        if embed_title == 'Question number 1' and label == 'Next':
 
 

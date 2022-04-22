@@ -143,7 +143,6 @@ def interview_message(num, user):
     if num == '1':
         try:
             discord_id = user.id
-#            discord_id = 175719252995604480
             user = requests.get(
             f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
@@ -153,9 +152,13 @@ def interview_message(num, user):
             nation_name = user.get('name')
             nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
 
-            message = (f'My sources tell me that the nation {nation_name} led by {leader} at the link {nation_link} is your nation.\n' \
-                           + 'Is this correct? If not, what is the link to your nation?\n\n' \
-                           + reminder)
+            message = (f'''link: {nation_link}
+            nation id : {nation_id}
+            nation: {nation_name}
+            leader: {leader}
+
+            Is this your nation?
+            {reminder}''')
         except:
             message = ('Could I get a link to your Nation page?\n' \
                        + 'If you can\'t find it, go to your nation page' \
@@ -257,7 +260,7 @@ We hope to see you on Discord as much as your time commitments allow, but you mu
 If you have any questions, comments, or concerns, please let us know. Otherwise, state you agree to these terms.\n\n'''
 + reminder)]
     if num == '13':
-        message = ('For coordination purposes, what\'s your Timezone?' + reminder)
+        message = ('For coordination purposes, what\'s your Timezone?')
     if num == '14':
         message = ('That was the last question, a human should be along soon to review your interview.')
 
