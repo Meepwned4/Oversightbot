@@ -167,7 +167,10 @@ class interview(commands.Cog):
                             super().__init__()
                         @discord.ui.button(label='Start',style=discord.ButtonStyle.blurple)
                         async def start_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-
+                            try:
+                                await interaction.followup.defer()
+                            except:
+                                await interaction.response.defer()
                         @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                         async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
                             disc_channel = client.get_channel(disc_channel_id)
@@ -264,10 +267,10 @@ class interview(commands.Cog):
                                 await interaction.response.defer()
                         @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                         async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                            disc_channel = client.get_channel(disc_channel_id)
-        #                    await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
-                            message = 'Staff have been notified. Please be patient.'
-                            await channel.send(message)
+                            try:
+                                await interaction.followup.defer()
+                            except:
+                                await interaction.response.defer()
                     await interaction.response.send_message('Nation link is correct')
                     discord_id = member.id
                     user = requests.get(
@@ -316,7 +319,7 @@ class interview(commands.Cog):
                     embed = discord.Embed(title = 'Question number 1',
                                           description = f'{message}', color=colors.dark_gold)
                     await channel.send(embed=embed, view=interview_buttons_1())
-        if embed_title == 'Question number 1' and label == 'No':
+#        if embed_title == 'Question number 1' and label == 'No':
 
 
 
