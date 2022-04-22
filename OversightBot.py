@@ -98,64 +98,39 @@ async def load_extensions():
 @client.command()
 @commands.is_owner()
 async def pip_install(ctx, module):
-    user = ctx.author
-    await ctx.send(f'Installing {module} module.')
-    if module == 'requirements.txt':
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', module])
-    if module == 'discord':
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', './discord.py.zip'])
-        await DMChannel.send(user, 'git clone https://github.com/Rapptz/discord.py\ncd discord.py\npython3 -m pip install -U .[voice]')
-    else:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', module])
-
-    # process output with an API in the subprocess module:
-    reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
-    installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
-    message = ''
-    for package in installed_packages:
-        message +=  f'{package}, '
-        if len(message) > 1800:
-            await DMChannel.send(user, message)
-            message = ''
-    await DMChannel.send(user, message)
+    if ctx.channel.name == 'logs':
+        await ctx.send(f'Installing {module} module.')
+        if module == 'requirements.txt':
+            output = subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', module], capture_output=True, text=True)
+            await ctx.send(output)
+        if module == 'discord':
+            output = subprocess.run([sys.executable, '-m', 'pip', 'install', './discord.py.zip'], capture_output=True, text=True)
+            await ctx.send(output)
+#            await DMChannel.send(user, 'git clone https://github.com/Rapptz/discord.py\ncd discord.py\npython3 -m pip install -U .[voice]')
+        else:
+            output = subprocess.run([sys.executable, '-m', 'pip', 'install', module], capture_output=True, text=True)
+            await ctx.send(output)
 
 @client.command()
 @commands.is_owner()
 async def pip_upgrade(ctx, module):
-    user = ctx.author
-    await ctx.send(f'Upgrading {module} module.')
-    if module == 'discord':
-#        subprocess.check_call([sys.executable, '-m', 'pip', 'install', './discord.py.zip'])
-        await DMChannel.send(user, 'git clone https://github.com/Rapptz/discord.py\ncd discord.py\npython3 -m pip install -U .[voice]')
-    else:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', module], '--upgrade')
-
-    # process output with an API in the subprocess module:
-    reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
-    installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
-    message = ''
-    for package in installed_packages:
-        message +=  f'{package}, '
-        if len(message) > 1800:
-            await DMChannel.send(user, message)
-            message = ''
-    await DMChannel.send(user, message)
+    if ctx.channel.name == 'logs':
+        await ctx.send(f'Upgrading {module} module.')
+        if module == 'discord':
+    #        subprocess.run([sys.executable, '-m', 'pip', 'install', './discord.py.zip'], capture_output=True, text=True)
+            await ctx.send('Manually install discord, ya doofus!')
+    #        await DMChannel.send(user, 'git clone https://github.com/Rapptz/discord.py\ncd discord.py\npython3 -m pip install -U .[voice]')
+        else:
+            output = subprocess.run([sys.executable, '-m', 'pip', 'install', module, '--upgrade'], capture_output=True, text=True)
+            await ctx.send(output)
 
 @client.command()
 @commands.is_owner()
 async def pip_uninstall(ctx, module):
-    user = ctx.author
-    await ctx.send(f'Uninstalling {module} module.')
-    subprocess.check_call([sys.executable, '-m', 'pip', 'uninstal', module])
-    reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
-    installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
-    message = ''
-    for package in installed_packages:
-        message +=  f'{package}, '
-        if len(message) > 1800:
-            await DMChannel.send(user, message)
-            message = ''
-    await DMChannel.send(user, message)
+    if ctx.channel.name == 'logs':
+        await ctx.send(f'Uninstalling {module} module.')
+        output = subprocess.run([sys.executable, '-m', 'pip', 'uninstal', module], capture_output=True, text=True)
+        await ctx.send(output)
 
 @client.command()
 @commands.is_owner()
