@@ -41,6 +41,8 @@ logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%b-%d-%y %H:%M:%S')
 
+logging.getLogger('apscheduler').setLevel(logging.DEBUG)
+
 logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
@@ -102,14 +104,14 @@ async def pip_install(ctx, module):
         await ctx.send(f'Installing {module} module.')
         if module == 'requirements.txt':
             output = subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', module], capture_output=True, text=True)
-            await ctx.send(output)
+            await ctx.send(output.stdout)
         if module == 'discord':
             output = subprocess.run([sys.executable, '-m', 'pip', 'install', './discord.py.zip'], capture_output=True, text=True)
-            await ctx.send(output)
+            await ctx.send(output.stdout)
 #            await DMChannel.send(user, 'git clone https://github.com/Rapptz/discord.py\ncd discord.py\npython3 -m pip install -U .[voice]')
         else:
             output = subprocess.run([sys.executable, '-m', 'pip', 'install', module], capture_output=True, text=True)
-            await ctx.send(output)
+            await ctx.send(output.stdout)
 
 @client.command()
 @commands.is_owner()
@@ -122,7 +124,7 @@ async def pip_upgrade(ctx, module):
     #        await DMChannel.send(user, 'git clone https://github.com/Rapptz/discord.py\ncd discord.py\npython3 -m pip install -U .[voice]')
         else:
             output = subprocess.run([sys.executable, '-m', 'pip', 'install', module, '--upgrade'], capture_output=True, text=True)
-            await ctx.send(output)
+            await ctx.send(output.stdout)
 
 @client.command()
 @commands.is_owner()
@@ -130,7 +132,7 @@ async def pip_uninstall(ctx, module):
     if ctx.channel.name == 'logs':
         await ctx.send(f'Uninstalling {module} module.')
         output = subprocess.run([sys.executable, '-m', 'pip', 'uninstal', module], capture_output=True, text=True)
-        await ctx.send(output)
+        await ctx.send(output.stdout)
 
 @client.command()
 @commands.is_owner()
@@ -969,7 +971,7 @@ scheduler = AsyncIOScheduler(
 
 # runs daily coroutine at 15 mins after default update
 scheduler.add_job(daily,
-                  CronTrigger(timezone=utc, hour='0', minute='15'),
+                  CronTrigger(hour='18', minute='15'),
                   misfire_grace_time=3600)
 
 # starting the scheduler
@@ -1016,7 +1018,7 @@ async def on_error(ctx, error):
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
         channel = client.get_channel(959657551627161650)
         await channel.send('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
-        await channel.send(traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr))
+        await channel.send(traceback.format_exception(type(error), error, error.__traceback__, file=sys.stderr))
 
 async def main():
     async with client:
