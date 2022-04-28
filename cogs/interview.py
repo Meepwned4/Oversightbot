@@ -152,7 +152,7 @@ class interview(commands.Cog):
                 else:
                     await interaction.response.send_message('Ticket created',ephemeral=True)
                     await ticket_category.create_text_channel(f'ticket-{nation_id}', overwrites=overwrites)
-                    chan = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
+                    channel = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
                     await channel.edit(sync_permissions=True)
                     dic = {'channel':channel.id, 'user_id':member.id}
                     with open(f'./data/tickets/{nation_id}.json', 'w') as outfile:
