@@ -7,7 +7,6 @@ import time
 import pickle
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from pytz import utc
 import asyncio
 import nest_asyncio
 nest_asyncio.apply()
