@@ -189,13 +189,13 @@ def interview_message(num, user):
     if num == '8':
         message = ('''Now, please select one of the following, or use your own words to best describe what your activity would look like:
 
-- I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
+1) I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
 
-- I will login at least once or twice a day. I want to be moderately active in the CTO community. I will be active on Discord whenever possible and participate when I'm able.
+2) I will login at least once or twice a day. I want to be moderately active in the CTO community. I will be active on Discord whenever possible and participate when I'm able.
 
-- I would like to be as active as I'd like, while building my Nation and income at peace and I'm just here so I don't get raided.
+3) I would like to be as active as I'd like, while building my Nation and income at peace and I'm just here so I don't get raided.
 
-- I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
+4) I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
 + reminder)
     if num == '9':
         message = ('''If you were given the opportunity to choose a government department to work in, considering the descriptions provided, which would you choose?

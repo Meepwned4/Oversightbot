@@ -63,7 +63,6 @@ class Select(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction):
         if self.values[0] == "UTC -12":
             await interaction.response.send_message("UTC -12", ephemeral=False)
-            await interaction.response.send_message("UTC -12", ephemeral=False)
         elif self.values[0] == "UTC -11":
             await interaction.response.send_message("UTC -11",ephemeral=False)
         elif self.values[0] == "UTC -10":
