@@ -218,17 +218,17 @@ If you aren't interested in any of these, that’s okay, just say so. If you hav
         message = ('''
 With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game?
 
-- Staying at peace, building my nation, trading and growing my income.
+1) Staying at peace, building my nation, trading and growing my income.
 
-- Fighting in wars against other Nations and Alliances.
+2) Fighting in wars against other Nations and Alliances.
 
-- Working in the environment of an organized Alliance government.
+3) Working in the environment of an organized Alliance government.
 
-- Making friends and being part of a community.
+4) Making friends and being part of a community.
 
-- Raiding inactive nations for money and resources. Arrgh!
+5) Raiding inactive nations for money and resources. Arrgh!
 
-- Becoming a politically influential, well-known player.\n\n''' + reminder)
+6) Becoming a politically influential, well-known player.\n\n''' + reminder)
     if num == '11':
         message = 'Which would you consider the least interesting?\n\n' + reminder
     if num == '12':

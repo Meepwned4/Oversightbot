@@ -75,6 +75,8 @@ class interview(commands.Cog):
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
+        reminder = f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \
+                    + f'**After** you\'ve answered, react with {right_arrow} to continue'
         client = self.client
         custom_id = interaction.data.get('custom_id')
         components = interaction.message.components
@@ -85,7 +87,7 @@ class interview(commands.Cog):
                         label = child.label
                         break
         except:
-            label = False
+            label = 'False'
         member = interaction.user
         guild_id = interaction.guild_id
         channel_id = interaction.channel_id
@@ -505,10 +507,10 @@ class interview(commands.Cog):
             class Select(discord.ui.Select):
                 def __init__(self):
                     options=[
-            discord.SelectOption(emoji='1️⃣'),
-            discord.SelectOption(emoji='2️⃣'),
-            discord.SelectOption(emoji='3️⃣'),
-            discord.SelectOption(emoji='4️⃣'),
+            discord.SelectOption(label='Option 1', emoji='1️⃣'),
+            discord.SelectOption(label='Option 2', emoji='2️⃣'),
+            discord.SelectOption(label='Option 3', emoji='3️⃣'),
+            discord.SelectOption(label='Option 4', emoji='4️⃣'),
             discord.SelectOption(label='Other'),
             ]
                     super().__init__(placeholder='Select an option',max_values=1,min_values=1,options=options)
@@ -521,8 +523,14 @@ class interview(commands.Cog):
                         await interaction.response.send_message('Option 3', ephemeral=False)
                     elif self.values[0] == 'Option 4':
                         await interaction.response.send_message('Option 4', ephemeral=False)
-                    elif self.values[0] == 'Option 5':
-                        await interaction.response.send_message('Option 5', ephemeral=False)
+                    elif self.values[0] == 'Other':
+                        class Questionnaire(discord.ui.Modal, title='Questionnaire Response'):
+                            answer = discord.ui.TextInput(label='Answer', style=discord.TextStyle.paragraph)
+
+                            async def on_submit(self, interaction: discord.Interaction):
+                                answer = self.answer
+                                await interaction.response.send_message(f'{answer}', ephemeral=False)
+                        await interaction.response.send_modal(Questionnaire())
 
             class SelectView(discord.ui.View):
                 def __init__(self, *, timeout = None):
@@ -551,7 +559,7 @@ class interview(commands.Cog):
                 async def callback(self, interaction: discord.Interaction):
                     values = ''
                     for value in self.values:
-                        values += f'{value} '
+                        values += f'{value}\n'
                     await interaction.response.send_message(f'{values}', ephemeral=False)
 
             class SelectView(discord.ui.View):
@@ -569,19 +577,19 @@ class interview(commands.Cog):
             class Select(discord.ui.Select):
                 def __init__(self):
                     options=[
-            discord.SelectOption(label='Option 1',emoji='1️⃣'),
-            discord.SelectOption(label='Option 2',emoji='2️⃣'),
-            discord.SelectOption(label='Option 3',emoji='3️⃣'),
-            discord.SelectOption(label='Option 4',emoji='4️⃣'),
-            discord.SelectOption(label='Option 5',emoji='5️⃣'),
-            discord.SelectOption(label='Option 6',emoji='6️⃣'),
-            discord.SelectOption(label='Option 7',emoji='7️⃣')
+            discord.SelectOption(label='Option 1', emoji='1️⃣'),
+            discord.SelectOption(label='Option 2', emoji='2️⃣'),
+            discord.SelectOption(label='Option 3', emoji='3️⃣'),
+            discord.SelectOption(label='Option 4', emoji='4️⃣'),
+            discord.SelectOption(label='Option 5', emoji='5️⃣'),
+            discord.SelectOption(label='Option 6', emoji='6️⃣'),
+            discord.SelectOption(label='Option 7', emoji='7️⃣')
             ]
                     super().__init__(placeholder='Select an option',max_values=7,min_values=1,options=options)
                 async def callback(self, interaction: discord.Interaction):
                     values = ''
                     for value in self.values:
-                        values += f'{value} '
+                        values += f'{value}\n'
                     await interaction.response.send_message(f'{values}', ephemeral=False)
 
             class SelectView(discord.ui.View):
@@ -611,7 +619,7 @@ class interview(commands.Cog):
                 async def callback(self, interaction: discord.Interaction):
                     values = ''
                     for value in self.values:
-                        values += f'{value} '
+                        values += f'{value}\n'
                     await interaction.response.send_message(f'{values}', ephemeral=False)
 
             class SelectView(discord.ui.View):
@@ -635,14 +643,13 @@ class interview(commands.Cog):
                         await interaction.followup.defer()
                     except:
                         await interaction.response.defer()
-                @discord.ui.button(label='Disagree',style=discord.ButtonStyle.gray)
+                @discord.ui.button(label='Disagree',style=discord.ButtonStyle.red)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
                     try:
                         await interaction.followup.defer()
                     except:
                         await interaction.response.defer()
             message = OversightData.interview_message('12', member)
-            message = message.replace(reminder, '')
             if isinstance(message, list) == True:
                 l = 0
                 for item in message:
@@ -652,6 +659,7 @@ class interview(commands.Cog):
                                     description = f'{item}', color=colors.dark_gold)
                         await channel.send(embed=embed)
                     else:
+                        item = item.replace(reminder, '')
                         embed = discord.Embed(title = f'',
                                     description = f'{item}', color=colors.dark_gold)
             await channel.send(embed=embed,view=interview_buttons_12())
@@ -690,8 +698,6 @@ class interview(commands.Cog):
             ]
                     super().__init__(placeholder='Select a timezone',max_values=1,min_values=1,options=options)
                 async def callback(self, interaction: discord.Interaction):
-                    reminder = f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \
-                    + f'**After** you\'ve answered, react with {right_arrow} to continue'
 
                     if self.values[0] == 'UTC -12':
                         message = OversightData.interview_message('14', member)
@@ -923,12 +929,13 @@ class interview(commands.Cog):
                     super().__init__(timeout=timeout)
                     self.add_item(Select())
             message = OversightData.interview_message('13', member)
+            await interaction.response.send_message('Agree', ephemeral=False)
             embed = discord.Embed(title = f'Question number 13',
                                 description = f'{message}', color=colors.dark_gold)
             await channel.send(embed=embed,view=SelectView())
 
 
-        if label == 'Disgree':
+        if label == 'Disagree':
             disc_channel = client.get_channel(disc_channel_id)
             class Select(discord.ui.Select):
                 def __init__(self):
@@ -1193,6 +1200,7 @@ class interview(commands.Cog):
                 def __init__(self, *, timeout = None):
                     super().__init__(timeout=timeout)
                     self.add_item(Select())
+            await interaction.response.send_message('Disagree', ephemeral=False)
             message = OversightData.interview_message('13', member)
             embed = discord.Embed(title = f'Question number 13',
                                 description = f'{message}', color=colors.dark_gold)
