@@ -184,7 +184,6 @@ async def get_memberdata(ctx):
     user = ctx.author
     try:
         await DMChannel.send(user, file=discord.File('./data/memberdata.json'))
-        await DMChannel.send(user, file=discord.File('./data/num.pickle'))
     except:
         msg = 'Failed to send memberdata'
         await DMChannel.send(user, msg)

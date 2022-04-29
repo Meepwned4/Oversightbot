@@ -202,67 +202,65 @@ class interview(commands.Cog):
                 await channel.send(message)
 
 
-        if label == 'close':
-            if channel.id in ignore_channels:
-                await interaction.response.send_message(':no_entry_sign::facepalm:', ephemeral=True)
+        if label == 'Close':
             if category.name == ticket_category_name and channel.id not in ignore_channels:
                 client = self.client
                 channel_name = channel.name.split('-')
                 channel_name = channel_name[0]
                 channel_name = channel.name
-                class close_modal(discord.ui.Modal, title='Questionnaire Response'):
+                user = interaction.user
+                class close_modal(discord.ui.Modal, title='Reason for closing ticket'):
                     answer = discord.ui.TextInput(label='Reason', style=discord.TextStyle.short)
                     async def on_submit(self, interaction: discord.Interaction):
                         answer = self.answer
-                        try:
-                            await interaction.followup.send_message(f'Ticket closing!', ephemeral=True)
-                        except:
-                            await interaction.response.send_message(f'Ticket closing!', ephemeral=True)
-                await interaction.response.send_modal(close_modal())
-                embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
-                embed.add_field(name = 'Closed by',
-                            value = f'<@{ctx.author.id}>',
-                            inline = True)
-                embed.add_field(name = 'Ticket name',
-                            value = f'{channel_name}',
-                            inline = True)
-                embed.add_field(name = 'Reason',
-                            value = f'{answer}',
-                            inline = False)
-                transcript = await chat_exporter.export(channel)
+                        embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
+                        embed.add_field(name = 'Closed by',
+                                    value = f'<@{user.id}>',
+                                    inline = True)
+                        embed.add_field(name = 'Ticket name',
+                                    value = f'{channel_name}',
+                                    inline = True)
+                        embed.add_field(name = 'Reason',
+                                    value = f'{answer}',
+                                    inline = False)
+                        transcript = await chat_exporter.export(channel)
 
-                if transcript is None:
-                    return
-                try:
-#                    file = open(f'./data/transcripts/transcript-{channel_id}.html', 'w')
-#                    file.write(transcript)
-#                    file.close()
-#                    transcript_file = open(f'./data/transcripts/transcript-{channel_id}.html', 'r')
-                    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{channel_id}.html')
-                    channel = client.get_channel(archive_channel)
-#                    await channel.send(embed=embed, file=discord.File(transcript_file))
-                    await channel.send(embed=embed, file=transcript_file)
-                    try:
-                        for filename in os.listdir('./data/transcripts'):
-                            if str(ctx.channel.id) in filename:
-                                os.remove(f'./data/transcripts/transcript-{channel_id}.html')
-                    except:
-                        pass
-                    try:
-                        for filename in os.listdir('./data/tickets'):
-                            if str(ctx.channel.id) in filename:
-                                os.remove(f'./data/tickets/{channel_id}.json')
-                    except:
-                        pass
-                    await ctx.channel.delete()
-                except:
-                    if member == client.is_owner:
-                        msg = f'❌ Failed to archive <#{channel_id}> \n\'+close\' ran by <@{member.id}>'
-                        await DMChannel.send(member, msg)
-                    else:
-                        msg = f'❌ Failed to archive <#{ctx.channel.id}>'
-                        user = await client.fetch_user(175719252995604480)
-                        await DMChannel.send(user, msg)
+                        if transcript is None:
+                            return
+                        try:
+        #                    file = open(f'./data/transcripts/transcript-{channel_id}.html', 'w')
+        #                    file.write(transcript)
+        #                    file.close()
+        #                    transcript_file = open(f'./data/transcripts/transcript-{channel_id}.html', 'r')
+                            transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{channel_id}.html')
+                            chan = client.get_channel(archive_channel)
+        #                    await chan.send(embed=embed, file=discord.File(transcript_file))
+                            await chan.send(embed=embed, file=transcript_file)
+                            try:
+                                for filename in os.listdir('./data/transcripts'):
+                                    if str(chan.id) in filename:
+                                        os.remove(f'./data/transcripts/transcript-{channel_id}.html')
+                            except:
+                                pass
+                            try:
+                                for filename in os.listdir('./data/tickets'):
+                                    if str(chan.id) in filename:
+                                        os.remove(f'./data/tickets/{channel_id}.json')
+                            except:
+                                pass
+                            await chan.delete()
+                        except:
+                            if member == client.is_owner:
+                                msg = f'❌ Failed to archive <#{channel_id}> \n\'+close\' ran by <@{member.id}>'
+                                await DMChannel.send(member, msg)
+                            else:
+                                msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+                                user = await client.fetch_user(175719252995604480)
+                                await DMChannel.send(user, msg)
+                                await interaction.response.send_message(f'Ticket closing!', ephemeral=True)
+
+                await interaction.response.send_modal(close_modal())
+
 
 
         if embed_title == 'Pre-Application' and label == 'Start':
@@ -321,7 +319,7 @@ class interview(commands.Cog):
                     embed = discord.Embed(title = 'Question number 2',
                                           description = f'{message}', color=colors.dark_gold)
                     await channel.send(embed=embed, view=interview_buttons_2())
-            await channel.send_modal(link_question())
+            await interaction.response.send_modal(link_question())
 
 
         if embed_title == 'Question number 1' and label == 'Yes':
@@ -644,6 +642,12 @@ class interview(commands.Cog):
                     except:
                         await interaction.response.defer()
                 @discord.ui.button(label='Disagree',style=discord.ButtonStyle.red)
+                async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                    try:
+                        await interaction.followup.defer()
+                    except:
+                        await interaction.response.defer()
+                @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
                     try:
                         await interaction.followup.defer()
