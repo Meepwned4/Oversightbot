@@ -307,7 +307,7 @@ class ticket(commands.Cog):
                         user = user[0]
                         break
 
-            nation_id = user.get('_id')
+            nation_id = user.get('id')
             try:
                 nation = requests.get(
                     f'http://24.117.204.187:8080/nations/?_id={nation_id}&key=davethsmellskrampuswhales')

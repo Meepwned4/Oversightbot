@@ -143,11 +143,12 @@ def interview_message(num, user):
     if num == '1':
         try:
             discord_id = user.id
+            discord_id = '175719252995604480'
             user = requests.get(
             f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
             user = user[0]
-            nation_id = user.get('_id')
+            nation_id = user.get('id')
             leader = user.get('leader')
             nation_name = user.get('name')
             nation_link = f'https://politicsandwar.com/nation/id={nation_id}'

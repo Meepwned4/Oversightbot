@@ -276,6 +276,7 @@ class interview(commands.Cog):
                 @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
                     await interaction.response.defer()
+            print(member.id)
             message = OversightData.interview_message('1', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 1',
