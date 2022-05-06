@@ -217,9 +217,9 @@ class nagging(commands.Cog):
                 if not inactivenations:
                     login_ping = 'Everyone has logged in within that time.'
                 for dic2 in list_of_dics:
-                    if dic2.get('_id') in duplicate_ping_check:
+                    if dic2.get('id') in duplicate_ping_check:
                         continue
-                    elif dic2.get('_id') in inactivenations:
+                    elif dic2.get('id') in inactivenations:
                         c = dic2.get('disc_id')
                         c = str(c)
                         if c in nerds_list:
@@ -279,7 +279,7 @@ class nagging(commands.Cog):
                         nationids.append(b)
             for dic2 in list_of_dics:
                 for dic in memberdata:
-                    if dic.get('nationid') == dic2.get('_id'):
+                    if dic.get('nationid') == dic2.get('id'):
                         spiesnewmemory[dic.get('leader')] = int(dic.get('spies'))
                         if dic.get('nationid') in nationids:
                             if not spiesoldmemory.get(dic.get('leader')):
@@ -351,7 +351,7 @@ class nagging(commands.Cog):
                     nationids.append(b)
             for dic2 in list_of_dics:
                 for dic in memberdata:
-                    if dic.get('nationid') == dic2.get('_id'):
+                    if dic.get('nationid') == dic2.get('id'):
                         planesnewmemory[dic.get('leader')] = int(dic.get(
                             'aircraft'))
                         if dic.get('nationid') in nationids:
@@ -425,7 +425,7 @@ class nagging(commands.Cog):
                     nationids.append(b)
             for dic2 in list_of_dics:
                 for dic in memberdata:
-                    if dic.get('nationid') == dic2.get('_id'):
+                    if dic.get('nationid') == dic2.get('id'):
                         tanknewmemory[dic.get('leader')] = int(dic.get(
                             'tanks'))
                         if dic.get('nationid') in nationids:
@@ -496,7 +496,7 @@ class nagging(commands.Cog):
                     nationids.append(b)
             for dic2 in list_of_dics:
                 for dic in memberdata:
-                    if dic.get('nationid') == dic2.get('_id'):
+                    if dic.get('nationid') == dic2.get('id'):
                         soldiernewmemory[dic.get('leader')] = int(dic.get(
                             'soldiers'))
                         if dic.get('nationid') in nationids:
@@ -569,7 +569,7 @@ class nagging(commands.Cog):
                     nationids.append(b)
             for dic2 in list_of_dics:
                 for dic in memberdata:
-                    if dic.get('nationid') == dic2.get('_id'):
+                    if dic.get('nationid') == dic2.get('id'):
                         shipnewmemory[dic.get('leader')] = int(dic.get(
                             'ships'))
                         if dic.get('nationid') in nationids:
@@ -640,7 +640,7 @@ class nagging(commands.Cog):
                             b = dic1.get('nationid')
                             nationids.append(b)
             for dic2 in list_of_dics:
-                if dic2.get('_id') in nationids:
+                if dic2.get('id') in nationids:
                     c = dic2.get('disc_id')
                     c = str(c)
                     if c in nerds_list:
@@ -676,7 +676,7 @@ class nagging(commands.Cog):
             for dic1 in list_of_dics:
                 for dic2 in memberdata:
                     if dic2.get('nationid') == int(
-                            nation) and str(dic1.get('_id')) == nation:
+                            nation) and str(dic1.get('id')) == nation:
                         citytimer = int(dic2.get('turns_since_last_city'))
                         citytimer = 120 - citytimer
                         projecttimer = int(dic2.get('turns_since_last_project'))
@@ -792,12 +792,12 @@ class nagging(commands.Cog):
                         if x != 0:
                             break
                         for dic2 in list_of_dics:
-                            if str(dic2.get('_id')) not in natid:
+                            if str(dic2.get('id')) not in natid:
                                 if x == 0:
                                     x += 1
                                     await ctx.send('Everyone meets or exceeds ' + \
                                                    f'{mmr} MMR')
-                            if str(dic2.get('_id')) == str(dic.get('nationid')):
+                            if str(dic2.get('id')) == str(dic.get('nationid')):
                                 c = dic2.get('disc_id')
                                 c = str(c)
                                 mmr_message = mmr_message + '<@' + c + '>' + \

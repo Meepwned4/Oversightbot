@@ -108,7 +108,7 @@ class Button(discord.ui.View):
                 user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
                 user = user.json()
                 user = user[0]
-                nation_id = user.get('_id')
+                nation_id = user.get('id')
             except:
                 nation_id = random.randrange(1,100)
             for ticket_channel in ticket_category.channels:
@@ -230,7 +230,7 @@ class ticket(commands.Cog):
                         user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
                         user = user.json()
                         user = user[0]
-                        nation_id = user.get('_id')
+                        nation_id = user.get('id')
                     except:
                         nation_id = random.randrange(1,100)
                     await ticket_category.create_text_channel(

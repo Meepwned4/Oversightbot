@@ -37,7 +37,7 @@ def merge_memberdata(memberdata, oldmemberdata, list_of_dics):
         for dic2 in memberdata:
             if dic1.get('nationid') == dic2.get('nationid'):
                 for dic3 in list_of_dics:
-                    if dic2.get('nationid') == dic3.get('_id'):
+                    if dic2.get('nationid') == dic3.get('id'):
                         dic2.update({'disc_id':dic3.get('disc_id')})
                 dic2['ping'] = dic1.get('ping')
                 dic2['war_status'] = dic1.get('war_status')
@@ -143,7 +143,6 @@ def interview_message(num, user):
     if num == '1':
         try:
             discord_id = user.id
-            discord_id = '175719252995604480'
             user = requests.get(
             f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()

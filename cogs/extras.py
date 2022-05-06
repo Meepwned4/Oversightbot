@@ -194,7 +194,7 @@ class extras(commands.Cog):
                     f'http://24.117.204.187:8080/discord/?disc_id={nation}&key=davethsmellskrampuswhales')
                 nation = nation.json()
                 nation = nation[0]
-                nation_id = str(nation.get('_id'))
+                nation_id = str(nation.get('id'))
             else:
                 nation_id = nation
 

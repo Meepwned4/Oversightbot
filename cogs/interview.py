@@ -141,7 +141,7 @@ class interview(commands.Cog):
                     user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
                     user = user.json()
                     user = user[0]
-                    nation_id = user.get('_id')
+                    nation_id = user.get('id')
                 except:
                     nation_id = random.randrange(1,100)
                 for ticket_channel in ticket_category.channels:
@@ -331,7 +331,7 @@ class interview(commands.Cog):
             user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
             user = user[0]
-            nation_id = user.get('_id')
+            nation_id = user.get('id')
             nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
             await channel.edit(topic=nation_link)
             message = OversightData.interview_message('2', member)

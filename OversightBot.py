@@ -314,8 +314,7 @@ async def daily():
                             'missiles':0, 'nukes':0}})
 
         for dic in list_of_dics:
-            if i.get('nationid') == dic.get(
-                    '_id'):
+            if i.get('nationid') == dic.get('id'):
                 i.update({'disc_id':dic.get('disc_id')})
 
     for nation in memberdata:
