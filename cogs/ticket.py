@@ -62,16 +62,123 @@ class colors:
     blurple = 0x7289da
     greyple = 0x99aab5
 
+
+class Button(discord.ui.View):
+        def __init__(self, timeout=None):
+            super().__init__()
+        @discord.ui.button(label='Apply',emoji=elephant,style=discord.ButtonStyle.blurple,custom_id='sendticket_button')
+        async def blue_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+            member = interaction.user
+            guild_id = interaction.guild_id
+            channel = interaction.channel
+            await interaction.response.send_message('Ticket created',ephemeral=True)
+            if guild_id == guild_id_1:
+                guild = client.get_guild(guild_id_1)
+                ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
+                interviewer_role = guild.get_role(interviewer_role_id)
+                pentarch_role = guild.get_role(pentarch_role_id)
+                disc_role = guild.get_role(disc_role_id)
+                adirim_role = guild.get_role(adirim_role_id)
+                overwrites = {
+                    guild.default_role: discord.PermissionOverwrite(view_channel=False),
+                    member: discord.PermissionOverwrite(view_channel=True),
+                    guild.me: discord.PermissionOverwrite(view_channel=True),
+                    interviewer_role: discord.PermissionOverwrite(view_channel=True),
+                    pentarch_role: discord.PermissionOverwrite(view_channel=True),
+                    adirim_role: discord.PermissionOverwrite(view_channel=True),
+                    disc_role: discord.PermissionOverwrite(view_channel=True),
+                }
+            if guild_id == guild_id_2:
+                guild = client.get_guild(guild_id_2)
+                ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
+                interviewer_role = guild.get_role(874085960885878786)
+                pentarch_role = guild.get_role(736050504089731173)
+                overwrites = {
+                    guild.default_role: discord.PermissionOverwrite(view_channel=False),
+                    member: discord.PermissionOverwrite(view_channel=True),
+                    guild.me: discord.PermissionOverwrite(view_channel=True),
+                    interviewer_role: discord.PermissionOverwrite(view_channel=True),
+                    pentarch_role: discord.PermissionOverwrite(view_channel=True),
+                }
+
+
+            discord_id = member.id
+            dup = False
+            try:
+                user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
+                user = user.json()
+                user = user[0]
+                nation_id = user.get('_id')
+            except:
+                nation_id = random.randrange(1,100)
+            for ticket_channel in ticket_category.channels:
+                if ticket_channel.name == f'ticket-{nation_id}':
+                    dup = True
+            if dup == True:
+                await interaction.response.send_message('Can\'t create more than one ticket',ephemeral=True)
+            else:
+                await interaction.response.send_message('Ticket created',ephemeral=True)
+                await ticket_category.create_text_channel(f'ticket-{nation_id}', overwrites=overwrites)
+                channel = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
+                await channel.edit(sync_permissions=True)
+                dic = {'channel':channel.id, 'user_id':member.id}
+                with open(f'./data/tickets/{nation_id}.json', 'w') as outfile:
+                    json.dump(dic, outfile)
+                message = f'''
+                Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
+
+                - Apply to us at: https://politicsandwar.com/alliance/join/id=5049
+                - No current in-game wars or alliance;
+                - No unsettled debt or loans;
+                - You must be active on Discord and in-game, inactivity is not acceptable;
+                - You must obey orders in a timely manner, abide by our rules and listen to your superiors, insubordination will not be tolerated.
+                - You cannot possess two or more nations/accounts in the same network. This is a grave offense that may lead to banishment.
+                '''
+                ping = f'<@{member.id}>'
+                class pre_application_buttons(discord.ui.View):
+                    def __init__(self, timeout=None):
+                        super().__init__()
+                    @discord.ui.button(label='Start',style=discord.ButtonStyle.blurple)
+                    async def start_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                        try:
+                            await interaction.followup.defer()
+                        except:
+                            await interaction.response.defer()
+                    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
+                    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                        try:
+                            await interaction.followup.defer()
+                        except:
+                            await interaction.response.defer()
+                    @discord.ui.button(label='Close',style=discord.ButtonStyle.red)
+                    async def close_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+                        try:
+                            await interaction.followup.defer()
+                        except:
+                            await interaction.response.defer()
+                embed = discord.Embed(title = 'Pre-Application',
+                                    description = f'{message}', color=colors.dark_gold)
+                await channel.send(ping, embed=embed, view=pre_application_buttons())
+
+
 class ticket(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+    global client
 
     # Ignore these
     ticket_category = None
     interviewer_role = None
     guild = None
 
+    async def setup_hook(self) -> None:
+        # Register the persistent view for listening here.
+        # Note that this does not send the view to any message.
+        # In order to do this you need to first send a message with the View, which is shown below.
+        # If you have the message_id you can also pass it as a keyword argument, but for this example
+        # we don't have one.
+        self.add_view(Button())
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
@@ -120,7 +227,7 @@ class ticket(commands.Cog):
 
                     discord_id = member.id
                     try:
-                        user = requests.get(f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                        user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
                         user = user.json()
                         user = user[0]
                         nation_id = user.get('_id')
@@ -153,12 +260,6 @@ class ticket(commands.Cog):
             If that's done, press the button.
             ''', color=colors.dark_gold
         )
-        class Button(discord.ui.View):
-            def __init__(self, timeout=None):
-                super().__init__()
-            @discord.ui.button(label='Apply',emoji=elephant,style=discord.ButtonStyle.blurple)
-            async def blue_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                await interaction.response.send_message('Ticket created',ephemeral=True)
         await ctx.send(embed=embed, view=Button())
         await ctx.message.delete()
 
@@ -188,7 +289,7 @@ class ticket(commands.Cog):
                     data = json.load(data)
                 discord_id = data.get('user_id')
                 user = requests.get(
-                    f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                    f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
                 user = user.json()
                 user = user[0]
                 for member in ctx.channel.members:
@@ -201,7 +302,7 @@ class ticket(commands.Cog):
                     and adirim_role not in member.roles and bot_role not in member.roles:
                         discord_id = member.id
                         user = requests.get(
-                            f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                            f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
                         user = user.json()
                         user = user[0]
                         break

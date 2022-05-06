@@ -56,6 +56,16 @@ c_format = logging.Formatter(
 c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
+def exception_hook(exc_type, exc_value, exc_traceback):
+    logging.error(
+        "Uncaught exception",
+        exc_info=(exc_type, exc_value, exc_traceback)
+    )
+
+sys.excepthook = exception_hook
+
+#logging.debug("Something went wrong", exc_info=True)
+
 pickle_off = open('./data/api_key.pickle', 'rb')
 apikey = pickle.load(pickle_off)
 #apikeys = apikeys.split(',')
@@ -83,7 +93,7 @@ interview = '📝' # interview emoji
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
-client = commands.Bot(command_prefix='+', intents=intents)
+client = commands.Bot(command_prefix='.', intents=intents)
 
 @client.event
 async def on_ready():
@@ -119,7 +129,7 @@ async def pip_upgrade(ctx, module):
         await ctx.send(f'Upgrading {module} module.')
         if module == 'discord':
     #        subprocess.run([sys.executable, '-m', 'pip', 'install', './discord.py.zip'], capture_output=True, text=True)
-            await ctx.send('Manually install discord, ya doofus!')
+            await ctx.send('Manually install discord.py, ya doofus!')
     #        await DMChannel.send(user, 'git clone https://github.com/Rapptz/discord.py\ncd discord.py\npython3 -m pip install -U .[voice]')
         else:
             output = subprocess.run([sys.executable, '-m', 'pip', 'install', module, '--upgrade'], capture_output=True, text=True)
@@ -236,7 +246,7 @@ async def daily():
     fetcheddata = fetcheddata.json()
     memberdata = fetcheddata.get(['nations'][0])
     list_of_dics = requests.get(
-        'http://24.117.204.187:8080/discord/?alliance=5049' +
+        'http://24.117.204.187:8080/discord/?alliance_id=5049' +
         '&key=davethsmellskrampuswhales')
     list_of_dics = list_of_dics.json()
     memberdata = OversightData.merge_memberdata(memberdata, oldmemberdata, list_of_dics)
@@ -249,10 +259,10 @@ async def daily():
 #        for key in ping:
 #            if ping.get(key) >= 3:
 #                value = ping.get(key)
-#                DiscordID = nation.get('DiscordID')
+#                disc_id = nation.get('disc_id')
 #                nation_name = nation.get('nation')
 #                nationid = nation.get('nationid')
-#                print(f'{nation_name} - {nationid} - {DiscordID} - {key} - {value}\n')
+#                print(f'{nation_name} - {nationid} - {disc_id} - {key} - {value}\n')
 
     for chan in server.text_channels:
         if chan.category_id == 567390184774303745:
@@ -265,7 +275,7 @@ async def daily():
                     else:
                         member_id = str(member.id)
                         for dic in memberdata:
-                            if dic.get('DiscordID') == member_id:
+                            if dic.get('disc_id') == member_id:
                                 for role in member.roles:
                                     role_id = role.id
                                     if role_id == nerds_id:
@@ -282,7 +292,7 @@ async def daily():
                 else:
                     member_id = str(member.id)
                     for dic in memberdata:
-                        if dic.get('DiscordID') == member_id:
+                        if dic.get('disc_id') == member_id:
                             for role in member.roles:
                                 role_id = role.id
                                 if role_id == raider_id:
@@ -292,7 +302,7 @@ async def daily():
             i.update({'war_status':memberdata[0].get('war_status')})
 
     for i in memberdata:
-        if i.get('DiscordID') in nerds_list:
+        if i.get('disc_id') in nerds_list:
             i.update({'Trainee':1})
         else:
             i.update({'Trainee':0})
@@ -306,10 +316,10 @@ async def daily():
         for dic in list_of_dics:
             if i.get('nationid') == dic.get(
                     '_id'):
-                i.update({'DiscordID':dic.get('DiscordID')})
+                i.update({'disc_id':dic.get('disc_id')})
 
     for nation in memberdata:
-        if nation.get('DiscordID') in nerds_list:
+        if nation.get('disc_id') in nerds_list:
             nation.update({'Trainee':1})
         else:
             nation.update({'Trainee':0})
@@ -346,7 +356,7 @@ async def daily():
                 if not ping_dic.get('login'):
                     ping_dic.update({'login':0})
                 num = ping_dic.get('login')
-                c = dic.get('DiscordID')
+                c = dic.get('disc_id')
                 c = str(c)
                 if c in nerds_list:
                     duplicate_ping_check.append(c)
@@ -399,7 +409,7 @@ async def daily():
                         if not ping_dic.get('aircraft'):
                             ping_dic.update({'aircraft':0})
                         num = ping_dic.get('aircraft')
-                        c = dic2.get('DiscordID')
+                        c = dic2.get('disc_id')
                         c = str(c)
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
@@ -463,7 +473,7 @@ async def daily():
                         if not ping_dic.get('spies'):
                             ping_dic.update({'spies':0})
                         num = ping_dic.get('spies')
-                        c = dic.get('DiscordID')
+                        c = dic.get('disc_id')
                         c = str(c)
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
@@ -517,7 +527,7 @@ async def daily():
                         if not ping_dic.get('tanks'):
                             ping_dic.update({'tanks':0})
                         num = ping_dic.get('tanks')
-                        c = dic.get('DiscordID')
+                        c = dic.get('disc_id')
                         c = str(c)
                         if c in raider_list:
                             continue
@@ -576,7 +586,7 @@ async def daily():
                         if not ping_dic.get('soldiers'):
                             ping_dic.update({'soldiers':0})
                         num = ping_dic.get('soldiers')
-                        c = dic.get('DiscordID')
+                        c = dic.get('disc_id')
                         c = str(c)
                         if c in raider_list:
                             continue
@@ -622,7 +632,7 @@ async def daily():
             if b not in pinglist:
                 pinglist.append(b)
         for dic2 in oldmemberdata:
-            if dic.get('DiscordID') in duplicate_ping_check:
+            if dic.get('disc_id') in duplicate_ping_check:
                 continue
             if dic.get('nationid') == dic2.get('nationid'):
                 if dic.get('nationid') in nmsh_nationids:
@@ -631,7 +641,7 @@ async def daily():
                         if not ping_dic.get('ships'):
                             ping_dic.update({'ships':0})
                         num = ping_dic.get('ships')
-                        c = dic.get('DiscordID')
+                        c = dic.get('disc_id')
                         c = str(c)
                         if c in nerds_list:
                             if ships > 0:
@@ -678,14 +688,14 @@ async def daily():
                     color_nationids.append(b)
                     if b not in pinglist:
                         pinglist.append(b)
-        if dic.get('DiscordID') in duplicate_ping_check:
+        if dic.get('disc_id') in duplicate_ping_check:
             continue
         if dic.get('nationid') in color_nationids:
             ping_dic = dic.get('ping')
             if not ping_dic.get('color'):
                 ping_dic.update({'color':0})
             num = ping_dic.get('color')
-            c = dic.get('DiscordID')
+            c = dic.get('disc_id')
             c = str(c)
             nation_color = dic.get('color')
             if c in nerds_list:
@@ -735,7 +745,7 @@ async def daily():
                         if not ping_dic.get('missiles'):
                             ping_dic.update({'missiles':0})
                         num = ping_dic.get('missiles')
-                        c = dic2.get('DiscordID')
+                        c = dic2.get('disc_id')
                         c = str(c)
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
@@ -762,7 +772,7 @@ async def daily():
     color_message_temp = f'\nChange to {AA_color}' + \
     ' <https://politicsandwar.com/nation/edit/> ' + \
     'and vote <https://politicsandwar.com/world/color/voting/> ' + \
-    'for \'Olive belongs to Nexus\''
+    'for \'Carthaclysmic Olive\''
     war_status = ''
     len_check = 0
     message = ''
@@ -1015,7 +1025,7 @@ async def on_error(ctx, error):
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
         channel = client.get_channel(959657551627161650)
-        await channel.send('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+        await channel.send(error)
         await channel.send(traceback.format_exception(type(error), error, error.__traceback__, file=sys.stderr))
 
 async def main():

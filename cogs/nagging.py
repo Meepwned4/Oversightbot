@@ -69,7 +69,7 @@ class nagging(commands.Cog):
 #        ctx.channel.name == 'disciplinarians' and ctx.channel.category.name \
 #                != '[The Harbour]':
 #                    test = requests.get(
-#        'http://24.117.204.187:8080/discord/?DiscordID=800760164680204340' +
+#        'http://24.117.204.187:8080/discord/?disc_id=800760164680204340' +
 #        '&key=davethsmellskrampuswhales')
 #                    test = test.json()
 
@@ -220,7 +220,7 @@ class nagging(commands.Cog):
                     if dic2.get('_id') in duplicate_ping_check:
                         continue
                     elif dic2.get('_id') in inactivenations:
-                        c = dic2.get('DiscordID')
+                        c = dic2.get('disc_id')
                         c = str(c)
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
@@ -287,7 +287,7 @@ class nagging(commands.Cog):
                             if spiesnewmemory.get(dic.get(
                                     'leader')) <= spiesoldmemory.get(dic.get(
                                         'leader')):
-                                c = dic2.get('DiscordID')
+                                c = dic2.get('disc_id')
                                 c = str(c)
                                 if c in nerds_list:
                                     nerds_nsp_ping = nerds_nsp_ping + \
@@ -360,7 +360,7 @@ class nagging(commands.Cog):
                             elif planesnewmemory.get(
                                     dic.get('leader')) <= planesoldmemory.get(
                                         dic.get('leader')):
-                                c = dic2.get('DiscordID')
+                                c = dic2.get('disc_id')
                                 c = str(c)
                                 if c in nerds_list:
                                     nerds_nmp_ping = nerds_nmp_ping + \
@@ -432,7 +432,7 @@ class nagging(commands.Cog):
                             if tanknewmemory.get(
                                     dic.get('leader')) <= tankoldmemory.get(
                                         dic.get('leader')):
-                                c = dic2.get('DiscordID')
+                                c = dic2.get('disc_id')
                                 c = str(c)
                                 if c in nerds_list:
                                     nerds_nmt_ping = nerds_nmt_ping + \
@@ -505,7 +505,7 @@ class nagging(commands.Cog):
                             elif soldiernewmemory.get(
                                     dic.get('leader')) <= soldieroldmemory.get(
                                         dic.get('leader')):
-                                c = dic2.get('DiscordID')
+                                c = dic2.get('disc_id')
                                 c = str(c)
                                 if c in nerds_list:
                                     nerds_nms_ping = nerds_nms_ping + \
@@ -578,7 +578,7 @@ class nagging(commands.Cog):
                             elif shipnewmemory.get(
                                     dic.get('leader')) <= shipoldmemory.get(
                                         dic.get('leader')):
-                                c = dic2.get('DiscordID')
+                                c = dic2.get('disc_id')
                                 c = str(c)
                                 if c in nerds_list:
                                     nerds_nmsh_ping = nerds_nmsh_ping + \
@@ -641,7 +641,7 @@ class nagging(commands.Cog):
                             nationids.append(b)
             for dic2 in list_of_dics:
                 if dic2.get('_id') in nationids:
-                    c = dic2.get('DiscordID')
+                    c = dic2.get('disc_id')
                     c = str(c)
                     if c in nerds_list:
                         nerds_color_ping = nerds_color_ping + \
@@ -798,7 +798,7 @@ class nagging(commands.Cog):
                                     await ctx.send('Everyone meets or exceeds ' + \
                                                    f'{mmr} MMR')
                             if str(dic2.get('_id')) == str(dic.get('nationid')):
-                                c = dic2.get('DiscordID')
+                                c = dic2.get('disc_id')
                                 c = str(c)
                                 mmr_message = mmr_message + '<@' + c + '>' + \
                                 ' ' + 'soldiers: ' + str(dic.get(

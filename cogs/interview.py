@@ -138,7 +138,7 @@ class interview(commands.Cog):
                 discord_id = member.id
                 dup = False
                 try:
-                    user = requests.get(f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+                    user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
                     user = user.json()
                     user = user[0]
                     nation_id = user.get('_id')
@@ -269,22 +269,13 @@ class interview(commands.Cog):
                     super().__init__()
                 @discord.ui.button(label='Yes',style=discord.ButtonStyle.blurple)
                 async def yes_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='No',style=discord.ButtonStyle.blurple)
                 async def no_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
             message = OversightData.interview_message('1', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 1',
@@ -304,16 +295,10 @@ class interview(commands.Cog):
                             super().__init__()
                         @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
                         async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                            try:
-                                await interaction.followup.defer()
-                            except:
-                                await interaction.response.defer()
+                            await interaction.response.defer()
                         @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                         async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                            try:
-                                await interaction.followup.defer()
-                            except:
-                                await interaction.response.defer()
+                            await interaction.response.defer()
                     message = OversightData.interview_message('2', member)
                     message = message.replace(reminder, '')
                     embed = discord.Embed(title = 'Question number 2',
@@ -341,8 +326,8 @@ class interview(commands.Cog):
             await interaction.response.send_message('Nation link is correct')
             discord_id = member.id
             user = requests.get(
-            f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
-            user = requests.get(f'http://24.117.204.187:8080/discord/?DiscordID={discord_id}&key=davethsmellskrampuswhales')
+            f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
+            user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
             user = user[0]
             nation_id = user.get('_id')
@@ -361,16 +346,10 @@ class interview(commands.Cog):
                     super().__init__()
                 @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
                 async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
             message = OversightData.interview_message('3', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 3',
@@ -384,16 +363,10 @@ class interview(commands.Cog):
                     super().__init__()
                 @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
                 async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
             message = OversightData.interview_message('4', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 4',
@@ -407,22 +380,13 @@ class interview(commands.Cog):
                     super().__init__()
                 @discord.ui.button(label='Yes',style=discord.ButtonStyle.blurple)
                 async def yes_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='No',style=discord.ButtonStyle.blurple)
                 async def no_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
             message = OversightData.interview_message('5', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 5',
@@ -436,16 +400,10 @@ class interview(commands.Cog):
                     super().__init__()
                 @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
                 async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
             await interaction.response.send_message('No')
             message = OversightData.interview_message('6', member)
             message = message.replace(reminder, '')
@@ -460,16 +418,10 @@ class interview(commands.Cog):
                     super().__init__()
                 @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
                 async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
             await interaction.response.send_message('Yes')
             message = OversightData.interview_message('6', member)
             message = message.replace(reminder, '')
@@ -484,16 +436,10 @@ class interview(commands.Cog):
                     super().__init__()
                 @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
                 async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
                 @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
                 async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                    try:
-                        await interaction.followup.defer()
-                    except:
-                        await interaction.response.defer()
+                    await interaction.response.defer()
             message = OversightData.interview_message('7', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 7',
