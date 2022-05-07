@@ -1325,7 +1325,7 @@ class interview(commands.Cog):
                                     await msg.add_reaction(right_arrow)
                                     await msg.add_reaction(person)
                             await user_message.reactions[0].remove(member)
-                        elif num == '13':
+                        elif num == '17':
                             class Select(discord.ui.Select):
                                 def __init__(self):
                                     options=[
@@ -1874,7 +1874,7 @@ class interview(commands.Cog):
             user = None
             message = OversightData.interview_message(num, user)
             skip = False
-            if num != '14' and int(num) <= 14:
+            if num != '19' and int(num) <= 19:
                 if isinstance(message, list) == True:
                     skip = True
                     l = 0
@@ -2211,7 +2211,7 @@ class interview(commands.Cog):
                                 num += 1
                                 num = str(num)
                                 dic.update({'num':num})
-                                if int(num) <= 14:
+                                if int(num) <= 19:
                                     with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
                                     message = OversightData.interview_message(num, member)
@@ -2228,7 +2228,7 @@ class interview(commands.Cog):
                                 dic.update({'num':num})
                                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                                if int(num) <= 14:
+                                if int(num) <= 19:
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
@@ -2243,7 +2243,7 @@ class interview(commands.Cog):
                                 dic.update({'num':num})
                                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                                if int(num) <= 14:
+                                if int(num) <= 19:
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
@@ -2258,7 +2258,7 @@ class interview(commands.Cog):
                                 dic.update({'num':num})
                                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                                if int(num) <= 14:
+                                if int(num) <= 19:
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
@@ -2273,7 +2273,7 @@ class interview(commands.Cog):
                                 dic.update({'num':num})
                                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                                if int(num) <= 14:
+                                if int(num) <= 19:
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
@@ -2288,7 +2288,7 @@ class interview(commands.Cog):
                                 dic.update({'num':num})
                                 with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                         json.dump(dic, outfile)
-                                if int(num) <= 14:
+                                if int(num) <= 19:
                                     message = OversightData.interview_message(num, member)
                                     embed = discord.Embed(title = f'Question number {num}',
                                                     description = f'{message}', color=colors.dark_gold)
@@ -2305,7 +2305,7 @@ class interview(commands.Cog):
                     embed = discord.Embed(title = f'Question number {num}',
                                         description = f'{message}', color=colors.dark_gold)
                     await ctx.send(embed=embed,view=SelectView())
-                elif skip != True and int(num) <= 14:
+                elif skip != True and int(num) <= 19:
                     message = OversightData.interview_message(num, user)
                     embed = discord.Embed(title = f'Question number {num}',
                                     description = f'{message}', color=colors.dark_gold)
@@ -2319,7 +2319,7 @@ class interview(commands.Cog):
                     if 'foreigner' in user.roles:
                         user_id = user.id
                         dic.update({'user_id':user_id})
-            elif num == '14':
+            elif num == '19':
                 message = OversightData.interview_message(num, member)
                 embed = discord.Embed(title = f'',
                                     description = f'{message}', color=colors.dark_gold)

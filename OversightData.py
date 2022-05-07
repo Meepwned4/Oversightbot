@@ -168,25 +168,30 @@ def interview_message(num, user):
         message = ('How did you find out about Carthago? What led you to apply?\n\n' \
                        + reminder)
     if num == '3':
+        message = ('Was there anything about our invite which caught your attention in '+ \
+                   'comparison to the others our there?\n\n' + reminder)
+    if num == '4':
+        message = ('What about us caught your attention?\n\n' + reminder)
+    if num == '5':
         message = ('Have you ever been involved in another alliance ' \
                        + 'on Politics and War, either under this account or' \
                        + ' another account?\n\n' + reminder)
-    if num == '4':
+    if num == '6':
         message = ('How long have you been playing Politics and War? Have you had' + \
                    ' any gaming experience in similar games?\n\n' + reminder)
-    if num == '5':
+    if num == '7':
         message = ('Do you have any standing debts to anyone in the game?\n\n' \
                        + reminder)
-    if num == '6':
+    if num == '8':
         message = ('What would you consider your greatest skills? These can be ' \
                        + 'in games or IRL which translate into the game, such as GFX ' \
                        + '(Photoshop, GIMP, etc), Video editing, Diplomacy, Spreadsheet ' \
                        + 'or Coding.\n\n' \
                        + reminder)
-    if num == '7':
+    if num == '9':
         message = ('What would you consider your worst weaknesses?\n\n' \
                    + reminder)
-    if num == '8':
+    if num == '10':
         message = ('''Now, please select one of the following, or use your own words to best describe what your activity would look like:
 
 1) I will login once a week. I would like the protection and economic benefits that CTO offers, and I will fight in wars for the Alliance, but I don't really want a job or be particularly involved the community.
@@ -197,7 +202,7 @@ def interview_message(num, user):
 
 4) I will log in multiple times every single day. I want to be extremely active and contribute in whatever capacity I can within the CTO community. I will frequent the Discord channels and would like to work my way up to a leadership position in the future.\n\n''' \
 + reminder)
-    if num == '9':
+    if num == '11':
         message = ('''If you were given the opportunity to choose a government department to work in, considering the descriptions provided, which would you choose?
 
 - **War Department**: Defense during peacetime and wartime, making sure members meet minimum military requirements, monitoring conflicts across Orbis and assisting with Foreign Affairs when necessary; ensuring warchests are kept stocked.
@@ -214,7 +219,7 @@ def interview_message(num, user):
 
 If you aren't interested in any of these, that’s okay, just say so. If you have ideas for other government positions we should be offering, feel free to bring this up after this interview.\n\n''' \
 + reminder)
-    if num == '10':
+    if num == '12':
         message = ('''
 With your answer in mind, which among the following or using your own words, would you consider the most interesting aspects which drew you to the game?
 
@@ -229,9 +234,16 @@ With your answer in mind, which among the following or using your own words, wou
 5) Raiding inactive nations for money and resources. Arrgh!
 
 6) Becoming a politically influential, well-known player.\n\n''' + reminder)
-    if num == '11':
+    if num == '13':
+        message = ('''Carthago as an Alliance has historically been involved in major conflicts, some of which we were on the losing side.
+                   Would this be a problem?\n\n''' + reminder)
+    if num == '14':
+        message = ('''As part of our training program, we require raiding to meet certain requirements.
+                   It is the most profitable way to make money as a small nation.
+                   Are you okay with that?\n\n''' + reminder)
+    if num == '15':
         message = 'Which would you consider the least interesting?\n\n' + reminder
-    if num == '12':
+    if num == '16':
         message = [('''
  These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated.
 
@@ -259,9 +271,11 @@ We hope to see you on Discord as much as your time commitments allow, but you mu
 ---
 If you have any questions, comments, or concerns, please let us know. Otherwise, state you agree to these terms.\n\n'''
 + reminder)]
-    if num == '13':
+    if num == '17':
         message = ('For coordination purposes, what\'s your Timezone?')
-    if num == '14':
+    if num == '18':
+        message = ('''If an officer gave you an order that you disagreed with, what would you do?''')
+    if num == '19':
         message = ('That was the last question, a human should be along soon to review your interview.')
 
     return message
