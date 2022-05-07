@@ -232,7 +232,7 @@ class ticket(commands.Cog):
                         user = user[0]
                         nation_id = user.get('id')
                     except:
-                        nation_id = random.randrange(1,100)
+                        nation_id = random.randrange(1,1000)
                     await ticket_category.create_text_channel(
                             f'ticket-{nation_id}', overwrites=overwrites)
                     chan = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')

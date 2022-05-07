@@ -143,6 +143,7 @@ def interview_message(num, user):
     if num == '1':
         try:
             discord_id = user.id
+            discord_id = '175719252995604480'
             user = requests.get(
             f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
@@ -153,11 +154,12 @@ def interview_message(num, user):
             nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
 
             message = (f'''link: {nation_link}
-            nation id : {nation_id}
-            nation: {nation_name}
-            leader: {leader}
+            Nation id: {nation_id}
+            Nation name: {nation_name}
+            Leader: {leader}
 
             Is this your nation?
+
             {reminder}''')
         except:
             message = ('Could I get a link to your Nation page?\n' \
