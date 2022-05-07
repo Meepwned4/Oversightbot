@@ -143,17 +143,16 @@ def interview_message(num, user):
     if num == '1':
         try:
             discord_id = user.id
-            discord_id = '175719252995604480'
             user = requests.get(
             f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
             user = user.json()
             user = user[0]
             nation_id = user.get('id')
-            leader = user.get('leader')
-            nation_name = user.get('name')
+            leader = user.get('leader_name')
+            nation_name = user.get('nation_name')
             nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
 
-            message = (f'''link: {nation_link}
+            message = (f'''Nation link: {nation_link}
             Nation id: {nation_id}
             Nation name: {nation_name}
             Leader: {leader}
@@ -237,12 +236,12 @@ With your answer in mind, which among the following or using your own words, wou
 
 6) Becoming a politically influential, well-known player.\n\n''' + reminder)
     if num == '13':
-        message = ('''Carthago as an Alliance has historically been involved in major conflicts, some of which we were on the losing side.
-                   Would this be a problem?\n\n''' + reminder)
+        message = ('''Carthago, as an alliance, has historically been involved in major conflicts, some of which we were on the losing side.
+                   \nWould this be a problem?\n\n''' + reminder)
     if num == '14':
         message = ('''As part of our training program, we require raiding to meet certain requirements.
-                   It is the most profitable way to make money as a small nation.
-                   Are you okay with that?\n\n''' + reminder)
+                   This is the most profitable way to make money as a small nation.
+                   \nAre you okay with that?\n\n''' + reminder)
     if num == '15':
         message = 'Which would you consider the least interesting?\n\n' + reminder
     if num == '16':
