@@ -171,9 +171,9 @@ def interview_message(num, user):
                        + reminder)
     if num == '3':
         message = ('Was there anything about our invite which caught your attention in '+ \
-                   'comparison to the others our there?\n\n' + reminder)
+                   'comparison to the others out there?\n\n' + reminder)
     if num == '4':
-        message = ('What about us caught your attention?\n\n' + reminder)
+        message = ('Was there anything else about us that caught your attention?\n\n' + reminder)
     if num == '5':
         message = ('Have you ever been involved in another alliance ' \
                        + 'on Politics and War, either under this account or' \

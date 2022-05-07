@@ -1367,12 +1367,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -12', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -11':
@@ -1383,12 +1383,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -11', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -10':
@@ -1399,12 +1399,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -10', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -9':
@@ -1415,12 +1415,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -9', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -8':
@@ -1431,12 +1431,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -8', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -7':
@@ -1447,12 +1447,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -7', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -6':
@@ -1463,12 +1463,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -6', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -5':
@@ -1479,12 +1479,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -5', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -4':
@@ -1495,12 +1495,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -4', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -3':
@@ -1511,12 +1511,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -3', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -2':
@@ -1527,12 +1527,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -2', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC -1':
@@ -1543,12 +1543,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC -1', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +0':
@@ -1559,12 +1559,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +0', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         await user_message.reactions[0].remove(member)
@@ -1576,12 +1576,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +1', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +2':
@@ -1592,12 +1592,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +2', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +3':
@@ -1608,12 +1608,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +3', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +4':
@@ -1624,12 +1624,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +4', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +5':
@@ -1640,12 +1640,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +5', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +6':
@@ -1656,12 +1656,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +6', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +7':
@@ -1672,12 +1672,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC 7', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +8':
@@ -1688,12 +1688,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +8', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +9':
@@ -1704,12 +1704,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +9', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +10':
@@ -1720,12 +1720,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +10', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +11':
@@ -1736,12 +1736,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +11', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                     elif self.values[0] == 'UTC +12':
@@ -1752,12 +1752,12 @@ class interview(commands.Cog):
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
                                         message = OversightData.interview_message(num, member)
-                                        message = message.replace(reminder, '')
                                         embed = discord.Embed(title = f'Question number {num}',
                                                         description = f'{message}', color=colors.dark_gold)
                                         await interaction.response.send_message('UTC +12', ephemeral=False)
-                                        await chan.send(embed=embed)
-                                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+                                        msg = await chan.send(embed=embed)
+                                        await msg.add_reaction(right_arrow)
+                                        await msg.add_reaction(person)
                                         with open(f'./data/tickets/{chan_id}.json', 'w') as outfile:
                                             json.dump(dic, outfile)
 
@@ -1769,6 +1769,12 @@ class interview(commands.Cog):
                             embed = discord.Embed(title = f'Question number {num}',
                                                 description = f'{message}', color=colors.dark_gold)
                             await chan.send(embed=embed,view=SelectView())
+                        elif num == '19':
+                            message = OversightData.interview_message(num, member)
+                            embed = discord.Embed(title = f'Question number {num}',
+                                                description = f'{message}', color=colors.dark_gold)
+                            await chan.send(embed=embed)
+                            await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
                         elif skip != True:
                             message = OversightData.interview_message(num, member)
                             embed = discord.Embed(title = f'Question number {num}',
@@ -1874,7 +1880,7 @@ class interview(commands.Cog):
             user = None
             message = OversightData.interview_message(num, user)
             skip = False
-            if num != '19' and int(num) <= 19:
+            if num != '20' and int(num) <= 20:
                 if isinstance(message, list) == True:
                     skip = True
                     l = 0
