@@ -236,14 +236,14 @@ With your answer in mind, which among the following or using your own words, wou
 
 6) Becoming a politically influential, well-known player.\n\n''' + reminder)
     if num == '13':
+        message = 'Which would you consider the least interesting?\n\n' + reminder
+    if num == '14':
         message = ('''Carthago, as an alliance, has historically been involved in major conflicts, some of which we were on the losing side.
                    \nWould this be a problem?\n\n''' + reminder)
-    if num == '14':
+    if num == '15':
         message = ('''As part of our training program, we require raiding to meet certain requirements.
                    This is the most profitable way to make money as a small nation.
                    \nAre you okay with that?\n\n''' + reminder)
-    if num == '15':
-        message = 'Which would you consider the least interesting?\n\n' + reminder
     if num == '16':
         message = [('''
  These Terms and Conditions constitute a legally binding agreement, between yourself and the alliance, by which you agree to be bound by terms and conditions herein stated.
@@ -275,7 +275,7 @@ If you have any questions, comments, or concerns, please let us know. Otherwise,
     if num == '17':
         message = ('For coordination purposes, what\'s your Timezone?')
     if num == '18':
-        message = ('''If an officer gave you an order that you disagreed with, what would you do?''')
+        message = ('''If an officer gave you an order that you disagreed with, what would you do?''' + reminder)
     if num == '19':
         message = ('That was the last question, a human should be along soon to review your interview.')
 
