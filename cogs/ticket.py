@@ -6,8 +6,6 @@ import pickle
 import json
 import typing
 import requests
-import aiohttp
-from bs4 import BeautifulSoup
 import os
 import io
 import random
@@ -277,8 +275,8 @@ class ticket(commands.Cog):
             interviewer_role = ctx.guild.get_role(interviewer_role_id)
             adirim_role = ctx.guild.get_role(adirim_role_id)
             bot_role = ctx.guild.get_role(bot_role_id)
-            pickle_off = open('./data/api_key.pickle', 'rb')
-            apikey = pickle.load(pickle_off)
+#            pickle_off = open('./data/api_key.pickle', 'rb')
+#            apikey = pickle.load(pickle_off)
 #            apikeys = apikeys.split(',')
 #            api_num = apikeys[0]
 #            apikeys.remove(api_num)
@@ -307,45 +305,15 @@ class ticket(commands.Cog):
                         user = user[0]
                         break
 
-            nation_id = user.get('id')
-            try:
-                nation = requests.get(
-                    f'http://24.117.204.187:8080/nations/?_id={nation_id}&key=davethsmellskrampuswhales')
-                nation = nation.json()
-                nation = nation[0]
-            except:
-                fetcheddata = requests.get(
-                        'https://politicsandwar.com/api/nation/' +
-                        f'?id={nation_id}&key={apikey}')
-                fetcheddata = fetcheddata.json()
-                memberdata = fetcheddata.get(['nations'][0])
-                for dic in memberdata:
-                    if dic.get('nationid') == nation_id:
-                        nation = dic
-                        break
-            user_name = user.get('leader')
-            channel_name = user.get('leader').replace(' ', '-') + '-' + str(user.get('NationID'))
-            nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
-            login_data = {'email': 'jacksonayres11@gmail.com', 'password': 'Dungeons&Dragons', 'loginform': 'Login'}
-            async with aiohttp.ClientSession() as session:
-                login_url = 'https://politicsandwar.com/login/'
-                res1 = await session.post(login_url, data=login_data)
-                if(len((BeautifulSoup(await res1.text(), 'html.parser')).body.findAll(text='Login Failure')) > 0):
-                    print('Login failed')
-                    raise   Exception('Login failed')
-                url = 'https://politicsandwar.com/alliance/id=5049&display=acp'
-                user_name = 34
-                perms_data = {'alliance_positions_member':f'{user_name}', 'alliance_positions_member_name_type':'leader_name', 'alliance_positions_new_position_select':'284',  'alliance_positions_assign_submit':'Save Position Assignment'}
-                res2 = await session.get(url);
-                text = await res2.text()
-                auth_token = (BeautifulSoup(text, 'html.parser')).find('input', {'name':'validation_token'})['value']
-                perms_data.update({'validation_token': auth_token})
-                await session.post(url, data=perms_data)
-                await session.close()
+            channel_name = user.get('leader_name').replace(' ', '-') + '-' + str(user.get('id'))
+            nation_link = f'https://politicsandwar.com/nation/id={user.id}'
+            modlog_channel = ctx.guild.get_channel(568138330957676567)
+            await modlog_channel.send('$set_position -t 241077 -p Member')
+
             await ctx.channel.edit(name=channel_name, topic=nation_link)
-            if nation.get('cities') >= 10:
-                if nation.get('cenciveng') == True and nation.get('intagncy') == True \
-                and nation.get('propbureau') == True:
+            if user.get('num_cities') >= 10:
+                if user.get('center_for_civil_engineering') == True and user.get('central_intelligence_agency') == True \
+                and user.get('propaganda_bureau') == True:
                     await member.add_roles(citizen_role)
                     await member.remove_roles(foreigner_role)
                 else:

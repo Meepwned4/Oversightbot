@@ -408,8 +408,7 @@ async def daily():
                         if not ping_dic.get('aircraft'):
                             ping_dic.update({'aircraft':0})
                         num = ping_dic.get('aircraft')
-                        c = dic2.get('disc_id')
-                        c = str(c)
+                        c = dic.get('disc_id')
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
                             c = dic.get('ChannelID')
@@ -744,7 +743,7 @@ async def daily():
                         if not ping_dic.get('missiles'):
                             ping_dic.update({'missiles':0})
                         num = ping_dic.get('missiles')
-                        c = dic2.get('disc_id')
+                        c = dic.get('disc_id')
                         c = str(c)
                         if c in nerds_list:
                             duplicate_ping_check.append(c)
