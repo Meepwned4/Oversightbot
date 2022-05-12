@@ -133,30 +133,6 @@ class Button(discord.ui.View):
                 - You cannot possess two or more nations/accounts in the same network. This is a grave offense that may lead to banishment.
                 '''
                 ping = f'<@{member.id}>'
-                class pre_application_buttons(discord.ui.View):
-                    def __init__(self, timeout=None):
-                        super().__init__()
-                    @discord.ui.button(label='Start',style=discord.ButtonStyle.blurple)
-                    async def start_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                        try:
-                            await interaction.followup.defer()
-                        except:
-                            await interaction.response.defer()
-                    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
-                    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                        try:
-                            await interaction.followup.defer()
-                        except:
-                            await interaction.response.defer()
-                    @discord.ui.button(label='Close',style=discord.ButtonStyle.red)
-                    async def close_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-                        try:
-                            await interaction.followup.defer()
-                        except:
-                            await interaction.response.defer()
-                embed = discord.Embed(title = 'Pre-Application',
-                                    description = f'{message}', color=colors.dark_gold)
-                await channel.send(ping, embed=embed, view=pre_application_buttons())
 
 
 class ticket(commands.Cog):
