@@ -8,7 +8,6 @@ import typing
 import requests
 import os
 import io
-import random
 
 right_arrow = '➡' # right arrow emoji
 robot = '🤖' # robot emoji
@@ -17,7 +16,6 @@ interview_emoji = '📝' # interview emoji
 elephant = '\N{ELEPHANT}' # elephant emoji
 x_emoji = '❌' # x emoji
 guild_id = 567336454632636416
-guild_id_1 = 567336454632636416
 guild_id_2 = 645391966598594561
 information_board = 714233548332204084
 information_board_2 = 876651793428414485
@@ -34,6 +32,7 @@ bot_role_id = 567722813335535622
 trainee_role_id = 712071416505172090
 foreigner_role_id = 569519945847930911
 citizen_role_id = 567389586934726677
+disc_channel_id = 605910228692893726
 
 class colors:
     default = 0
@@ -61,80 +60,6 @@ class colors:
     greyple = 0x99aab5
 
 
-class Button(discord.ui.View):
-        def __init__(self, timeout=None):
-            super().__init__()
-        @discord.ui.button(label='Apply',emoji=elephant,style=discord.ButtonStyle.blurple,custom_id='sendticket_button')
-        async def blue_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-            member = interaction.user
-            guild_id = interaction.guild_id
-            channel = interaction.channel
-            await interaction.response.send_message('Ticket created',ephemeral=True)
-            if guild_id == guild_id_1:
-                guild = client.get_guild(guild_id_1)
-                ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
-                interviewer_role = guild.get_role(interviewer_role_id)
-                pentarch_role = guild.get_role(pentarch_role_id)
-                disc_role = guild.get_role(disc_role_id)
-                adirim_role = guild.get_role(adirim_role_id)
-                overwrites = {
-                    guild.default_role: discord.PermissionOverwrite(view_channel=False),
-                    member: discord.PermissionOverwrite(view_channel=True),
-                    guild.me: discord.PermissionOverwrite(view_channel=True),
-                    interviewer_role: discord.PermissionOverwrite(view_channel=True),
-                    pentarch_role: discord.PermissionOverwrite(view_channel=True),
-                    adirim_role: discord.PermissionOverwrite(view_channel=True),
-                    disc_role: discord.PermissionOverwrite(view_channel=True),
-                }
-            if guild_id == guild_id_2:
-                guild = client.get_guild(guild_id_2)
-                ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
-                interviewer_role = guild.get_role(874085960885878786)
-                pentarch_role = guild.get_role(736050504089731173)
-                overwrites = {
-                    guild.default_role: discord.PermissionOverwrite(view_channel=False),
-                    member: discord.PermissionOverwrite(view_channel=True),
-                    guild.me: discord.PermissionOverwrite(view_channel=True),
-                    interviewer_role: discord.PermissionOverwrite(view_channel=True),
-                    pentarch_role: discord.PermissionOverwrite(view_channel=True),
-                }
-
-
-            discord_id = member.id
-            dup = False
-            try:
-                user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
-                user = user.json()
-                user = user[0]
-                nation_id = user.get('id')
-            except:
-                nation_id = random.randrange(1,100)
-            for ticket_channel in ticket_category.channels:
-                if ticket_channel.name == f'ticket-{nation_id}':
-                    dup = True
-            if dup == True:
-                await interaction.response.send_message('Can\'t create more than one ticket',ephemeral=True)
-            else:
-                await interaction.response.send_message('Ticket created',ephemeral=True)
-                await ticket_category.create_text_channel(f'ticket-{nation_id}', overwrites=overwrites)
-                channel = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
-                await channel.edit(sync_permissions=True)
-                dic = {'channel':channel.id, 'user_id':member.id}
-                with open(f'./data/tickets/{nation_id}.json', 'w') as outfile:
-                    json.dump(dic, outfile)
-                message = f'''
-                Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
-
-                - Apply to us at: https://politicsandwar.com/alliance/join/id=5049
-                - No current in-game wars or alliance;
-                - No unsettled debt or loans;
-                - You must be active on Discord and in-game, inactivity is not acceptable;
-                - You must obey orders in a timely manner, abide by our rules and listen to your superiors, insubordination will not be tolerated.
-                - You cannot possess two or more nations/accounts in the same network. This is a grave offense that may lead to banishment.
-                '''
-                ping = f'<@{member.id}>'
-
-
 class ticket(commands.Cog):
 
     def __init__(self, client):
@@ -146,14 +71,6 @@ class ticket(commands.Cog):
     interviewer_role = None
     guild = None
 
-    async def setup_hook(self) -> None:
-        # Register the persistent view for listening here.
-        # Note that this does not send the view to any message.
-        # In order to do this you need to first send a message with the View, which is shown below.
-        # If you have the message_id you can also pass it as a keyword argument, but for this example
-        # we don't have one.
-        self.add_view(Button())
-
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         client = self.client
@@ -161,8 +78,8 @@ class ticket(commands.Cog):
         emoji = payload.emoji
         message_id = payload.message_id
         channel_id = payload.channel_id
-        if payload.guild_id == guild_id_1:
-            guild = client.get_guild(guild_id_1)
+        if payload.guild_id == guild_id:
+            guild = client.get_guild(guild_id)
             ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
             interviewer_role = guild.get_role(interviewer_role_id)  # management role
 #            senator_role = guild.get_role(senator_role_id)
@@ -180,7 +97,7 @@ class ticket(commands.Cog):
             adirim_role = guild.get_role(adirim_role_id)
             channel = guild.get_channel(channel_id)
 
-        if not member.bot:
+        if not member.client:
             message = 'Welcome to Carthago Co-Operative Alliance. We are glad to see you recognize the glory of the Shining City and wish to join us.'
 
             user_message = await channel.fetch_message(message_id)
@@ -206,12 +123,22 @@ class ticket(commands.Cog):
                         user = user[0]
                         nation_id = user.get('id')
                     except:
-                        nation_id = random.randrange(1,1000)
+                        msg = 'Failed to create ticket. Seems you aren\'t registered. Contact a staff member to get this resolved.'
+                        await DMChannel.send(member, msg)
+                        disc_channel = client.get_channel(disc_channel_id)
+                        await disc_channel.send(f'<@{disc_role_id}> {user.mention} tried to open a ticket, but it seems they aren\'t registered')
                     await ticket_category.create_text_channel(
                             f'ticket-{nation_id}', overwrites=overwrites)
                     chan = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
                     await chan.edit(sync_permissions=True)
-                    dic = {'channel':chan.id, 'user_id':member.id}
+                    try:
+                        data = open(f'./data/tickets_info.json')
+                        ticket_dic = json.load(data)
+                    except:
+                        ticket_dic = {nation_id:{'channel':chan.id, 'user_id':member.id}}
+                        with open(f'./data/tickets_info.json', 'w') as outfile:
+                            json.dump(ticket_dic, outfile)
+                    dic = {'channel':chan.id, 'user_id':member.id, 'discord_id':discord_id}
                     with open(f'./data/tickets/{nation_id}.json', 'w') as outfile:
                         json.dump(dic, outfile)
 
@@ -220,22 +147,6 @@ class ticket(commands.Cog):
                     await user_message.clear_reaction(elephant)
                     await user_message.add_reaction(elephant)
                     break
-
-    @commands.command(name='sendticket', help='+sendticket')
-    @commands.has_any_role('Elder', 'Suffet', 'Pentarch')
-    async def sendticket(self, ctx):
-        embed = discord.Embed(
-            title='Greetings',
-            description='''
-            Welcome to Carthago Co-Operative Alliance. We are glad to see you recognize the glory of the Shining City and wish to join us.
-
-            Please make sure you've applied at the Alliance Page: https://politicsandwar.com/alliance/join/id=5049
-
-            If that's done, press the button.
-            ''', color=colors.dark_gold
-        )
-        await ctx.send(embed=embed, view=Button())
-        await ctx.message.delete()
 
 
     @commands.command(name='approve', help='+approve', aliases=['accept'])
@@ -284,7 +195,7 @@ class ticket(commands.Cog):
             channel_name = user.get('leader_name').replace(' ', '-') + '-' + str(user.get('id'))
             nation_link = f'https://politicsandwar.com/nation/id={user.id}'
             modlog_channel = ctx.guild.get_channel(568138330957676567)
-            await modlog_channel.send('$set_position -t 241077 -p Member')
+            await modlog_channel.send(f'$set_position -t {user.id} -p Member')
 
             await ctx.channel.edit(name=channel_name, topic=nation_link)
             if user.get('num_cities') >= 10:
@@ -307,7 +218,20 @@ class ticket(commands.Cog):
         if ctx.channel.category.name == ticket_category_name and ctx.channel.id not in ignore_channels:
             client = self.client
             await ctx.message.delete()
+
+            try:
+                data = open(f'./data/tickets_info.json')
+                ticket_dic = json.load(data)
+                discord_id = ticket_dic.get('discord_id')
+                discord_id = f'<@{discord_id}>'
+            except:
+                discord_id = 'Unknown'
+
             embed = discord.Embed(title='Ticket manually saved',color=colors.dark_gold)
+
+            embed.add_field(name = 'Opened by',
+                    value = f'{discord_id}',
+                    inline = True)
             embed.add_field(name = 'Saved by',
                         value = f'<@{ctx.author.id}>',
                         inline = True)
@@ -360,7 +284,19 @@ class ticket(commands.Cog):
             if ctx.message.channel.category == ticket_category:
                 await ctx.message.delete()
                 channel_name = ctx.channel.name
+
+                try:
+                    data = open(f'./data/tickets_info.json')
+                    ticket_dic = json.load(data)
+                    discord_id = ticket_dic.get('discord_id')
+                except:
+                    discord_id = 'Unknown'
+
                 embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
+
+                embed.add_field(name = 'Opened by',
+                        value = f'<@{discord_id}>',
+                        inline = True)
                 embed.add_field(name = 'Closed by',
                             value = f'<@{ctx.author.id}>',
                             inline = True)

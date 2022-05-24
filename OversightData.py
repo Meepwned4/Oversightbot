@@ -275,7 +275,7 @@ If you have any questions, comments, or concerns, please let us know. Otherwise,
     if num == '17':
         message = ('For coordination purposes, what\'s your Timezone?')
     if num == '18':
-        message = ('''If an officer gave you an order that you disagreed with, what would you do?''' + reminder)
+        message = ('''If an officer gave you an order that you disagreed with, what would you do?\n\n''' + reminder)
     if num == '19':
         message = ('That was the last question, a human should be along soon to review your interview.')
 

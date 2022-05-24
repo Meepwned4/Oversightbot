@@ -90,15 +90,31 @@ right_arrow = '➡' # right arrow emoji
 person = '🧑' # person emoji
 interview = '📝' # interview emoji
 
-intents = discord.Intents.default()
-intents.members = True
-intents.message_content = True
-client = commands.Bot(command_prefix='+', intents=intents)
+class OversightBot(commands.Bot):
+    def __init__(self):
+        intents = discord.Intents.default()
+        intents.message_content = True
 
-@client.event
-async def on_ready():
-    print(f'\n\n{client.user.name} has connected to Discord!')
-    await client.change_presence(activity=discord.Game('Hauling mad cash'))
+        super().__init__(command_prefix='.', intents=intents)
+
+#    async def setup_hook(self) -> None:
+#        # Register the persistent view for listening here.
+#        # Note that this does not send the view to any message.
+#        # In order to do this you need to first send a message with the View, which is shown below.
+#        # If you have the message_id you can also pass it as a keyword argument, but for this example
+#        # we don't have one.
+#        self.add_view(PersistentView())
+
+    async def on_ready(self):
+        print(f'Logged in as {self.user} (ID: {self.user.id})')
+        print('------')
+
+client = OversightBot()
+
+#@client.event
+#async def on_ready():
+#    print(f'\n\n{client.user.name} has connected to Discord!')
+#    await client.change_presence(activity=discord.Game('Hauling mad cash'))
 
 async def load_extensions():
     for filename in os.listdir("./cogs"):

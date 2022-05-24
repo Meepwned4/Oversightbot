@@ -8,6 +8,7 @@ nest_asyncio.apply()
 import requests
 import random
 import pickle
+import asyncio
 import OversightData
 
 class colors:
@@ -67,210 +68,998 @@ right_arrow = '➡' # right arrow emoji
 person = '🧑' # person emoji
 interview_emoji = '📝' # interview emoji
 x_emoji = '✖️' # x emoji
+elephant = '\N{ELEPHANT}' # elephant emoji
+
+class apply_buttons(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Apply',emoji=elephant,style=discord.ButtonStyle.blurple,custom_id='sendticket_button')
+    async def blue_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        member = interaction.user
+        guild_id = interaction.guild_id
+        channel = interaction.channel
+        await interaction.response.send_message('Ticket created',ephemeral=True)
+        if guild_id == guild_id_1:
+            guild = client.get_guild(guild_id_1)
+            ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
+            interviewer_role = guild.get_role(interviewer_role_id)
+            pentarch_role = guild.get_role(pentarch_role_id)
+            disc_role = guild.get_role(disc_role_id)
+            adirim_role = guild.get_role(adirim_role_id)
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(view_channel=False),
+                member: discord.PermissionOverwrite(view_channel=True),
+                guild.me: discord.PermissionOverwrite(view_channel=True),
+                interviewer_role: discord.PermissionOverwrite(view_channel=True),
+                pentarch_role: discord.PermissionOverwrite(view_channel=True),
+                adirim_role: discord.PermissionOverwrite(view_channel=True),
+                disc_role: discord.PermissionOverwrite(view_channel=True),
+            }
+        if guild_id == guild_id_2:
+            guild = client.get_guild(guild_id_2)
+            ticket_category = discord.utils.get(guild.categories, name=ticket_category_name)
+            interviewer_role = guild.get_role(874085960885878786)
+            pentarch_role = guild.get_role(736050504089731173)
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(view_channel=False),
+                member: discord.PermissionOverwrite(view_channel=True),
+                guild.me: discord.PermissionOverwrite(view_channel=True),
+                interviewer_role: discord.PermissionOverwrite(view_channel=True),
+                pentarch_role: discord.PermissionOverwrite(view_channel=True),
+            }
+
+
+        discord_id = member.id
+        dup = False
+        try:
+            user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
+            user = user.json()
+            user = user[0]
+            nation_id = user.get('id')
+        except:
+            nation_id = random.randrange(1,100)
+        for ticket_channel in ticket_category.channels:
+            if ticket_channel.name == f'ticket-{nation_id}':
+                dup = True
+        if dup == True:
+            await interaction.response.send_message('Can\'t create more than one ticket',ephemeral=True)
+        else:
+            await interaction.response.send_message('Ticket created',ephemeral=True)
+            await ticket_category.create_text_channel(f'ticket-{nation_id}', overwrites=overwrites)
+            channel = discord.utils.get(guild.text_channels, name=f'ticket-{nation_id}')
+            await channel.edit(sync_permissions=True)
+            dic = {'channel':channel.id, 'user_id':member.id}
+            with open(f'./data/tickets/{nation_id}.json', 'w') as outfile:
+                json.dump(dic, outfile)
+            message = f'''
+            Please read and follow these instructions before you proceed with the prompt below, provided by the bot.
+
+            - Apply to us at: https://politicsandwar.com/alliance/join/id=5049
+            - No current in-game wars or alliance;
+            - No unsettled debt or loans;
+            - You must be active on Discord and in-game, inactivity is not acceptable;
+            - You must obey orders in a timely manner, abide by our rules and listen to your superiors, insubordination will not be tolerated.
+            - You cannot possess two or more nations/accounts in the same network. This is a grave offense that may lead to banishment.
+            '''
+            ping = f'<@{member.id}>'
+            embed = discord.Embed(title = 'Pre-Application',
+                                        description = f'{message}', color=colors.dark_gold)
+            await channel.send(ping, embed=embed, view=pre_application_buttons())
+
+
+
+class link_question(discord.ui.Modal, title='What is your nation link?'):
+    answer = discord.ui.TextInput(label='Politics and War nation link', style=discord.TextStyle.short, custom_id='link_modal')
+    async def on_submit(self, interaction: discord.Interaction):
+        answer = self.answer
+        await channel.edit(topic=answer)
+        await interaction.response.send_message(f'Nation link is {answer}')
+        message = OversightData.interview_message('2', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 2',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_2())
+
+class close_modal(discord.ui.Modal, title='Reason for closing ticket'):
+    answer = discord.ui.TextInput(label='Reason', style=discord.TextStyle.short, custom_id='close_modal')
+    async def on_submit(self, interaction: discord.Interaction):
+        answer = self.answer
+        embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
+        embed.add_field(name = 'Closed by',
+                    value = f'<@{user.id}>',
+                    inline = True)
+        embed.add_field(name = 'Ticket name',
+                    value = f'{channel_name}',
+                    inline = True)
+        embed.add_field(name = 'Reason',
+                    value = f'{answer}',
+                    inline = False)
+        transcript = await chat_exporter.export(channel)
+
+        if transcript is None:
+            return
+        try:
+#                    file = open(f'./data/transcripts/transcript-{channel_id}.html', 'w')
+#                    file.write(transcript)
+#                    file.close()
+#                    transcript_file = open(f'./data/transcripts/transcript-{channel_id}.html', 'r')
+            transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{channel_id}.html')
+            chan = client.get_channel(archive_channel)
+#                    await chan.send(embed=embed, file=discord.File(transcript_file))
+            await chan.send(embed=embed, file=transcript_file)
+            try:
+                for filename in os.listdir('./data/transcripts'):
+                    if str(chan.id) in filename:
+                        os.remove(f'./data/transcripts/transcript-{channel_id}.html')
+            except:
+                pass
+            try:
+                for filename in os.listdir('./data/tickets'):
+                    if str(chan.id) in filename:
+                        os.remove(f'./data/tickets/{channel_id}.json')
+            except:
+                pass
+            await chan.delete()
+        except:
+            if member == client.is_owner:
+                msg = f'❌ Failed to archive <#{channel_id}> \n\'+close\' ran by <@{member.id}>'
+                await DMChannel.send(member, msg)
+            else:
+                msg = f'❌ Failed to archive <#{ctx.channel.id}>'
+                user = await client.fetch_user(175719252995604480)
+                await DMChannel.send(user, msg)
+                await interaction.response.send_message(f'Ticket closing!', ephemeral=True)
+
+class pre_application_buttons(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Start',style=discord.ButtonStyle.blurple, custom_id='start_button')
+    async def start_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        print(member.id)
+        message = OversightData.interview_message('1', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 1',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_1())
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button:pre-application')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        disc_channel = client.get_channel(disc_channel_id)
+        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+        message = 'Staff have been notified. Please be patient.'
+        await channel.send(message)
+    @discord.ui.button(label='Close',style=discord.ButtonStyle.red, custom_id='close_button')
+    async def close_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        if channel.id not in ignore_channels:
+            client = self.client
+            channel_name = channel.name.split('-')
+            channel_name = channel_name[0]
+            channel_name = channel.name
+            user = interaction.user
+            await interaction.response.send_modal(close_modal())
+
+class interview_buttons_1(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Yes',style=discord.ButtonStyle.blurple, custom_id='yes_interview_1')
+    async def yes_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        await interaction.response.send_message('Nation link is correct')
+        discord_id = member.id
+        user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
+        user = user.json()
+        user = user[0]
+        nation_id = user.get('id')
+        nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
+        await channel.edit(topic=nation_link)
+        message = OversightData.interview_message('2', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 2',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_2())
+    @discord.ui.button(label='No',style=discord.ButtonStyle.blurple, custom_id='no_interview_1')
+    async def no_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        await interaction.response.send_modal(link_question())
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button_1')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        disc_channel = client.get_channel(disc_channel_id)
+        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+        message = 'Staff have been notified. Please be patient.'
+        await channel.send(message)
+
+class interview_buttons_2(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple, custom_id='next_button_2')
+    async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        message = OversightData.interview_message('3', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 3',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_3())
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button_2')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        disc_channel = client.get_channel(disc_channel_id)
+        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+        message = 'Staff have been notified. Please be patient.'
+        await channel.send(message)
+
+class interview_buttons_3(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple, custom_id='next_button_3')
+    async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        message = OversightData.interview_message('4', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 4',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_4())
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button_3')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        disc_channel = client.get_channel(disc_channel_id)
+        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+        message = 'Staff have been notified. Please be patient.'
+        await channel.send(message)
+
+class interview_buttons_4(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple, custom_id='next_button_4')
+    async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        message = OversightData.interview_message('5', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 5',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_5())
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button_4')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        disc_channel = client.get_channel(disc_channel_id)
+        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+        message = 'Staff have been notified. Please be patient.'
+        await channel.send(message)
+
+class interview_buttons_5(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Yes',style=discord.ButtonStyle.blurple, custom_id='yes_button_5')
+    async def yes_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        await interaction.response.send_message('Yes')
+        message = OversightData.interview_message('6', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 6',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_6())
+    @discord.ui.button(label='No',style=discord.ButtonStyle.blurple, custom_id='no_button_5')
+    async def no_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        await interaction.response.send_message('No')
+        message = OversightData.interview_message('6', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 6',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_6())
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button_5')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        disc_channel = client.get_channel(disc_channel_id)
+        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+        message = 'Staff have been notified. Please be patient.'
+        await channel.send(message)
+
+class interview_buttons_6(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple, custom_id='next_button_6')
+    async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        message = OversightData.interview_message('7', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 7',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_7())
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button_6')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        disc_channel = client.get_channel(disc_channel_id)
+        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+        message = 'Staff have been notified. Please be patient.'
+        await channel.send(message)
+
+class interview_buttons_7(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple, custom_id='next_button_7')
+    async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        message = OversightData.interview_message('8', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 8',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_8())
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button_7')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        disc_channel = client.get_channel(disc_channel_id)
+        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
+        message = 'Staff have been notified. Please be patient.'
+        await channel.send(message)
+
+class Select_7(discord.ui.Select):
+    def __init__(self):
+        options=[
+discord.SelectOption(label='Option 1', emoji='1️⃣'),
+discord.SelectOption(label='Option 2', emoji='2️⃣'),
+discord.SelectOption(label='Option 3', emoji='3️⃣'),
+discord.SelectOption(label='Option 4', emoji='4️⃣'),
+discord.SelectOption(label='Other'),
+]
+        super().__init__(placeholder='Select an option',max_values=1,min_values=1,options=options, custom_id='select_7')
+    async def callback(self, interaction: discord.Interaction):
+        if self.values[0] == 'Option 1':
+            await interaction.response.send_message('Option 1', ephemeral=False)
+        elif self.values[0] == 'Option 2':
+            await interaction.response.send_message('Option 2', ephemeral=False)
+        elif self.values[0] == 'Option 3':
+            await interaction.response.send_message('Option 3', ephemeral=False)
+        elif self.values[0] == 'Option 4':
+            await interaction.response.send_message('Option 4', ephemeral=False)
+        elif self.values[0] == 'Other':
+            class Questionnaire(discord.ui.Modal, title='Questionnaire Response'):
+                answer = discord.ui.TextInput(label='Answer', style=discord.TextStyle.paragraph)
+
+                async def on_submit(self, interaction: discord.Interaction):
+                    answer = self.answer
+                    await interaction.response.send_message(f'{answer}', ephemeral=False)
+            await interaction.response.send_modal(Questionnaire())
+
+class SelectView_7(discord.ui.View):
+    def __init__(self, *, timeout = None):
+        super().__init__(timeout=timeout)
+        self.add_item(Select())
+
+
+class Select_8(discord.ui.Select):
+    def __init__(self):
+        options=[
+discord.SelectOption(label='War Department'),
+discord.SelectOption(label='Foreign affairs department'),
+discord.SelectOption(label='Tech Department'),
+discord.SelectOption(label='Discipline Department'),
+discord.SelectOption(label='Culture Department'),
+discord.SelectOption(label='Treasury Department'),
+discord.SelectOption(label='None')
+]
+        super().__init__(placeholder='Select an option',max_values=7,min_values=1,options=options, custom_id='select_8')
+    async def callback(self, interaction: discord.Interaction):
+        values = ''
+        for value in self.values:
+            values += f'{value}\n'
+        await interaction.response.send_message(f'{values}', ephemeral=False)
+
+class SelectView_8(discord.ui.View):
+    def __init__(self, *, timeout = None):
+        super().__init__(timeout=timeout)
+        self.add_item(Select_8())
+
+
+class Select_9(discord.ui.Select):
+    def __init__(self):
+        options=[
+discord.SelectOption(label='Option 1', emoji='1️⃣'),
+discord.SelectOption(label='Option 2', emoji='2️⃣'),
+discord.SelectOption(label='Option 3', emoji='3️⃣'),
+discord.SelectOption(label='Option 4', emoji='4️⃣'),
+discord.SelectOption(label='Option 5', emoji='5️⃣'),
+discord.SelectOption(label='Option 6', emoji='6️⃣'),
+discord.SelectOption(label='Option 7', emoji='7️⃣')
+]
+        super().__init__(placeholder='Select an option',max_values=7,min_values=1,options=options, custom_id='select_9')
+    async def callback(self, interaction: discord.Interaction):
+        values = ''
+        for value in self.values:
+            values += f'{value}\n'
+        await interaction.response.send_message(f'{values}', ephemeral=False)
+
+class SelectView_9(discord.ui.View):
+    def __init__(self, *, timeout = None):
+        super().__init__(timeout=timeout)
+        self.add_item(Select_9())
+
+
+class Select_10(discord.ui.Select):
+    def __init__(self):
+        options=[
+discord.SelectOption(label='Option 1',emoji='1️⃣'),
+discord.SelectOption(label='Option 2',emoji='2️⃣'),
+discord.SelectOption(label='Option 3',emoji='3️⃣'),
+discord.SelectOption(label='Option 4',emoji='4️⃣'),
+discord.SelectOption(label='Option 5',emoji='5️⃣'),
+discord.SelectOption(label='Option 6',emoji='6️⃣'),
+discord.SelectOption(label='Option 7',emoji='7️⃣')
+]
+        super().__init__(placeholder='Select an option',max_values=7,min_values=1,options=options, custom_id='select_10')
+    async def callback(self, interaction: discord.Interaction):
+        values = ''
+        for value in self.values:
+            values += f'{value}\n'
+        await interaction.response.send_message(f'{values}', ephemeral=False)
+
+class SelectView_10(discord.ui.View):
+    def __init__(self, *, timeout = None):
+        super().__init__(timeout=timeout)
+        self.add_item(Select_10())
+
+
+class interview_buttons_12(discord.ui.View):
+    def __init__(self, timeout=None):
+        super().__init__()
+    @discord.ui.button(label='Agree',style=discord.ButtonStyle.blurple, custom_id='agree_button_12')
+    async def agree_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        message = OversightData.interview_message('13', member)
+        message = message.replace(reminder, '')
+        embed = discord.Embed(title = 'Question number 13',
+                              description = f'{message}', color=colors.dark_gold)
+        await channel.send(embed=embed, view=interview_buttons_3())
+    @discord.ui.button(label='Disagree',style=discord.ButtonStyle.blurple, custom_id='disagree_button_12')
+    async def disagree_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        try:
+            await interaction.followup.defer()
+        except:
+            await interaction.response.defer()
+    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray, custom_id='help_button_12')
+    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
+        try:
+            await interaction.followup.defer()
+        except:
+            await interaction.response.defer()
+
+class Select_13_a(discord.ui.Select):
+    def __init__(self):
+        options=[
+discord.SelectOption(label='UTC -12',emoji='🕛'),
+discord.SelectOption(label='UTC -11',emoji='🕚'),
+discord.SelectOption(label='UTC -10',emoji='🕙'),
+discord.SelectOption(label='UTC -9',emoji='🕘'),
+discord.SelectOption(label='UTC -8',emoji='🕗'),
+discord.SelectOption(label='UTC -7',emoji='🕖'),
+discord.SelectOption(label='UTC -6',emoji='🕕'),
+discord.SelectOption(label='UTC -5',emoji='🕔'),
+discord.SelectOption(label='UTC -4',emoji='🕓'),
+discord.SelectOption(label='UTC -3',emoji='🕒'),
+discord.SelectOption(label='UTC -2',emoji='🕑'),
+discord.SelectOption(label='UTC -1',emoji='🕐'),
+discord.SelectOption(label='UTC +0',emoji='⏳'),
+discord.SelectOption(label='UTC +1',emoji='🕐'),
+discord.SelectOption(label='UTC +2',emoji='🕑'),
+discord.SelectOption(label='UTC +3',emoji='🕒'),
+discord.SelectOption(label='UTC +4',emoji='🕓'),
+discord.SelectOption(label='UTC +5',emoji='🕔'),
+discord.SelectOption(label='UTC +6',emoji='🕕'),
+discord.SelectOption(label='UTC +7',emoji='🕖'),
+discord.SelectOption(label='UTC +8',emoji='🕗'),
+discord.SelectOption(label='UTC +9',emoji='🕘'),
+discord.SelectOption(label='UTC +10',emoji='🕙'),
+discord.SelectOption(label='UTC +11',emoji='🕚'),
+discord.SelectOption(label='UTC +12',emoji='🕛')
+]
+        super().__init__(placeholder='Select a timezone',max_values=1,min_values=1,options=options, custom_id='select_13_a')
+    async def callback(self, interaction: discord.Interaction):
+
+        if self.values[0] == 'UTC -12':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -12', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -11':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -11', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -10':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -10', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -9':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -9', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -8':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -8', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -7':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -7', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -6':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -6', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -5':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -5', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -4':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -4', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -3':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -3', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -2':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -2', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -1':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -1', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +0':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +0', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +1':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +1', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +2':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +2', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +3':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +3', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +4':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +4', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +5':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +5', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +6':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +6', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +7':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC 7', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +8':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +8', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +9':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +9', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +10':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +10', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +11':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +11', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +12':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +12', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+class SelectView_13_a(discord.ui.View):
+    def __init__(self, *, timeout = None):
+        super().__init__(timeout=timeout)
+        self.add_item(Select_13_b())
+
+class Select_13_b(discord.ui.Select):
+    def __init__(self):
+        options=[
+discord.SelectOption(label='UTC -12',emoji='🕛'),
+discord.SelectOption(label='UTC -11',emoji='🕚'),
+discord.SelectOption(label='UTC -10',emoji='🕙'),
+discord.SelectOption(label='UTC -9',emoji='🕘'),
+discord.SelectOption(label='UTC -8',emoji='🕗'),
+discord.SelectOption(label='UTC -7',emoji='🕖'),
+discord.SelectOption(label='UTC -6',emoji='🕕'),
+discord.SelectOption(label='UTC -5',emoji='🕔'),
+discord.SelectOption(label='UTC -4',emoji='🕓'),
+discord.SelectOption(label='UTC -3',emoji='🕒'),
+discord.SelectOption(label='UTC -2',emoji='🕑'),
+discord.SelectOption(label='UTC -1',emoji='🕐'),
+discord.SelectOption(label='UTC +0',emoji='⏳'),
+discord.SelectOption(label='UTC +1',emoji='🕐'),
+discord.SelectOption(label='UTC +2',emoji='🕑'),
+discord.SelectOption(label='UTC +3',emoji='🕒'),
+discord.SelectOption(label='UTC +4',emoji='🕓'),
+discord.SelectOption(label='UTC +5',emoji='🕔'),
+discord.SelectOption(label='UTC +6',emoji='🕕'),
+discord.SelectOption(label='UTC +7',emoji='🕖'),
+discord.SelectOption(label='UTC +8',emoji='🕗'),
+discord.SelectOption(label='UTC +9',emoji='🕘'),
+discord.SelectOption(label='UTC +10',emoji='🕙'),
+discord.SelectOption(label='UTC +11',emoji='🕚'),
+discord.SelectOption(label='UTC +12',emoji='🕛')
+]
+        super().__init__(placeholder='Select a timezone',max_values=1,min_values=1,options=options, custom_id='select_13_b')
+    async def callback(self, interaction: discord.Interaction):
+        reminder = f'If at any time you\'d like to be interviewed by a human, react with {person} \n' \
+        + f'**After** you\'ve answered, react with {right_arrow} to continue'
+
+        if self.values[0] == 'UTC -12':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -12', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -11':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -11', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -10':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -10', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -9':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -9', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -8':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -8', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -7':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -7', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -6':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -6', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -5':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -5', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -4':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -4', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -3':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -3', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -2':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -2', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC -1':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC -1', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +0':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +0', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +1':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +1', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +2':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +2', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +3':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +3', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +4':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +4', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +5':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +5', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +6':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +6', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +7':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC 7', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +8':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +8', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +9':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +9', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +10':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +10', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +11':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +11', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+        elif self.values[0] == 'UTC +12':
+            message = OversightData.interview_message('14', member)
+            message = message.replace(reminder, '')
+            embed = discord.Embed(title = f'Automated interview over',
+                            description = f'{message}', color=colors.dark_gold)
+            await interaction.response.send_message('UTC +12', ephemeral=False)
+            await channel.send(embed=embed)
+#                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
+
+class SelectView_13_b(discord.ui.View):
+    def __init__(self, *, timeout = None):
+        super().__init__(timeout=timeout)
+        self.add_item(Select_13_b())
+
+async def setup_hook(self) -> None:
+    # Register the persistent view for listening here.
+    # Note that this does not send the view to any message.
+    # In order to do this you need to first send a message with the View, which is shown below.
+    # If you have the message_id you can also pass it as a keyword argument, but for this example
+    # we don't have one.
+    self.add_view(apply_buttons())
+    self.add_view(pre_application_buttons())
+    self.add_view(link_question())
+    self.add_view(close_modal())
+    self.add_view(interview_buttons_1())
+    self.add_view(interview_buttons_2())
+    self.add_view(interview_buttons_3())
+    self.add_view(interview_buttons_4())
+    self.add_view(interview_buttons_5())
+    self.add_view(interview_buttons_6())
+    self.add_view(interview_buttons_7())
+    self.add_view(interview_buttons_8())
+    self.add_view(interview_buttons_9())
+    self.add_view(interview_buttons_10())
+    self.add_view(interview_buttons_11())
+    self.add_view(interview_buttons_12())
+    self.add_view(SelectView_13_a())
+    self.add_view(SelectView_13_b())
 
 class interview(commands.Cog):
     def __init__(self, client):
         self.client = client
-        client = self.client
-#        ignore_channels = [605910228692893726, 845685557367144448, 568822425253576739]
-#        guild = client.get_guild(guild_id_1)
-#        category = discord.utils.get(guild.categories, name=ticket_category_name)
-#        for channel in category.channels:
-#            if channel not in ignore_channels:
-#                self.add_view(PersistentView())
-#                class link_question(discord.ui.Modal, title='What is your nation link?'):
-#                    answer = discord.ui.TextInput(label='Politics and War nation link', style=discord.TextStyle.short)
-#                    async def on_submit(self, interaction: discord.Interaction):
-#                        answer = self.answer
-#                        await channel.edit(topic=answer)
-#                        await interaction.response.send_message(f'Nation link is {answer}')
-#                        message = OversightData.interview_message('2', member)
-#                        message = message.replace(reminder, '')
-#                        embed = discord.Embed(title = 'Question number 2',
-#                                              description = f'{message}', color=colors.dark_gold)
-#                        await channel.send(embed=embed, view=interview_buttons_2())
-#
-#                class close_modal(discord.ui.Modal, title='Reason for closing ticket'):
-#                    answer = discord.ui.TextInput(label='Reason', style=discord.TextStyle.short)
-#                    async def on_submit(self, interaction: discord.Interaction):
-#                        answer = self.answer
-#                        embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
-#                        embed.add_field(name = 'Closed by',
-#                                    value = f'<@{user.id}>',
-#                                    inline = True)
-#                        embed.add_field(name = 'Ticket name',
-#                                    value = f'{channel_name}',
-#                                    inline = True)
-#                        embed.add_field(name = 'Reason',
-#                                    value = f'{answer}',
-#                                    inline = False)
-#                        transcript = await chat_exporter.export(channel)
-#
-#                        if transcript is None:
-#                            return
-#                        try:
-#        #                    file = open(f'./data/transcripts/transcript-{channel_id}.html', 'w')
-#        #                    file.write(transcript)
-#        #                    file.close()
-#        #                    transcript_file = open(f'./data/transcripts/transcript-{channel_id}.html', 'r')
-#                            transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{channel_id}.html')
-#                            chan = client.get_channel(archive_channel)
-#        #                    await chan.send(embed=embed, file=discord.File(transcript_file))
-#                            await chan.send(embed=embed, file=transcript_file)
-#                            try:
-#                                for filename in os.listdir('./data/transcripts'):
-#                                    if str(chan.id) in filename:
-#                                        os.remove(f'./data/transcripts/transcript-{channel_id}.html')
-#                            except:
-#                                pass
-#                            try:
-#                                for filename in os.listdir('./data/tickets'):
-#                                    if str(chan.id) in filename:
-#                                        os.remove(f'./data/tickets/{channel_id}.json')
-#                            except:
-#                                pass
-#                            await chan.delete()
-#                        except:
-#                            if member == client.is_owner:
-#                                msg = f'❌ Failed to archive <#{channel_id}> \n\'+close\' ran by <@{member.id}>'
-#                                await DMChannel.send(member, msg)
-#                            else:
-#                                msg = f'❌ Failed to archive <#{ctx.channel.id}>'
-#                                user = await client.fetch_user(175719252995604480)
-#                                await DMChannel.send(user, msg)
-#                                await interaction.response.send_message(f'Ticket closing!', ephemeral=True)
-#
-#                class pre_application_buttons(discord.ui.View):
-#                    def __init__(self, timeout=None):
-#                        super().__init__()
-#                    @discord.ui.button(label='Start',style=discord.ButtonStyle.blurple)
-#                    async def start_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-#                        print(member.id)
-#                        message = OversightData.interview_message('1', member)
-#                        message = message.replace(reminder, '')
-#                        embed = discord.Embed(title = 'Question number 1',
-#                                              description = f'{message}', color=colors.dark_gold)
-#                        await channel.send(embed=embed, view=interview_buttons_1())
-#                    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
-#                    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-#                        disc_channel = client.get_channel(disc_channel_id)
-#                        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
-#                        message = 'Staff have been notified. Please be patient.'
-#                        await channel.send(message)
-#                    @discord.ui.button(label='Close',style=discord.ButtonStyle.red)
-#                    async def close_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-#                        if category.name == ticket_category_name and channel.id not in ignore_channels:
-#                            client = self.client
-#                            channel_name = channel.name.split('-')
-#                            channel_name = channel_name[0]
-#                            channel_name = channel.name
-#                            user = interaction.user
-#                            class close_modal(discord.ui.Modal, title='Reason for closing ticket'):
-#                                answer = discord.ui.TextInput(label='Reason', style=discord.TextStyle.short)
-#                                async def on_submit(self, interaction: discord.Interaction):
-#                                    answer = self.answer
-#                                    embed = discord.Embed(title='Ticket closed',color=colors.dark_gold)
-#                                    embed.add_field(name = 'Closed by',
-#                                                value = f'<@{user.id}>',
-#                                                inline = True)
-#                                    embed.add_field(name = 'Ticket name',
-#                                                value = f'{channel_name}',
-#                                                inline = True)
-#                                    embed.add_field(name = 'Reason',
-#                                                value = f'{answer}',
-#                                                inline = False)
-#                                    transcript = await chat_exporter.export(channel)
-#
-#                                    if transcript is None:
-#                                        return
-#                                    try:
-#                    #                    file = open(f'./data/transcripts/transcript-{channel_id}.html', 'w')
-#                    #                    file.write(transcript)
-#                    #                    file.close()
-#                    #                    transcript_file = open(f'./data/transcripts/transcript-{channel_id}.html', 'r')
-#                                        transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f'transcript-{channel_id}.html')
-#                                        chan = client.get_channel(archive_channel)
-#                    #                    await chan.send(embed=embed, file=discord.File(transcript_file))
-#                                        await chan.send(embed=embed, file=transcript_file)
-#                                        try:
-#                                            for filename in os.listdir('./data/transcripts'):
-#                                                if str(chan.id) in filename:
-#                                                    os.remove(f'./data/transcripts/transcript-{channel_id}.html')
-#                                        except:
-#                                            pass
-#                                        try:
-#                                            for filename in os.listdir('./data/tickets'):
-#                                                if str(chan.id) in filename:
-#                                                    os.remove(f'./data/tickets/{channel_id}.json')
-#                                        except:
-#                                            pass
-#                                        await chan.delete()
-#                                    except:
-#                                        if member == client.is_owner:
-#                                            msg = f'❌ Failed to archive <#{channel_id}> \n\'+close\' ran by <@{member.id}>'
-#                                            await DMChannel.send(member, msg)
-#                                        else:
-#                                            msg = f'❌ Failed to archive <#{ctx.channel.id}>'
-#                                            user = await client.fetch_user(175719252995604480)
-#                                            await DMChannel.send(user, msg)
-#                                            await interaction.response.send_message(f'Ticket closing!', ephemeral=True)
-#
-#                            await interaction.response.send_modal(close_modal())
-#                class interview_buttons_1(discord.ui.View):
-#                    def __init__(self, timeout=None):
-#                        super().__init__()
-#                    @discord.ui.button(label='Yes',style=discord.ButtonStyle.blurple)
-#                    async def yes_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-#                        await interaction.response.send_message('Nation link is correct')
-#                        discord_id = member.id
-#                        user = requests.get(f'http://24.117.204.187:8080/discord/?disc_id={discord_id}&key=davethsmellskrampuswhales')
-#                        user = user.json()
-#                        user = user[0]
-#                        nation_id = user.get('id')
-#                        nation_link = f'https://politicsandwar.com/nation/id={nation_id}'
-#                        await channel.edit(topic=nation_link)
-#                        message = OversightData.interview_message('2', member)
-#                        message = message.replace(reminder, '')
-#                        embed = discord.Embed(title = 'Question number 2',
-#                                              description = f'{message}', color=colors.dark_gold)
-#                        await channel.send(embed=embed, view=interview_buttons_2())
-#                    @discord.ui.button(label='No',style=discord.ButtonStyle.blurple)
-#                    async def no_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-#                        class link_question(discord.ui.Modal, title='What is your nation link?'):
-#                            answer = discord.ui.TextInput(label='Politics and War nation link', style=discord.TextStyle.short)
-#                            async def on_submit(self, interaction: discord.Interaction):
-#                                answer = self.answer
-#                                await channel.edit(topic=answer)
-#                                await interaction.response.send_message(f'Nation link is {answer}')
-#                                message = OversightData.interview_message('2', member)
-#                                message = message.replace(reminder, '')
-#                                embed = discord.Embed(title = 'Question number 2',
-#                                                      description = f'{message}', color=colors.dark_gold)
-#                                await channel.send(embed=embed, view=interview_buttons_2())
-#                        await interaction.response.send_modal(link_question())
-#                    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
-#                    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-#                        disc_channel = client.get_channel(disc_channel_id)
-#                        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
-#                        message = 'Staff have been notified. Please be patient.'
-#                        await channel.send(message)
-#
-#                class interview_buttons_2(discord.ui.View):
-#                    def __init__(self, timeout=None):
-#                        super().__init__()
-#                    @discord.ui.button(label='Next',style=discord.ButtonStyle.blurple)
-#                    async def next_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-#                        await interaction.response.defer()
-#                    @discord.ui.button(label='Help',style=discord.ButtonStyle.gray)
-#                    async def help_button(self,interaction:discord.Interaction,button:discord.ui.Button):
-#                        disc_channel = client.get_channel(disc_channel_id)
-#                        await disc_channel.send(f'<@&568141320011382825>\n<#{channel_id}> requests assistance')
-#                        message = 'Staff have been notified. Please be patient.'
-#                        await channel.send(message)
-
-
-
-
+        ignore_channels = [605910228692893726, 845685557367144448, 568822425253576739]
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
@@ -574,7 +1363,7 @@ class interview(commands.Cog):
             await channel.send(embed=embed, view=interview_buttons_4())
 
 
-        if embed_title == 'Question number 4' and label == 'Next':
+        if embed_title == '' and label == 'Next':
             class interview_buttons_5(discord.ui.View):
                 def __init__(self, timeout=None):
                     super().__init__()
@@ -648,7 +1437,7 @@ class interview(commands.Cog):
 
 
         if embed_title == 'Question number 7' and label == 'Next':
-            class Select(discord.ui.Select):
+            class Select_7(discord.ui.Select):
                 def __init__(self):
                     options=[
             discord.SelectOption(label='Option 1', emoji='1️⃣'),
@@ -676,7 +1465,7 @@ class interview(commands.Cog):
                                 await interaction.response.send_message(f'{answer}', ephemeral=False)
                         await interaction.response.send_modal(Questionnaire())
 
-            class SelectView(discord.ui.View):
+            class SelectView_7(discord.ui.View):
                 def __init__(self, *, timeout = None):
                     super().__init__(timeout=timeout)
                     self.add_item(Select())
@@ -688,7 +1477,7 @@ class interview(commands.Cog):
 
 
         if embed_title == 'Question number 8':
-            class Select(discord.ui.Select):
+            class Select_8(discord.ui.Select):
                 def __init__(self):
                     options=[
             discord.SelectOption(label='War Department'),
@@ -706,10 +1495,10 @@ class interview(commands.Cog):
                         values += f'{value}\n'
                     await interaction.response.send_message(f'{values}', ephemeral=False)
 
-            class SelectView(discord.ui.View):
+            class SelectView_8(discord.ui.View):
                 def __init__(self, *, timeout = None):
                     super().__init__(timeout=timeout)
-                    self.add_item(Select())
+                    self.add_item(Select_8())
             message = OversightData.interview_message('9', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 9',
@@ -718,7 +1507,7 @@ class interview(commands.Cog):
 
 
         if embed_title == 'Question number 9':
-            class Select(discord.ui.Select):
+            class Select_9(discord.ui.Select):
                 def __init__(self):
                     options=[
             discord.SelectOption(label='Option 1', emoji='1️⃣'),
@@ -736,10 +1525,10 @@ class interview(commands.Cog):
                         values += f'{value}\n'
                     await interaction.response.send_message(f'{values}', ephemeral=False)
 
-            class SelectView(discord.ui.View):
+            class SelectView_9(discord.ui.View):
                 def __init__(self, *, timeout = None):
                     super().__init__(timeout=timeout)
-                    self.add_item(Select())
+                    self.add_item(Select_9())
             message = OversightData.interview_message('10', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 10',
@@ -748,7 +1537,7 @@ class interview(commands.Cog):
 
 
         if embed_title == 'Question number 10':
-            class Select(discord.ui.Select):
+            class Select_10(discord.ui.Select):
                 def __init__(self):
                     options=[
             discord.SelectOption(label='Option 1',emoji='1️⃣'),
@@ -766,10 +1555,10 @@ class interview(commands.Cog):
                         values += f'{value}\n'
                     await interaction.response.send_message(f'{values}', ephemeral=False)
 
-            class SelectView(discord.ui.View):
+            class SelectView_10(discord.ui.View):
                 def __init__(self, *, timeout = None):
                     super().__init__(timeout=timeout)
-                    self.add_item(Select())
+                    self.add_item(Select_10())
             message = OversightData.interview_message('11', member)
             message = message.replace(reminder, '')
             embed = discord.Embed(title = 'Question number 11',
@@ -817,7 +1606,7 @@ class interview(commands.Cog):
 
         if label == 'Agree':
             disc_channel = client.get_channel(disc_channel_id)
-            class Select(discord.ui.Select):
+            class Select_13(discord.ui.Select):
                 def __init__(self):
                     options=[
             discord.SelectOption(label='UTC -12',emoji='🕛'),
@@ -1074,20 +1863,20 @@ class interview(commands.Cog):
                         await channel.send(embed=embed)
 #                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
 
-            class SelectView(discord.ui.View):
+            class SelectView_13(discord.ui.View):
                 def __init__(self, *, timeout = None):
                     super().__init__(timeout=timeout)
-                    self.add_item(Select())
+                    self.add_item(Select_13())
             message = OversightData.interview_message('13', member)
             await interaction.response.send_message('Agree', ephemeral=False)
             embed = discord.Embed(title = f'Question number 13',
                                 description = f'{message}', color=colors.dark_gold)
-            await channel.send(embed=embed,view=SelectView())
+            await channel.send(embed=embed,view=SelectView_13())
 
 
         if label == 'Disagree':
             disc_channel = client.get_channel(disc_channel_id)
-            class Select(discord.ui.Select):
+            class Select_13(discord.ui.Select):
                 def __init__(self):
                     options=[
             discord.SelectOption(label='UTC -12',emoji='🕛'),
@@ -1346,15 +2135,15 @@ class interview(commands.Cog):
                         await channel.send(embed=embed)
 #                        await disc_channel.send(f'<@&568141320011382825>\n<#{chan_id}> Needs approved/denied')
 
-            class SelectView(discord.ui.View):
+            class SelectView_13(discord.ui.View):
                 def __init__(self, *, timeout = None):
                     super().__init__(timeout=timeout)
-                    self.add_item(Select())
+                    self.add_item(Select_13())
             await interaction.response.send_message('Disagree', ephemeral=False)
             message = OversightData.interview_message('13', member)
             embed = discord.Embed(title = f'Question number 13',
                                 description = f'{message}', color=colors.dark_gold)
-            await channel.send(embed=embed,view=SelectView())
+            await channel.send(embed=embed,view=SelectView_13())
 
 
     @commands.Cog.listener()
@@ -2039,6 +2828,22 @@ class interview(commands.Cog):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction(right_arrow)
             await msg.add_reaction(person)
+
+    @commands.command(name='sendticket', help='+sendticket')
+    @commands.has_any_role('Elder', 'Suffet', 'Pentarch')
+    async def sendticket(self, ctx):
+        embed = discord.Embed(
+            title='Greetings',
+            description='''
+            Welcome to Carthago Co-Operative Alliance. We are glad to see you recognize the glory of the Shining City and wish to join us.
+
+            Please make sure you've applied at the Alliance Page: https://politicsandwar.com/alliance/join/id=5049
+
+            If that's done, press the button.
+            ''', color=colors.dark_gold
+        )
+        await ctx.send(embed=embed, view=apply_buttons())
+        await ctx.message.delete()
 
     @commands.command(name='next', help='+next')
     @commands.has_any_role('Pentarch', 'Elder', 'Suffet', 'Adirim', 'Interviewer')
